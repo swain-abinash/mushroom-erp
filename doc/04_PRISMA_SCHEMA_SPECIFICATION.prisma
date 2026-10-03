@@ -1,0 +1,680 @@
+// ==============================================================================
+// 🍄 SPORE ERP - PRODUCTION PRISMA SCHEMA FOR MARIADB 11.x
+// Complete Relational Model with 20+ Entities, Strict Constraints & RBAC
+// ==============================================================================
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ------------------------------------------------------------------------------
+// ENUMS
+// ------------------------------------------------------------------------------
+
+enum CustomerType {
+  RETAIL
+  B2B_RESTAURANT
+  WHOLESALE
+}
+
+enum AddressType {
+  HOME
+  WORK
+  RESTAURANT_KITCHEN
+  WAREHOUSE
+}
+
+enum UnitType {
+  KG
+  GRAMS_200
+  GRAMS_500
+  PACK
+  BOTTLE
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  OUT_OF_STOCK
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  PACKED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum PaymentMethod {
+  UPI_RAZORPAY
+  NET_BANKING
+  CREDIT_DEBIT_CARD
+  CASH_ON_DELIVERY
+  B2B_CREDIT_INVOICE
+}
+
+enum ItemCategory {
+  FINISHED_PRODUCT
+  RAW_MATERIAL
+  PACKAGING
+  EQUIPMENT
+}
+
+enum InventoryTxType {
+  PURCHASE
+  PRODUCTION_USE
+  HARVEST_INJECTION
+  CUSTOMER_SALE
+  WASTAGE_SPOILAGE
+  RETURN
+  MANUAL_ADJUSTMENT
+}
+
+enum RoomType {
+  INCUBATION
+  FRUITING
+  SPAWN_LAB
+  SUBSTRATE_STERILIZATION
+}
+
+enum BatchStatus {
+  PLANNED
+  PREPARATION
+  SPAWNING
+  INCUBATION
+  FRUITING
+  HARVESTING
+  COMPLETED
+  CONTAMINATED
+}
+
+enum BedStatus {
+  COLONIZING
+  PINNING
+  FRUITING
+  EXHAUSTED
+  CONTAMINATED
+}
+
+enum ExpenseCategory {
+  RAW_MATERIAL
+  ELECTRICITY
+  WATER
+  FARM_LABOR
+  PACKAGING
+  RENT
+  DELIVERY_FUEL
+  MARKETING
+  EQUIPMENT
+  MAINTENANCE
+  MISC
+}
+
+enum DeliveryStatus {
+  UNASSIGNED
+  ASSIGNED
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+  FAILED_ATTEMPT
+}
+
+// ------------------------------------------------------------------------------
+// 1. AUTHENTICATION & RBAC
+// ------------------------------------------------------------------------------
+
+model User {
+  id            String      @id @default(uuid()) @db.VarChar(36)
+  name          String      @db.VarChar(100)
+  email         String      @unique @db.VarChar(150)
+  phone         String?     @unique @db.VarChar(20)
+  passwordHash  String      @map("password_hash") @db.VarChar(255)
+  isActive      Boolean     @default(true) @map("is_active")
+  emailVerified DateTime?   @map("email_verified")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  // Relations
+  userRoles           UserRole[]
+  customer            Customer?
+  employee            Employee?
+  createdBatches      ProductionBatch[]     @relation("BatchCreator")
+  recordedHarvests    Harvest[]             @relation("HarvestRecorder")
+  inventoryActions    InventoryTransaction[] @relation("InventoryActor")
+  recordedExpenses    Expense[]             @relation("ExpenseRecorder")
+  auditLogs           AuditLog[]            @relation("AuditActor")
+
+  @@map("users")
+}
+
+model Role {
+  id          String           @id @default(uuid()) @db.VarChar(36)
+  name        String           @unique @db.VarChar(50)
+  displayName String           @map("display_name") @db.VarChar(100)
+  description String?          @db.Text
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  rolePermissions RolePermission[]
+  userRoles       UserRole[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String           @id @default(uuid()) @db.VarChar(36)
+  code        String           @unique @db.VarChar(80)
+  module      String           @db.VarChar(50)
+  description String           @db.VarChar(255)
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String     @map("role_id") @db.VarChar(36)
+  permissionId String     @map("permission_id") @db.VarChar(36)
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  userId String @map("user_id") @db.VarChar(36)
+  roleId String @map("role_id") @db.VarChar(36)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+// ------------------------------------------------------------------------------
+// 2. CUSTOMERS & ADDRESSES
+// ------------------------------------------------------------------------------
+
+model Customer {
+  id           String        @id @default(uuid()) @db.VarChar(36)
+  userId       String        @unique @map("user_id") @db.VarChar(36)
+  customerType CustomerType  @default(RETAIL) @map("customer_type")
+  companyName  String?       @map("company_name") @db.VarChar(150)
+  gstin        String?       @db.VarChar(15)
+  creditLimit  Decimal       @default(0.00) @map("credit_limit") @db.Decimal(10, 2)
+  totalOrders  Int           @default(0) @map("total_orders") @db.UnsignedInt
+  createdAt    DateTime      @default(now()) @map("created_at")
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  addresses CustomerAddress[]
+  orders    Order[]
+  cart      Cart?
+
+  @@map("customers")
+}
+
+model CustomerAddress {
+  id             String      @id @default(uuid()) @db.VarChar(36)
+  customerId     String      @map("customer_id") @db.VarChar(36)
+  addressType    AddressType @default(HOME) @map("address_type")
+  recipientName  String      @map("recipient_name") @db.VarChar(100)
+  recipientPhone String      @map("recipient_phone") @db.VarChar(20)
+  addressLine1   String      @map("address_line1") @db.VarChar(255)
+  addressLine2   String?     @map("address_line2") @db.VarChar(255)
+  city           String      @db.VarChar(80)
+  state          String      @db.VarChar(80)
+  pincode        String      @db.VarChar(10)
+  latitude       Decimal?    @db.Decimal(10, 8)
+  longitude      Decimal?    @db.Decimal(11, 8)
+  isDefault      Boolean     @default(false) @map("is_default")
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId], map: "idx_cust_addr_cust")
+  @@index([pincode], map: "idx_cust_addr_pincode")
+  @@map("customer_addresses")
+}
+
+// ------------------------------------------------------------------------------
+// 3. PRODUCT CATALOG
+// ------------------------------------------------------------------------------
+
+model Category {
+  id          String     @id @default(uuid()) @db.VarChar(36)
+  name        String     @db.VarChar(100)
+  slug        String     @unique @db.VarChar(120)
+  description String?    @db.Text
+  imageUrl    String?    @map("image_url") @db.VarChar(255)
+  parentId    String?    @map("parent_id") @db.VarChar(36)
+  isActive    Boolean    @default(true) @map("is_active")
+
+  parentCategory Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  subCategories  Category[] @relation("SubCategories")
+  products       Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id            String        @id @default(uuid()) @db.VarChar(36)
+  categoryId    String        @map("category_id") @db.VarChar(36)
+  name          String        @db.VarChar(150)
+  slug          String        @unique @db.VarChar(180)
+  sku           String        @unique @db.VarChar(50)
+  description   String        @db.LongText
+  unitType      UnitType      @default(KG) @map("unit_type")
+  retailPrice   Decimal       @map("retail_price") @db.Decimal(10, 2)
+  b2bPrice      Decimal?      @map("b2b_price") @db.Decimal(10, 2)
+  minOrderQty   Decimal       @default(1.00) @map("min_order_qty") @db.Decimal(8, 2)
+  shelfLifeDays Int           @default(2) @map("shelf_life_days") @db.UnsignedInt
+  status        ProductStatus @default(DRAFT)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  category      Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  images        ProductImage[]
+  inventoryItem InventoryItem?
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+
+  @@index([categoryId], map: "idx_prod_category")
+  @@index([status], map: "idx_prod_status")
+  @@map("products")
+}
+
+model ProductImage {
+  id           String   @id @default(uuid()) @db.VarChar(36)
+  productId    String   @map("product_id") @db.VarChar(36)
+  imageUrl     String   @map("image_url") @db.VarChar(255)
+  altText      String?  @map("alt_text") @db.VarChar(150)
+  displayOrder Int      @default(0) @map("display_order") @db.UnsignedInt
+  isPrimary    Boolean  @default(false) @map("is_primary")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+// ------------------------------------------------------------------------------
+// 4. CART & ORDERS
+// ------------------------------------------------------------------------------
+
+model Cart {
+  id         String     @id @default(uuid()) @db.VarChar(36)
+  customerId String     @unique @map("customer_id") @db.VarChar(36)
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  customer Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items    CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  cartId    String   @map("cart_id") @db.VarChar(36)
+  productId String   @map("product_id") @db.VarChar(36)
+  quantity  Decimal  @db.Decimal(8, 2)
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+model Order {
+  id                  String        @id @default(uuid()) @db.VarChar(36)
+  orderNumber         String        @unique @map("order_number") @db.VarChar(30)
+  customerId          String        @map("customer_id") @db.VarChar(36)
+  subtotal            Decimal       @db.Decimal(10, 2)
+  discountAmount      Decimal       @default(0.00) @map("discount_amount") @db.Decimal(10, 2)
+  deliveryFee         Decimal       @default(0.00) @map("delivery_fee") @db.Decimal(10, 2)
+  taxAmount           Decimal       @default(0.00) @map("tax_amount") @db.Decimal(10, 2)
+  totalAmount         Decimal       @map("total_amount") @db.Decimal(10, 2)
+  paymentStatus       PaymentStatus @default(UNPAID) @map("payment_status")
+  orderStatus         OrderStatus   @default(PENDING) @map("order_status")
+  deliveryAddressJson Json          @map("delivery_address_json")
+  deliverySlot        String        @default("MORNING_HARVEST_DISPATCH") @map("delivery_slot") @db.VarChar(50)
+  notes               String?       @db.Text
+  createdAt           DateTime      @default(now()) @map("created_at")
+
+  customer     Customer             @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items        OrderItem[]
+  payments     Payment[]
+  delivery     Delivery?
+  statusHistory OrderStatusHistory[]
+
+  @@index([customerId], map: "idx_orders_customer")
+  @@index([orderStatus], map: "idx_orders_status")
+  @@index([createdAt], map: "idx_orders_created")
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String   @id @default(uuid()) @db.VarChar(36)
+  orderId    String   @map("order_id") @db.VarChar(36)
+  productId  String   @map("product_id") @db.VarChar(36)
+  quantity   Decimal  @db.Decimal(8, 2)
+  unitPrice  Decimal  @map("unit_price") @db.Decimal(10, 2)
+  totalPrice Decimal  @map("total_price") @db.Decimal(10, 2)
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(uuid()) @db.VarChar(36)
+  orderId   String      @map("order_id") @db.VarChar(36)
+  status    OrderStatus
+  notes     String?     @db.VarChar(255)
+  changedAt DateTime    @default(now()) @map("changed_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_status_history")
+}
+
+// ------------------------------------------------------------------------------
+// 5. PAYMENTS
+// ------------------------------------------------------------------------------
+
+model Payment {
+  id            String        @id @default(uuid()) @db.VarChar(36)
+  orderId       String        @map("order_id") @db.VarChar(36)
+  transactionId String?       @unique @map("transaction_id") @db.VarChar(100)
+  amount        Decimal       @db.Decimal(10, 2)
+  method        PaymentMethod @default(UPI_RAZORPAY)
+  status        PaymentStatus @default(UNPAID)
+  paidAt        DateTime?     @map("paid_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// ------------------------------------------------------------------------------
+// 6. INVENTORY & STOCK TRANSACTIONS
+// ------------------------------------------------------------------------------
+
+model InventoryItem {
+  id               String       @id @default(uuid()) @db.VarChar(36)
+  productId        String?      @unique @map("product_id") @db.VarChar(36)
+  itemName         String       @map("item_name") @db.VarChar(100)
+  itemCategory     ItemCategory @default(FINISHED_PRODUCT) @map("item_category")
+  availableStock   Decimal      @default(0.00) @map("available_stock") @db.Decimal(10, 2)
+  reservedStock    Decimal      @default(0.00) @map("reserved_stock") @db.Decimal(10, 2)
+  unit             String       @default("KG") @db.VarChar(20)
+  reorderThreshold Decimal      @default(5.00) @map("reorder_threshold") @db.Decimal(10, 2)
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+
+  product      Product?               @relation(fields: [productId], references: [id], onDelete: SetNull)
+  transactions InventoryTransaction[]
+
+  @@map("inventory_items")
+}
+
+model InventoryTransaction {
+  id              String          @id @default(uuid()) @db.VarChar(36)
+  inventoryItemId String          @map("inventory_item_id") @db.VarChar(36)
+  transactionType InventoryTxType @map("transaction_type")
+  quantity        Decimal         @db.Decimal(10, 2)
+  balanceAfter    Decimal         @map("balance_after") @db.Decimal(10, 2)
+  referenceType   String?         @map("reference_type") @db.VarChar(50)
+  referenceId     String?         @map("reference_id") @db.VarChar(36)
+  reason          String?         @db.VarChar(255)
+  performedBy     String?         @map("performed_by") @db.VarChar(36)
+  createdAt       DateTime        @default(now()) @map("created_at")
+
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id], onDelete: Restrict)
+  actor         User?         @relation("InventoryActor", fields: [performedBy], references: [id], onDelete: SetNull)
+
+  @@index([inventoryItemId], map: "idx_inv_tx_item")
+  @@index([createdAt], map: "idx_inv_tx_created")
+  @@map("inventory_transactions")
+}
+
+// ------------------------------------------------------------------------------
+// 7. AGRONOMY, CULTIVATION & HARVEST
+// ------------------------------------------------------------------------------
+
+model GrowingRoom {
+  id             String   @id @default(uuid()) @db.VarChar(36)
+  name           String   @unique @db.VarChar(50)
+  roomType       RoomType @default(FRUITING) @map("room_type")
+  capacityBeds   Int      @default(200) @map("capacity_beds") @db.UnsignedInt
+  targetTempC    Decimal  @default(24.0) @map("target_temp_c") @db.Decimal(4, 1)
+  targetHumidity Decimal  @default(85.0) @map("target_humidity") @db.Decimal(4, 1)
+  isActive       Boolean  @default(true) @map("is_active")
+
+  beds GrowingBed[]
+
+  @@map("growing_rooms")
+}
+
+model ProductionBatch {
+  id                   String      @id @default(uuid()) @db.VarChar(36)
+  batchNumber          String      @unique @map("batch_number") @db.VarChar(40)
+  mushroomType         String      @default("Oyster Mushroom") @map("mushroom_type") @db.VarChar(60)
+  spawnSupplierId      String?     @map("spawn_supplier_id") @db.VarChar(36)
+  spawnQuantityKg      Decimal     @map("spawn_quantity_kg") @db.Decimal(8, 2)
+  substrateType        String      @default("Paddy Straw + Wheat Bran") @map("substrate_type") @db.VarChar(80)
+  substrateDryWeightKg Decimal     @map("substrate_dry_weight_kg") @db.Decimal(8, 2)
+  numberOfBeds         Int         @map("number_of_beds") @db.UnsignedInt
+  inoculationDate      DateTime    @map("inoculation_date") @db.Date
+  expectedHarvestDate  DateTime    @map("expected_harvest_date") @db.Date
+  status               BatchStatus @default(PLANNED)
+  totalHarvestedKg     Decimal     @default(0.00) @map("total_harvested_kg") @db.Decimal(8, 2)
+  biologicalEfficiency Decimal?    @map("biological_efficiency") @db.Decimal(5, 2)
+  createdBy            String      @map("created_by") @db.VarChar(36)
+  createdAt            DateTime    @default(now()) @map("created_at")
+
+  spawnSupplier Supplier?    @relation(fields: [spawnSupplierId], references: [id], onDelete: SetNull)
+  creator       User         @relation("BatchCreator", fields: [createdBy], references: [id], onDelete: Restrict)
+  beds          GrowingBed[]
+  harvests      Harvest[]
+
+  @@index([status], map: "idx_batches_status")
+  @@index([batchNumber], map: "idx_batches_number")
+  @@map("production_batches")
+}
+
+model GrowingBed {
+  id                 String    @id @default(uuid()) @db.VarChar(36)
+  batchId            String    @map("batch_id") @db.VarChar(36)
+  roomId             String    @map("room_id") @db.VarChar(36)
+  rackIdentifier     String    @default("RACK-1") @map("rack_identifier") @db.VarChar(20)
+  bedIdentifier      String    @default("BED-001") @map("bed_identifier") @db.VarChar(20)
+  spawnWeightGrams   Int       @default(250) @map("spawn_weight_grams") @db.UnsignedInt
+  status             BedStatus @default(COLONIZING)
+  contaminationType  String?   @map("contamination_type") @db.VarChar(80)
+
+  batch ProductionBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  room  GrowingRoom     @relation(fields: [roomId], references: [id], onDelete: Restrict)
+
+  @@map("growing_beds")
+}
+
+model Harvest {
+  id             String   @id @default(uuid()) @db.VarChar(36)
+  batchId        String   @map("batch_id") @db.VarChar(36)
+  harvestDate    DateTime @map("harvest_date") @db.Date
+  flushNumber    Int      @default(1) @map("flush_number") @db.UnsignedInt
+  totalWeightKg  Decimal  @map("total_weight_kg") @db.Decimal(8, 2)
+  gradeAKg       Decimal  @default(0.00) @map("grade_a_kg") @db.Decimal(8, 2)
+  gradeBKg       Decimal  @default(0.00) @map("grade_b_kg") @db.Decimal(8, 2)
+  gradeCDryKg    Decimal  @default(0.00) @map("grade_c_dry_kg") @db.Decimal(8, 2)
+  wastageKg      Decimal  @default(0.00) @map("wastage_kg") @db.Decimal(8, 2)
+  notes          String?  @db.VarChar(255)
+  harvestedBy    String   @map("harvested_by") @db.VarChar(36)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  batch    ProductionBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  recorder User            @relation("HarvestRecorder", fields: [harvestedBy], references: [id], onDelete: Restrict)
+
+  @@index([batchId], map: "idx_harvests_batch")
+  @@index([harvestDate], map: "idx_harvests_date")
+  @@map("harvests")
+}
+
+// ------------------------------------------------------------------------------
+// 8. PROCUREMENT & SUPPLIERS
+// ------------------------------------------------------------------------------
+
+model Supplier {
+  id                String   @id @default(uuid()) @db.VarChar(36)
+  name              String   @db.VarChar(120)
+  contactPerson     String?  @map("contact_person") @db.VarChar(100)
+  phone             String   @db.VarChar(20)
+  email             String?  @db.VarChar(120)
+  materialsSupplied String   @map("materials_supplied") @db.VarChar(255)
+  gstin             String?  @db.VarChar(15)
+  isActive          Boolean  @default(true) @map("is_active")
+
+  batches   ProductionBatch[]
+  purchases Purchase[]
+
+  @@map("suppliers")
+}
+
+model Purchase {
+  id             String        @id @default(uuid()) @db.VarChar(36)
+  purchaseNumber String        @unique @map("purchase_number") @db.VarChar(40)
+  supplierId     String        @map("supplier_id") @db.VarChar(36)
+  purchaseDate   DateTime      @map("purchase_date") @db.Date
+  subtotal       Decimal       @db.Decimal(10, 2)
+  taxAmount      Decimal       @default(0.00) @map("tax_amount") @db.Decimal(10, 2)
+  totalAmount    Decimal       @map("total_amount") @db.Decimal(10, 2)
+  paymentStatus  PaymentStatus @default(UNPAID) @map("payment_status")
+
+  supplier Supplier       @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  items    PurchaseItem[]
+
+  @@map("purchases")
+}
+
+model PurchaseItem {
+  id           String   @id @default(uuid()) @db.VarChar(36)
+  purchaseId   String   @map("purchase_id") @db.VarChar(36)
+  materialName String   @map("material_name") @db.VarChar(100)
+  quantity     Decimal  @db.Decimal(10, 2)
+  unit         String   @default("KG") @db.VarChar(20)
+  unitPrice    Decimal  @map("unit_price") @db.Decimal(10, 2)
+  totalPrice   Decimal  @map("total_price") @db.Decimal(10, 2)
+
+  purchase Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+
+  @@map("purchase_items")
+}
+
+// ------------------------------------------------------------------------------
+// 9. EXPENSES & FINANCE
+// ------------------------------------------------------------------------------
+
+model Expense {
+  id            String          @id @default(uuid()) @db.VarChar(36)
+  category      ExpenseCategory @default(RAW_MATERIAL)
+  amount        Decimal         @db.Decimal(10, 2)
+  description   String          @db.VarChar(255)
+  expenseDate   DateTime        @map("expense_date") @db.Date
+  paymentMethod String          @default("UPI") @map("payment_method") @db.VarChar(30)
+  receiptUrl    String?         @map("receipt_url") @db.VarChar(255)
+  recordedBy    String          @map("recorded_by") @db.VarChar(36)
+  createdAt     DateTime        @default(now()) @map("created_at")
+
+  recorder User @relation("ExpenseRecorder", fields: [recordedBy], references: [id], onDelete: Restrict)
+
+  @@index([category], map: "idx_expenses_category")
+  @@index([expenseDate], map: "idx_expenses_date")
+  @@map("expenses")
+}
+
+// ------------------------------------------------------------------------------
+// 10. DELIVERY & DISPATCH
+// ------------------------------------------------------------------------------
+
+model Employee {
+  id         String   @id @default(uuid()) @db.VarChar(36)
+  userId     String   @unique @map("user_id") @db.VarChar(36)
+  designation String  @db.VarChar(80)
+  department String   @db.VarChar(60)
+  joiningDate DateTime @map("joining_date") @db.Date
+  isActive   Boolean  @default(true) @map("is_active")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries Delivery[] @relation("DeliveryDriver")
+
+  @@map("employees")
+}
+
+model Delivery {
+  id             String         @id @default(uuid()) @db.VarChar(36)
+  orderId        String         @unique @map("order_id") @db.VarChar(36)
+  driverId       String?        @map("driver_id") @db.VarChar(36)
+  status         DeliveryStatus @default(UNASSIGNED)
+  assignedAt     DateTime?      @map("assigned_at")
+  dispatchedAt   DateTime?      @map("dispatched_at")
+  deliveredAt    DateTime?      @map("delivered_at")
+  deliveryNotes  String?        @map("delivery_notes") @db.VarChar(255)
+
+  order  Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  driver Employee? @relation("DeliveryDriver", fields: [driverId], references: [id], onDelete: SetNull)
+
+  @@map("deliveries")
+}
+
+// ------------------------------------------------------------------------------
+// 11. AUDIT LOGS & SETTINGS
+// ------------------------------------------------------------------------------
+
+model AuditLog {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  actorId    String?  @map("actor_id") @db.VarChar(36)
+  action     String   @db.VarChar(50)
+  entityType String   @map("entity_type") @db.VarChar(50)
+  entityId   String   @map("entity_id") @db.VarChar(36)
+  oldState   Json?    @map("old_state")
+  newState   Json?    @map("new_state")
+  ipAddress  String?  @map("ip_address") @db.VarChar(45)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  actor User? @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId], map: "idx_audit_actor")
+  @@index([entityType, entityId], map: "idx_audit_entity")
+  @@index([createdAt], map: "idx_audit_created")
+  @@map("audit_logs")
+}
+
+model BusinessSetting {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  key         String   @unique @db.VarChar(80)
+  value       String   @db.Text
+  description String?  @db.VarChar(255)
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("business_settings")
+}

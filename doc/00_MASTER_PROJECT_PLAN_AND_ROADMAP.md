@@ -90,7 +90,7 @@ Sprint 1 ──> Sprint 2 ──> Sprint 3 ──> Sprint 4 ──> Sprint 5 ─
 
 #### Acceptance Criteria:
 - [x] `npm run dev` executes with zero warnings and hot reloading active.
-- [x] MariaDB connection verified via Prisma CLI (`npx prisma db push` & `npx prisma studio`).
+- [x] MariaDB connection verified via Prisma CLI (`npx prisma migrate deploy` & `npx prisma studio`).
 - [x] Baseline health check endpoint (`GET /api/health`) returns `200 OK` with database ping latency.
 
 ---

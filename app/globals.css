@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --color-forest-primary: #0f3a2f;
+  --color-forest-hover: #165343;
+  --color-shiitake-ochre: #c28b53;
+  --color-spore-ivory: #fbf9f5;
+  --color-surface-white: #ffffff;
+  --color-charcoal-dark: #121816;
+  --color-surface-charcoal: #1b2421;
+  --color-success-mint: #22c55e;
+  --color-alert-coral: #e05252;
+  --color-warning-amber: #f59e0b;
+
+  --background: var(--color-spore-ivory);
+  --foreground: var(--color-forest-primary);
+}
+
+@theme inline {
+  --color-forest-primary: var(--color-forest-primary);
+  --color-forest-hover: var(--color-forest-hover);
+  --color-shiitake-ochre: var(--color-shiitake-ochre);
+  --color-spore-ivory: var(--color-spore-ivory);
+  --color-surface-white: var(--color-surface-white);
+  --color-charcoal-dark: var(--color-charcoal-dark);
+  --color-surface-charcoal: var(--color-surface-charcoal);
+  --color-success-mint: var(--color-success-mint);
+  --color-alert-coral: var(--color-alert-coral);
+  --color-warning-amber: var(--color-warning-amber);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-display: var(--font-outfit);
+  --font-body: var(--font-plus-jakarta-sans);
+  --font-data: var(--font-jetbrains-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+}

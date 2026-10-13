@@ -19,6 +19,7 @@ Welcome to the master technical documentation library for **SporeERP (Mushroom B
 | **08** | [08_FRONTEND_UI_UX_DESIGN_SPECIFICATION.md](file:///d:/mushroomApp/doc/08_FRONTEND_UI_UX_DESIGN_SPECIFICATION.md) | **Frontend UI/UX Design System:** Color tokens, typography, component layouts, wireframes for customer storefront & admin ERP. |
 | **09** | [09_DEPLOYMENT_DEVOPS_AND_INFRASTRUCTURE.md](file:///d:/mushroomApp/doc/09_DEPLOYMENT_DEVOPS_AND_INFRASTRUCTURE.md) | **DevOps & Infrastructure:** Docker Compose, MariaDB 11, Redis, Nginx SSL, automated database backups, disaster recovery. |
 | **10** | [10_MASTER_MUSHROOM_ERP_PRD_AND_TECHNICAL_SPEC.md](file:///d:/mushroomApp/doc/10_MASTER_MUSHROOM_ERP_PRD_AND_TECHNICAL_SPEC.md) | **Master Unified PRD & Technical Spec:** Complete combined reference handbook for founders, engineers, and farm managers. |
+| **11** | [11_IMPLEMENTATION_STATUS_SPRINT_1_2.md](11_IMPLEMENTATION_STATUS_SPRINT_1_2.md) | **Implementation Status & Developer Handover:** What is actually built in Sprints 1–2, local setup, migrations policy, auth/RBAC internals, spec deviations, troubleshooting. |
 
 ---
 

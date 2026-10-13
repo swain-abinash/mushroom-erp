@@ -11,6 +11,16 @@ export async function AdminNav() {
   const links = [
     { href: "/admin/dashboard", label: "Dashboard", visible: true },
     {
+      href: "/admin/products",
+      label: "Products",
+      visible: hasPermission(user, PERMISSIONS.CATALOG_PRODUCT_VIEW),
+    },
+    {
+      href: "/admin/categories",
+      label: "Categories",
+      visible: hasPermission(user, PERMISSIONS.CATALOG_PRODUCT_MANAGE),
+    },
+    {
       href: "/admin/employees",
       label: "Employees",
       visible: hasPermission(user, PERMISSIONS.USERS_VIEW),

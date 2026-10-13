@@ -7,8 +7,3 @@ type MailMessage = { to: string; subject: string; text: string };
 export async function sendMail(message: MailMessage): Promise<void> {
   console.info(`[mail] To: ${message.to}\n[mail] Subject: ${message.subject}\n${message.text}`);
 }
-
-export function appUrl(path: string): string {
-  const base = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL ?? "http://localhost:3000";
-  return new URL(path, base).toString();
-}

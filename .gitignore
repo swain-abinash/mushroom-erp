@@ -37,3 +37,6 @@ pnpm-debug.log*
 
 # OS Files
 Thumbs.db
+
+# Uploaded media (served by app/uploads/[...path]/route.ts)
+/storage/

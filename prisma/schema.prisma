@@ -141,35 +141,36 @@ enum DeliveryStatus {
 // ------------------------------------------------------------------------------
 
 model User {
-  id            String      @id @default(uuid()) @db.VarChar(36)
-  name          String      @db.VarChar(100)
-  email         String      @unique @db.VarChar(150)
-  phone         String?     @unique @db.VarChar(20)
-  passwordHash  String      @map("password_hash") @db.VarChar(255)
-  isActive      Boolean     @default(true) @map("is_active")
-  emailVerified DateTime?   @map("email_verified")
-  createdAt     DateTime    @default(now()) @map("created_at")
-  updatedAt     DateTime    @updatedAt @map("updated_at")
+  id            String    @id @default(uuid()) @db.VarChar(36)
+  name          String    @db.VarChar(100)
+  email         String    @unique @db.VarChar(150)
+  phone         String?   @unique @db.VarChar(20)
+  passwordHash  String    @map("password_hash") @db.VarChar(255)
+  isActive      Boolean   @default(true) @map("is_active")
+  emailVerified DateTime? @map("email_verified")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
 
   userRoles           UserRole[]
   customer            Customer?
   employee            Employee?
-  createdBatches      ProductionBatch[]     @relation("BatchCreator")
-  recordedHarvests    Harvest[]             @relation("HarvestRecorder")
+  createdBatches      ProductionBatch[]      @relation("BatchCreator")
+  recordedHarvests    Harvest[]              @relation("HarvestRecorder")
   inventoryActions    InventoryTransaction[] @relation("InventoryActor")
-  recordedExpenses    Expense[]             @relation("ExpenseRecorder")
-  auditLogs           AuditLog[]            @relation("AuditActor")
+  recordedExpenses    Expense[]              @relation("ExpenseRecorder")
+  auditLogs           AuditLog[]             @relation("AuditActor")
   passwordResetTokens PasswordResetToken[]
+  stockNotifications  StockNotification[]
 
   @@map("users")
 }
 
 model Role {
-  id          String           @id @default(uuid()) @db.VarChar(36)
-  name        String           @unique @db.VarChar(50)
-  displayName String           @map("display_name") @db.VarChar(100)
-  description String?          @db.Text
-  createdAt   DateTime         @default(now()) @map("created_at")
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  name        String   @unique @db.VarChar(50)
+  displayName String   @map("display_name") @db.VarChar(100)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
 
   rolePermissions RolePermission[]
   userRoles       UserRole[]
@@ -178,10 +179,10 @@ model Role {
 }
 
 model Permission {
-  id          String           @id @default(uuid()) @db.VarChar(36)
-  code        String           @unique @db.VarChar(80)
-  module      String           @db.VarChar(50)
-  description String           @db.VarChar(255)
+  id          String @id @default(uuid()) @db.VarChar(36)
+  code        String @unique @db.VarChar(80)
+  module      String @db.VarChar(50)
+  description String @db.VarChar(255)
 
   rolePermissions RolePermission[]
 
@@ -189,8 +190,8 @@ model Permission {
 }
 
 model RolePermission {
-  roleId       String     @map("role_id") @db.VarChar(36)
-  permissionId String     @map("permission_id") @db.VarChar(36)
+  roleId       String @map("role_id") @db.VarChar(36)
+  permissionId String @map("permission_id") @db.VarChar(36)
 
   role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
   permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
@@ -231,14 +232,14 @@ model PasswordResetToken {
 // ------------------------------------------------------------------------------
 
 model Customer {
-  id           String        @id @default(uuid()) @db.VarChar(36)
-  userId       String        @unique @map("user_id") @db.VarChar(36)
-  customerType CustomerType  @default(RETAIL) @map("customer_type")
-  companyName  String?       @map("company_name") @db.VarChar(150)
-  gstin        String?       @db.VarChar(15)
-  creditLimit  Decimal       @default(0.00) @map("credit_limit") @db.Decimal(10, 2)
-  totalOrders  Int           @default(0) @map("total_orders") @db.UnsignedInt
-  createdAt    DateTime      @default(now()) @map("created_at")
+  id           String       @id @default(uuid()) @db.VarChar(36)
+  userId       String       @unique @map("user_id") @db.VarChar(36)
+  customerType CustomerType @default(RETAIL) @map("customer_type")
+  companyName  String?      @map("company_name") @db.VarChar(150)
+  gstin        String?      @db.VarChar(15)
+  creditLimit  Decimal      @default(0.00) @map("credit_limit") @db.Decimal(10, 2)
+  totalOrders  Int          @default(0) @map("total_orders") @db.UnsignedInt
+  createdAt    DateTime     @default(now()) @map("created_at")
 
   user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   addresses CustomerAddress[]
@@ -275,13 +276,13 @@ model CustomerAddress {
 // ------------------------------------------------------------------------------
 
 model Category {
-  id          String     @id @default(uuid()) @db.VarChar(36)
-  name        String     @db.VarChar(100)
-  slug        String     @unique @db.VarChar(120)
-  description String?    @db.Text
-  imageUrl    String?    @map("image_url") @db.VarChar(255)
-  parentId    String?    @map("parent_id") @db.VarChar(36)
-  isActive    Boolean    @default(true) @map("is_active")
+  id          String  @id @default(uuid()) @db.VarChar(36)
+  name        String  @db.VarChar(100)
+  slug        String  @unique @db.VarChar(120)
+  description String? @db.Text
+  imageUrl    String? @map("image_url") @db.VarChar(255)
+  parentId    String? @map("parent_id") @db.VarChar(36)
+  isActive    Boolean @default(true) @map("is_active")
 
   parentCategory Category?  @relation("SubCategories", fields: [parentId], references: [id])
   subCategories  Category[] @relation("SubCategories")
@@ -291,43 +292,82 @@ model Category {
 }
 
 model Product {
-  id            String        @id @default(uuid()) @db.VarChar(36)
-  categoryId    String        @map("category_id") @db.VarChar(36)
-  name          String        @db.VarChar(150)
-  slug          String        @unique @db.VarChar(180)
-  sku           String        @unique @db.VarChar(50)
-  description   String        @db.LongText
-  unitType      UnitType      @default(KG) @map("unit_type")
-  retailPrice   Decimal       @map("retail_price") @db.Decimal(10, 2)
-  b2bPrice      Decimal?      @map("b2b_price") @db.Decimal(10, 2)
-  minOrderQty   Decimal       @default(1.00) @map("min_order_qty") @db.Decimal(8, 2)
-  shelfLifeDays Int           @default(2) @map("shelf_life_days") @db.UnsignedInt
-  status        ProductStatus @default(DRAFT)
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
+  id               String        @id @default(uuid()) @db.VarChar(36)
+  categoryId       String        @map("category_id") @db.VarChar(36)
+  name             String        @db.VarChar(150)
+  slug             String        @unique @db.VarChar(180)
+  sku              String        @unique @db.VarChar(50)
+  description      String        @db.LongText
+  shortDescription String?       @map("short_description") @db.VarChar(255)
+  variety          String?       @db.VarChar(60)
+  nutritionInfo    String?       @map("nutrition_info") @db.Text
+  storageTips      String?       @map("storage_tips") @db.Text
+  unitType         UnitType      @default(KG) @map("unit_type")
+  // Retail price; B2B prices live in ProductPricingTier.
+  retailPrice      Decimal       @map("retail_price") @db.Decimal(10, 2)
+  minOrderQty      Decimal       @default(1.00) @map("min_order_qty") @db.Decimal(8, 2)
+  shelfLifeDays    Int           @default(2) @map("shelf_life_days") @db.UnsignedInt
+  isFeatured       Boolean       @default(false) @map("is_featured")
+  allowBackorder   Boolean       @default(false) @map("allow_backorder")
+  status           ProductStatus @default(DRAFT)
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
 
-  category      Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  images        ProductImage[]
-  inventoryItem InventoryItem?
-  orderItems    OrderItem[]
-  cartItems     CartItem[]
+  category           Category             @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  images             ProductImage[]
+  pricingTiers       ProductPricingTier[]
+  stockNotifications StockNotification[]
+  inventoryItem      InventoryItem?
+  orderItems         OrderItem[]
+  cartItems          CartItem[]
 
   @@index([categoryId], map: "idx_prod_category")
   @@index([status], map: "idx_prod_status")
+  @@index([variety], map: "idx_prod_variety")
   @@map("products")
 }
 
 model ProductImage {
-  id           String   @id @default(uuid()) @db.VarChar(36)
-  productId    String   @map("product_id") @db.VarChar(36)
-  imageUrl     String   @map("image_url") @db.VarChar(255)
-  altText      String?  @map("alt_text") @db.VarChar(150)
-  displayOrder Int      @default(0) @map("display_order") @db.UnsignedInt
-  isPrimary    Boolean  @default(false) @map("is_primary")
+  id           String  @id @default(uuid()) @db.VarChar(36)
+  productId    String  @map("product_id") @db.VarChar(36)
+  imageUrl     String  @map("image_url") @db.VarChar(255)
+  altText      String? @map("alt_text") @db.VarChar(150)
+  displayOrder Int     @default(0) @map("display_order") @db.UnsignedInt
+  isPrimary    Boolean @default(false) @map("is_primary")
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("product_images")
+}
+
+// B2B price per customer type (Restaurant / Wholesale), applied from `minQty` upward.
+model ProductPricingTier {
+  id           String       @id @default(uuid()) @db.VarChar(36)
+  productId    String       @map("product_id") @db.VarChar(36)
+  customerType CustomerType @map("customer_type")
+  price        Decimal      @db.Decimal(10, 2)
+  minQty       Decimal      @default(1.00) @map("min_qty") @db.Decimal(8, 2)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, customerType], map: "uq_pricing_tier_product_type")
+  @@map("product_pricing_tiers")
+}
+
+// "Notify me when back in stock" requests from the storefront.
+model StockNotification {
+  id         String    @id @default(uuid()) @db.VarChar(36)
+  productId  String    @map("product_id") @db.VarChar(36)
+  email      String    @db.VarChar(150)
+  userId     String?   @map("user_id") @db.VarChar(36)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  notifiedAt DateTime? @map("notified_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([productId, email], map: "uq_stock_notification_product_email")
+  @@map("stock_notifications")
 }
 
 // ------------------------------------------------------------------------------
@@ -335,9 +375,9 @@ model ProductImage {
 // ------------------------------------------------------------------------------
 
 model Cart {
-  id         String     @id @default(uuid()) @db.VarChar(36)
-  customerId String     @unique @map("customer_id") @db.VarChar(36)
-  updatedAt  DateTime   @updatedAt @map("updated_at")
+  id         String   @id @default(uuid()) @db.VarChar(36)
+  customerId String   @unique @map("customer_id") @db.VarChar(36)
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
   customer Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
   items    CartItem[]
@@ -346,10 +386,10 @@ model Cart {
 }
 
 model CartItem {
-  id        String   @id @default(uuid()) @db.VarChar(36)
-  cartId    String   @map("cart_id") @db.VarChar(36)
-  productId String   @map("product_id") @db.VarChar(36)
-  quantity  Decimal  @db.Decimal(8, 2)
+  id        String  @id @default(uuid()) @db.VarChar(36)
+  cartId    String  @map("cart_id") @db.VarChar(36)
+  productId String  @map("product_id") @db.VarChar(36)
+  quantity  Decimal @db.Decimal(8, 2)
 
   cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -387,12 +427,12 @@ model Order {
 }
 
 model OrderItem {
-  id         String   @id @default(uuid()) @db.VarChar(36)
-  orderId    String   @map("order_id") @db.VarChar(36)
-  productId  String   @map("product_id") @db.VarChar(36)
-  quantity   Decimal  @db.Decimal(8, 2)
-  unitPrice  Decimal  @map("unit_price") @db.Decimal(10, 2)
-  totalPrice Decimal  @map("total_price") @db.Decimal(10, 2)
+  id         String  @id @default(uuid()) @db.VarChar(36)
+  orderId    String  @map("order_id") @db.VarChar(36)
+  productId  String  @map("product_id") @db.VarChar(36)
+  quantity   Decimal @db.Decimal(8, 2)
+  unitPrice  Decimal @map("unit_price") @db.Decimal(10, 2)
+  totalPrice Decimal @map("total_price") @db.Decimal(10, 2)
 
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
@@ -518,14 +558,14 @@ model ProductionBatch {
 }
 
 model GrowingBed {
-  id                 String    @id @default(uuid()) @db.VarChar(36)
-  batchId            String    @map("batch_id") @db.VarChar(36)
-  roomId             String    @map("room_id") @db.VarChar(36)
-  rackIdentifier     String    @default("RACK-1") @map("rack_identifier") @db.VarChar(20)
-  bedIdentifier      String    @default("BED-001") @map("bed_identifier") @db.VarChar(20)
-  spawnWeightGrams   Int       @default(250) @map("spawn_weight_grams") @db.UnsignedInt
-  status             BedStatus @default(COLONIZING)
-  contaminationType  String?   @map("contamination_type") @db.VarChar(80)
+  id                String    @id @default(uuid()) @db.VarChar(36)
+  batchId           String    @map("batch_id") @db.VarChar(36)
+  roomId            String    @map("room_id") @db.VarChar(36)
+  rackIdentifier    String    @default("RACK-1") @map("rack_identifier") @db.VarChar(20)
+  bedIdentifier     String    @default("BED-001") @map("bed_identifier") @db.VarChar(20)
+  spawnWeightGrams  Int       @default(250) @map("spawn_weight_grams") @db.UnsignedInt
+  status            BedStatus @default(COLONIZING)
+  contaminationType String?   @map("contamination_type") @db.VarChar(80)
 
   batch ProductionBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
   room  GrowingRoom     @relation(fields: [roomId], references: [id], onDelete: Restrict)
@@ -534,18 +574,18 @@ model GrowingBed {
 }
 
 model Harvest {
-  id             String   @id @default(uuid()) @db.VarChar(36)
-  batchId        String   @map("batch_id") @db.VarChar(36)
-  harvestDate    DateTime @map("harvest_date") @db.Date
-  flushNumber    Int      @default(1) @map("flush_number") @db.UnsignedInt
-  totalWeightKg  Decimal  @map("total_weight_kg") @db.Decimal(8, 2)
-  gradeAKg       Decimal  @default(0.00) @map("grade_a_kg") @db.Decimal(8, 2)
-  gradeBKg       Decimal  @default(0.00) @map("grade_b_kg") @db.Decimal(8, 2)
-  gradeCDryKg    Decimal  @default(0.00) @map("grade_c_dry_kg") @db.Decimal(8, 2)
-  wastageKg      Decimal  @default(0.00) @map("wastage_kg") @db.Decimal(8, 2)
-  notes          String?  @db.VarChar(255)
-  harvestedBy    String   @map("harvested_by") @db.VarChar(36)
-  createdAt      DateTime @default(now()) @map("created_at")
+  id            String   @id @default(uuid()) @db.VarChar(36)
+  batchId       String   @map("batch_id") @db.VarChar(36)
+  harvestDate   DateTime @map("harvest_date") @db.Date
+  flushNumber   Int      @default(1) @map("flush_number") @db.UnsignedInt
+  totalWeightKg Decimal  @map("total_weight_kg") @db.Decimal(8, 2)
+  gradeAKg      Decimal  @default(0.00) @map("grade_a_kg") @db.Decimal(8, 2)
+  gradeBKg      Decimal  @default(0.00) @map("grade_b_kg") @db.Decimal(8, 2)
+  gradeCDryKg   Decimal  @default(0.00) @map("grade_c_dry_kg") @db.Decimal(8, 2)
+  wastageKg     Decimal  @default(0.00) @map("wastage_kg") @db.Decimal(8, 2)
+  notes         String?  @db.VarChar(255)
+  harvestedBy   String   @map("harvested_by") @db.VarChar(36)
+  createdAt     DateTime @default(now()) @map("created_at")
 
   batch    ProductionBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
   recorder User            @relation("HarvestRecorder", fields: [harvestedBy], references: [id], onDelete: Restrict)
@@ -560,14 +600,14 @@ model Harvest {
 // ------------------------------------------------------------------------------
 
 model Supplier {
-  id                String   @id @default(uuid()) @db.VarChar(36)
-  name              String   @db.VarChar(120)
-  contactPerson     String?  @map("contact_person") @db.VarChar(100)
-  phone             String   @db.VarChar(20)
-  email             String?  @db.VarChar(120)
-  materialsSupplied String   @map("materials_supplied") @db.VarChar(255)
-  gstin             String?  @db.VarChar(15)
-  isActive          Boolean  @default(true) @map("is_active")
+  id                String  @id @default(uuid()) @db.VarChar(36)
+  name              String  @db.VarChar(120)
+  contactPerson     String? @map("contact_person") @db.VarChar(100)
+  phone             String  @db.VarChar(20)
+  email             String? @db.VarChar(120)
+  materialsSupplied String  @map("materials_supplied") @db.VarChar(255)
+  gstin             String? @db.VarChar(15)
+  isActive          Boolean @default(true) @map("is_active")
 
   batches   ProductionBatch[]
   purchases Purchase[]
@@ -592,13 +632,13 @@ model Purchase {
 }
 
 model PurchaseItem {
-  id           String   @id @default(uuid()) @db.VarChar(36)
-  purchaseId   String   @map("purchase_id") @db.VarChar(36)
-  materialName String   @map("material_name") @db.VarChar(100)
-  quantity     Decimal  @db.Decimal(10, 2)
-  unit         String   @default("KG") @db.VarChar(20)
-  unitPrice    Decimal  @map("unit_price") @db.Decimal(10, 2)
-  totalPrice   Decimal  @map("total_price") @db.Decimal(10, 2)
+  id           String  @id @default(uuid()) @db.VarChar(36)
+  purchaseId   String  @map("purchase_id") @db.VarChar(36)
+  materialName String  @map("material_name") @db.VarChar(100)
+  quantity     Decimal @db.Decimal(10, 2)
+  unit         String  @default("KG") @db.VarChar(20)
+  unitPrice    Decimal @map("unit_price") @db.Decimal(10, 2)
+  totalPrice   Decimal @map("total_price") @db.Decimal(10, 2)
 
   purchase Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
 

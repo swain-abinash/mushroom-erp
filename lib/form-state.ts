@@ -7,7 +7,21 @@ export type FormState = {
   fieldErrors?: Record<string, string[] | undefined>;
   /** Extra data a form may need to show after success (e.g. an invite link). */
   data?: Record<string, string>;
+  /**
+   * Submitted values, echoed back on failure. React resets a form after its action runs, so inputs
+   * use these as `defaultValue` to keep what the user typed.
+   */
+  values?: Record<string, string>;
 };
+
+/** Text fields of a submission (files and repeated keys are skipped). */
+export function submittedValues(formData: FormData): Record<string, string> {
+  const values: Record<string, string> = {};
+  for (const [key, value] of formData) {
+    if (typeof value === "string" && !key.startsWith("$ACTION")) values[key] = value;
+  }
+  return values;
+}
 
 export function validationFailure(error: z.ZodError): FormState {
   const fieldErrors: Record<string, string[]> = {};

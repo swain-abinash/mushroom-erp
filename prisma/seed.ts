@@ -80,6 +80,59 @@ async function seedFounderAdmin() {
   console.log(`Created founder admin ${email}.`);
 }
 
+// Base taxonomy from DOC-00 Sprint 3 (Fresh / Processed / Supplies). Existing rows are left as-is.
+const CATEGORY_TREE = [
+  {
+    name: "Fresh Mushrooms",
+    slug: "fresh-mushrooms",
+    description: "Oyster, Milky, and Paddy Straw varieties harvested daily.",
+    children: [],
+  },
+  {
+    name: "Processed Products",
+    slug: "processed-products",
+    description: "Dried mushrooms and mushroom powders with a long shelf life.",
+    children: [
+      {
+        name: "Dry Mushrooms",
+        slug: "dry-mushrooms",
+        description: "Sun- and air-dried mushrooms.",
+      },
+      {
+        name: "Mushroom Powders",
+        slug: "mushroom-powders",
+        description: "Fine powders for soups and supplements.",
+      },
+    ],
+  },
+  {
+    name: "Cultivation Supplies",
+    slug: "cultivation-supplies",
+    description: "Everything to grow mushrooms at home or on the farm.",
+    children: [
+      { name: "Spawn", slug: "spawn", description: "Grain spawn for oyster and milky mushrooms." },
+      { name: "Grow Kits", slug: "grow-kits", description: "Ready-to-fruit home grow kits." },
+    ],
+  },
+];
+
+async function seedCategories() {
+  for (const { children, ...parent } of CATEGORY_TREE) {
+    const { id: parentId } = await prisma.category.upsert({
+      where: { slug: parent.slug },
+      update: {},
+      create: parent,
+    });
+    for (const child of children) {
+      await prisma.category.upsert({
+        where: { slug: child.slug },
+        update: {},
+        create: { ...child, parentId },
+      });
+    }
+  }
+}
+
 async function main() {
   await prisma.businessSetting.upsert({
     where: { key: "store_name" },
@@ -91,16 +144,23 @@ async function main() {
     },
   });
 
-  await prisma.category.upsert({
-    where: { slug: "fresh-mushrooms" },
-    update: {},
-    create: {
-      name: "Fresh Mushrooms",
-      slug: "fresh-mushrooms",
-      description: "Oyster, Milky, and Paddy Straw varieties harvested daily.",
-    },
-  });
+  // Storefront contact details shown in the footer/FAQ; left empty (hidden) until the founder fills them in.
+  const storeSettings: Array<[string, string]> = [
+    ["contact_phone", "Customer support phone number (footer)."],
+    ["contact_whatsapp", "WhatsApp number with country code, e.g. +91 98765 43210 (footer)."],
+    ["contact_email", "Customer support email (footer)."],
+    ["contact_address", "Farm / pickup address (footer, multi-line)."],
+    ["service_area", "Delivery coverage, e.g. 'Bhubaneswar and Cuttack' (FAQ)."],
+  ];
+  for (const [key, description] of storeSettings) {
+    await prisma.businessSetting.upsert({
+      where: { key },
+      update: {},
+      create: { key, value: "", description },
+    });
+  }
 
+  await seedCategories();
   await seedRbac();
   await seedFounderAdmin();
 }

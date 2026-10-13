@@ -9,9 +9,19 @@ const { auth } = NextAuth(authConfig);
 
 const FOUNDER_ONLY_PREFIXES = ["/admin/reports", "/admin/settings"];
 
+// Public JSON endpoints under /api/v1 (read-only catalog).
+function isPublicApi(method: string, pathname: string): boolean {
+  return (
+    method === "GET" &&
+    (pathname === "/api/v1/products" || pathname.startsWith("/api/v1/products/"))
+  );
+}
+
 export const proxy = auth((req) => {
   const { pathname, search } = req.nextUrl;
   const roles = req.auth?.user?.roles ?? [];
+
+  if (isPublicApi(req.method, pathname)) return NextResponse.next();
 
   if (!req.auth?.user) {
     if (pathname.startsWith("/api/")) {

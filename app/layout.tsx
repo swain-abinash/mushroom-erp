@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { siteUrl } from "@/lib/url";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -21,9 +22,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: "SporeERP — Mushroom Business Management & E-Commerce",
   description:
     "Unified ERP and e-commerce platform for mushroom cultivation, inventory, orders, and finance.",
+  openGraph: { siteName: "SporeERP", locale: "en_IN", type: "website" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

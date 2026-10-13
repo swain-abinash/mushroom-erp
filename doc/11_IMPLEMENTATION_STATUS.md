@@ -1,11 +1,11 @@
 # 🍄 SporeERP — Implementation Status & Developer Handover
-## Document 11: What Is Built (Sprints 1–2), How It Works, and How to Continue
+## Document 11: What Is Built (Sprints 1–3), How It Works, and How to Continue
 
 **Project Name:** SporeERP  
 **Document Code:** DOC-11-IMPL-STATUS  
 **Branch:** `initial/codesetup`  
 **Last Updated:** 2026-10-14  
-**Covers:** Sprint 1 (Infra/DB/Scaffolding) and Sprint 2 (Auth, Profiles & RBAC) from [00_MASTER_PROJECT_PLAN_AND_ROADMAP.md](00_MASTER_PROJECT_PLAN_AND_ROADMAP.md)
+**Covers:** Sprint 1 (Infra/DB/Scaffolding), Sprint 2 (Auth, Profiles & RBAC) and Sprint 3 (Catalog & Storefront) from [00_MASTER_PROJECT_PLAN_AND_ROADMAP.md](00_MASTER_PROJECT_PLAN_AND_ROADMAP.md)
 
 > Read this first if you are picking up the codebase. It records what is actually implemented (not just planned), the decisions that differ from the spec documents, and the rules to follow when adding features.
 
@@ -39,7 +39,7 @@ cp .env.example .env          # then fill in the values below
 You need a **MariaDB** server (not MySQL 8 — see §8 troubleshooting). Either:
 
 - **Docker:** `docker compose up -d` (MariaDB on `3306`, Redis on `6379`, Adminer on `8080`), or
-- **Local install:** create the database and user once as root (on Windows with both MySQL 8 and MariaDB installed, MariaDB is typically on another port such as `3308` — connect there, see §8):
+- **Local install:** create the database and user once as root (on Windows with both MySQL 8 and MariaDB installed, MariaDB is typically on another port such as `3308` — connect there, see §9):
 
 ```sql
 CREATE DATABASE IF NOT EXISTS sporeerp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -95,6 +95,7 @@ Sign in at `/login` with `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` → you land
 | :--- | :--- |
 | `20261014000000_init` | Full Sprint 1 schema: all 29 models / 14 enums from DOC-04 |
 | `20261014000100_add_password_reset_tokens` | Sprint 2: `password_reset_tokens` table (reset + staff invite links) |
+| `20261014000200_add_catalog_pricing_tiers_and_product_details` | Sprint 3: `product_pricing_tiers`, `stock_notifications`; product columns `short_description`, `variety` (indexed), `nutrition_info`, `storage_tips`, `is_featured`, `allow_backorder`; drops `products.b2b_price` (replaced by tiers) |
 
 **Workflow for a schema change:**
 
@@ -103,6 +104,8 @@ Sign in at `/login` with `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` → you land
 3. Review the generated SQL in `prisma/migrations/<timestamp>_<name>/migration.sql`.
 4. Commit the schema **and** the migration folder together.
 5. Teammates pull and run `npm run prisma:migrate:deploy`.
+
+> **Migration order = folder name order.** `prisma migrate dev` names folders with the current **UTC** timestamp. The existing folders are stamped `20261014…`, so a migration created before **2026-10-14 00:03 UTC** would sort *before* them and break fresh installs. If that happens, rename the folder so it sorts last (and update `_prisma_migrations.migration_name` in your local DB). Verify with a fresh replay: create an empty database, `migrate deploy` into it, then `prisma migrate diff --from-url <that db> --to-schema-datamodel prisma/schema.prisma --exit-code`.
 
 If a database was previously created with `db push`, baseline it once: `npx prisma migrate resolve --applied 20261014000000_init`, then `migrate deploy`.
 
@@ -118,13 +121,16 @@ types/next-auth.d.ts        Adds `id` + `roles` to Session / JWT types
 
 app/
   (customer)/               Public storefront + customer account (route group, ivory theme)
-    page.tsx                Landing hero (static placeholder)
+    page.tsx                Landing page (11 sections, see §7.3.1); copy in home-content.ts
+    products/               Catalog with filters (page.tsx), product detail page ([slug]/), notify-me action
     login/ register/ forgot-password/ reset-password/ account/
     loading.tsx             Suspense fallback for the group
   admin/                    Staff ERP (charcoal theme)
     layout.tsx              Sidebar with permission-filtered nav
     dashboard/              Placeholder dashboard (shows user + roles)
     employees/              Staff management (invite / roles / deactivate)
+    products/               Product list + filters, new/, [id]/ edit + archive, product-form.tsx, actions.ts
+    categories/             Category tree (two levels) create/edit
   unauthorized/             "Access denied" page
   actions/auth.ts           Server Actions for login/register/reset/profile/sign-out
   api/
@@ -132,6 +138,9 @@ app/
     auth/[...nextauth]/     Auth.js endpoints (session, callback, csrf, signout…)
     auth/register/          POST → register customer (JSON API)
     auth/forgot-password/   POST → request reset link (JSON API)
+    v1/products/            GET (public catalog) / POST (create product, catalog:product:manage)
+  uploads/[...path]/        Serves uploaded images from storage/uploads (immutable cache)
+  sitemap.ts  robots.ts     SEO files
 
 lib/
   db.ts                     Prisma singleton
@@ -142,19 +151,32 @@ lib/
   api-response.ts           JSON success/error envelopes (DOC-05 §1)
   form-state.ts             Server Action form state helpers, safe callbackUrl check
   errors.ts                 ServiceError (known, user-facing failures)
-  mail.ts                   Mail stub — logs emails to the server console (see §7)
+  mail.ts                   Mail stub — logs emails to the server console (see §8)
+  url.ts                    appUrl()/siteUrl() — absolute URLs from NEXTAUTH_URL
+  settings.ts               Cached store settings (name, contact details, service area) from business_settings
+  storage.ts                Image upload: content sniffing, size limits, save/delete under storage/uploads
+  auth/api.ts               authorizeApi(permission) — 401/403 envelopes for JSON routes (no redirects)
+  catalog/format.ts         Unit labels, slugify, SKU generator (client-safe)
+  catalog/queries.ts        Cached ("use cache", tag "catalog") storefront reads returning plain DTOs
+  validations/catalog.ts    Zod schemas: product form/API, list query, category, notify-me
 
 services/                   Business logic (no HTTP / React here)
   auth.service.ts           register, password reset, profile, change password
   employee.service.ts       list/invite employees, assign roles, activate/deactivate
+  catalog.service.ts        categories, product create/update/archive, images, tiers, notify-me
   audit.service.ts          Writes audit_logs rows
 
 components/
   ui/button.tsx
-  forms/form-controls.tsx   Field / SubmitButton / FormMessage (client)
+  forms/form-controls.tsx   Field / TextArea / Select / Checkbox / SubmitButton / FormMessage (client)
   forms/auth-card.tsx
   auth/user-nav.tsx         Header sign-in state (server, inside Suspense)
   auth/admin-nav.tsx        Admin sidebar links + sign out (server, inside Suspense)
+  catalog/product-card.tsx  ProductCard, ProductImage, AvailabilityBadge
+  catalog/status-badge.tsx  Admin product status pill
+  storefront/site-header.tsx / site-footer.tsx   Storefront header (sticky, mobile menu) and footer
+
+storage/uploads/            Uploaded media (gitignored; back it up together with the database)
 
 prisma/
   schema.prisma  migrations/  seed.ts
@@ -249,7 +271,113 @@ Envelopes follow DOC-05 §1: `{ success, data, meta: { timestamp, requestId } }`
 
 ---
 
-## 7. Deviations From the Spec & Known Gaps
+## 7. Sprint 3 — Catalog & Storefront (Implemented)
+
+### 7.1 Data model
+
+- **`ProductPricingTier`** — one row per product per B2B customer type (`B2B_RESTAURANT`, `WHOLESALE`) with `price` and `minQty` (the quantity from which it applies). Retail price stays on `products.retail_price`. The API's `b2bPrice` field (DOC-05) is derived from the Restaurant tier.
+- **`StockNotification`** — "notify me when back in stock" requests, unique per product + email.
+- **Product additions:** `shortDescription` (cards), `variety` (filter, e.g. "Blue Oyster"), `nutritionInfo`, `storageTips` (product page tabs), `isFeatured` (homepage), `allowBackorder`.
+- **Stock** uses the existing `inventory_items` table: every product gets a linked `FINISHED_PRODUCT` inventory item. Sellable stock = `available_stock − reserved_stock`. **Opening stock** entered on product creation is recorded as a `MANUAL_ADJUSTMENT` inventory transaction. After creation, stock is read-only in the product form (adjustments arrive with the Inventory module, Sprint 5).
+- **Seeded taxonomy:** Fresh Mushrooms; Processed Products › Dry Mushrooms, Mushroom Powders; Cultivation Supplies › Spawn, Grow Kits.
+
+### 7.2 Admin screens
+
+| Screen | Permission | What it does |
+| :--- | :--- | :--- |
+| `/admin/products` | `catalog:product:view` (all staff) | Search (name/SKU/variety), category & status filters; thumbnail, SKU, price/unit, stock with low-stock flag (≤ reorder level), status |
+| `/admin/products/new` | `catalog:product:manage` | Full product form (below) |
+| `/admin/products/[id]` | `catalog:product:manage` | Same form pre-filled + **Archive** |
+| `/admin/categories` | `catalog:product:manage` | Create/edit categories (two levels), parent, description, active flag |
+
+**Product form:** name, category, variety (suggestions from existing ones), SKU (blank → generated, or the **Generate** button), short + full description, selling unit (KG / 200 g / 500 g / pack / bottle), retail price, minimum order quantity, Restaurant + Wholesale tiers (price + from-quantity), opening stock (create only), low-stock level, shelf life, nutrition, cooking & storage, images, status, featured, allow back-orders.
+
+**Rules enforced by `services/catalog.service.ts`:**
+
+- **SKU** like `MUSH-OYS-BLU-1KG` (category word – variety words – unit); `-2`, `-3` … appended if taken. A manually entered duplicate → `SKU_TAKEN`.
+- **Slug** from the name, made unique, and **kept on rename** so URLs and SEO don't break (same for category slugs).
+- **Pricing override:** setting prices on a **new** product needs `catalog:product:manage`; **changing** the retail price or any tier of an **existing** product needs `catalog:pricing:override` (Founder only). Farm Managers see the price fields read-only with a notice; the service also rejects the change server-side.
+- **Images:** JPEG / PNG / WebP / AVIF, verified by file content (not the extension), ≤ 4 MB each, ≤ 5 per save. Exactly one **main image** (the chosen one, else the existing main, else the first). Removing an image deletes the file only if no other product image still uses that URL. If the database write fails, only the files saved by that request are deleted again.
+- **Archive instead of delete** — products are referenced by orders, so removal from sale sets `ARCHIVED`.
+- Every product create/update/archive and category change writes an `audit_logs` row (`PRODUCT_CREATED`, `PRODUCT_UPDATED` with old/new prices, `PRODUCT_ARCHIVED`, `CATEGORY_CREATED`, `CATEGORY_UPDATED`).
+
+### 7.3 Storefront
+
+| Route | Content |
+| :--- | :--- |
+| `/` | Landing page that works even with an empty catalog — see §7.3.1 |
+| `/products` | Grid with filters: category (incl. sub-categories), variety, in-stock only, search; pagination (24 per page); sort: in stock → featured → name |
+| `/products/[slug]` | Gallery with thumbnails; category/variety/availability badges; price per unit and minimum order; freshness guarantee (shelf life); quantity stepper (min = MOQ, step 0.5 kg or 1, max = stock unless back-order); business pricing tiers; tabs (Description / Nutrition / Cooking & storage). Out of stock without back-order → **Notify me** form instead |
+
+- **Visibility:** customers see `PUBLISHED` and `OUT_OF_STOCK` products in active categories; `DRAFT` / `ARCHIVED` are hidden (direct URL → "Product not found" with `noindex`).
+- **"In stock"** = status `PUBLISHED` and sellable stock > 0.
+- **Add to cart** is rendered but disabled ("Online ordering is coming soon") until Sprint 4.
+
+#### 7.3.1 Landing page, header & footer
+
+`app/(customer)/page.tsx` — sections in order (anchors in brackets are linked from the header and footer):
+
+1. **Hero** — headline, Shop / B2B buttons, **live "TODAY'S HARVEST: X KG AVAILABLE NOW"** (sum of in-stock kg products; "sold out" message at 0), and a "day at the farm" timeline (5 AM harvest, 8–11 AM and 4–7 PM delivery slots from DOC-07/08).
+2. **Highlights strip** — 5:00 AM harvest, < 4 hrs farm to door, 0 pesticides, 100% composted substrate.
+3. **Our mushrooms** (`#varieties`) — 6 variety cards (Blue / Pink / King Oyster, White Milky, Paddy Straw, Dry & Powder) with taste and best uses; a card shows **In stock / Sold out** and links to the filtered catalog when products of that variety exist.
+4. **Today's harvest** — featured products; with an empty catalog it shows "Our first harvest is on its way" + Create account.
+5. **How it works** (`#how-it-works`) — 4 steps from grow room to doorstep.
+6. **Our farm** (`#our-farm`) — growing method and checklist.
+7. **Nutrition** (`#nutrition`) — 4 benefit cards (no medical claims).
+8. **Ways to cook** (`#recipes`) — 3 quick recipe ideas.
+9. **For business** (`#business`) — B2B benefits + Register your business.
+10. **FAQ** (`#faq`) — 6 questions as an accordion, plus **`FAQPage` JSON-LD** for search engines. The delivery answer uses the `service_area` setting.
+11. **Final call to action** — Create free account / Browse products.
+
+All homepage copy lives in **`app/(customer)/home-content.ts`** — edit text there without touching the layout. The copy follows the claims in DOC-01/07/08; **founders should review it** (e.g. the variety list, dispatch times and payment methods) before launch.
+
+**Header** (`components/storefront/site-header.tsx`): sticky, store name, links (Shop, Varieties, How it works, For business, FAQ), sign-in/account, **Shop now** button, and a ☰ menu on mobile.
+
+**Footer** (`components/storefront/site-footer.tsx`): brand + tagline + contact details, **Shop** (all top-level categories from the DB + "In stock today"), **Learn** (section anchors), **Account** (create account, sign in, my account, B2B), bottom bar with © year.
+
+**Contact details come from `business_settings`** (seeded empty, so they're hidden until filled in) via `lib/settings.ts`:
+
+| Key | Shown as |
+| :--- | :--- |
+| `store_name` | Header/footer brand |
+| `contact_phone` | 📞 `tel:` link |
+| `contact_whatsapp` | 💬 "Chat on WhatsApp" (`wa.me` link; include the country code) |
+| `contact_email` | ✉️ `mailto:` link |
+| `contact_address` | 📍 address (multi-line) |
+| `service_area` | FAQ "Where do you deliver?" answer |
+
+There is no settings screen yet (founder settings come later), so set them with **Prisma Studio** (`npm run prisma:studio` → `BusinessSetting`) or SQL. Settings are cached with `cacheLife("minutes")`, so a change appears on the site **within about a minute** (verified: ~70 s). A future settings screen should call `updateTag("settings")` after saving.
+
+### 7.4 Caching (Next.js Cache Components)
+
+- All storefront reads live in `lib/catalog/queries.ts`, marked `"use cache"`, tagged **`catalog`**, with `cacheLife("minutes")`. They return plain JSON DTOs (Prisma `Decimal` → `number`) because cached values must be serializable.
+- Admin Server Actions call **`updateTag("catalog")`** after every write, so the storefront shows the change on the very next request. The JSON API uses `revalidateTag("catalog", "max")` (route handlers can't call `updateTag`).
+- **Any future code that changes stock, prices or product visibility (orders, inventory, harvest) must also invalidate the `catalog` tag**, otherwise the storefront can show stale stock for a few minutes.
+- Filtering and pagination happen in memory over the visible catalog (tens of products), because "in stock" compares two columns, which Prisma can't express in `WHERE`. Revisit with raw SQL if the catalog grows into the thousands.
+- The homepage and catalog shells are prerendered at **build time**, so **`next build` needs a reachable database**.
+
+### 7.5 Images & uploads
+
+- Stored in **`storage/uploads/products/<uuid>.<ext>`** (gitignored) and served by `app/uploads/[...path]/route.ts` with `Cache-Control: immutable` and `nosniff`; path traversal is rejected. They are not under `public/` because `next start` only serves files that were in `public/` at build time.
+- Rendered through `next/image` (`images.localPatterns` allows `/uploads/**`).
+- Upload limits: `experimental.serverActions.bodySizeLimit` and `experimental.proxyClientMaxBodySize` are both **22 MB** in `next.config.ts` (the proxy buffers `/admin/*` request bodies too).
+- **Back up `storage/uploads` together with the database.** Moving to S3/R2 later only requires changing `lib/storage.ts` (save/delete/read) and the image URL prefix.
+
+### 7.6 SEO
+
+- Root `metadataBase` from `NEXTAUTH_URL`; per-page titles and descriptions; product pages have a canonical URL, OpenGraph + Twitter tags with product images, and **JSON-LD `Product`** with an `Offer` (INR price; `InStock` / `BackOrder` / `OutOfStock`).
+- `/sitemap.xml` (home, catalog, every visible product with `lastModified`) and `/robots.txt` (disallows `/admin`, `/account`, `/checkout`, `/api/`, `/reset-password`).
+
+### 7.7 JSON API
+
+| Method | Endpoint | Access | Notes |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/v1/products` | **Public** (exempted in `proxy.ts`) | Query: `category` (slug), `variety`, `status` (`PUBLISHED` / `OUT_OF_STOCK`), `inStock=1`, `q`, `page`, `limit` (1–100). Returns `products[]` (id, name, slug, sku, category, variety, retailPrice, b2bPrice, pricingTiers, unitType, minOrderQty, availableStock, inStock, shelfLifeDays, primaryImage, status) + `pagination` |
+| `POST` | `/api/v1/products` | `catalog:product:manage` | Body per DOC-05: `name`, `categoryId`, `description`, `unitType`, `retailPrice`; optional `sku`, `b2bPrice` (→ Restaurant tier) or `pricingTiers[]`, `minOrderQty`, `shelfLifeDays`, `status`, `openingStock`, `images[{imageUrl, isPrimary}]` (`/uploads/…` or `https://`). Responses `201` / `401` / `403` / `409 SKU_TAKEN` / `422` |
+
+---
+
+## 8. Deviations From the Spec & Known Gaps
 
 | Item | Spec said | What we did / why |
 | :--- | :--- | :--- |
@@ -262,11 +390,19 @@ Envelopes follow DOC-05 §1: `{ success, data, meta: { timestamp, requestId } }`
 | Email verification | `users.email_verified` column exists | Not enforced or sent yet. |
 | Customer addresses | `customer_addresses` table exists | No UI yet — planned with checkout (Sprint 4). |
 | `/api/auth/session` permissions | DOC-05 says "claims and permissions" | Returns `id` + `roles` only. Server code should use `getCurrentUser().permissions`. |
-| Automated tests | — | None yet. |
+| `products.b2b_price` | DOC-04 column | **Dropped** in favour of `product_pricing_tiers` (one source of truth). API responses still expose `b2bPrice` (= Restaurant tier). |
+| Permission for product create | DOC-05 says `catalog:product:create` | Uses the matrix code **`catalog:product:manage`** (DOC-06). |
+| `catalog:pricing:override` | Founder-only; meaning not specified | Interpreted as **changing the prices of an existing product** (see §7.2). |
+| Image storage / CDN | DOC-05 shows `cdn.sporemushroom.com` URLs | **Local disk** (`storage/uploads`) for now; swap `lib/storage.ts` for S3/R2 + CDN later. |
+| Product page freshness card | "Picked from Batch BATCH-2026-048 • Harvest Date" | Shows the shelf-life guarantee only; batch traceability needs production data (Sprint 6). |
+| Add to cart / notify-me emails | Sprint 3 product page | Add to cart disabled until Sprint 4. Notify-me requests are **stored** but no email is sent yet — send them when stock is replenished (Sprint 5 inventory). |
+| HTTP status of missing products | — | Unknown/archived product URLs render "not found" with `noindex`, but the HTTP status is `200` (the page streams behind `loading.tsx`). |
+| Category form without JavaScript | — | Creating a category works, but with JavaScript disabled the success message isn't shown (React's form-state matching with many forms on one page). Normal browsers with JavaScript show it. |
+| Automated tests | — | None in the repo yet (the verification in §10 used throwaway scripts). |
 
 ---
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Symptom | Cause / Fix |
 | :--- | :--- |
@@ -277,10 +413,14 @@ Envelopes follow DOC-05 §1: `{ success, data, meta: { timestamp, requestId } }`
 | Build error "encountered the unstable value `new Date()`" / missing Suspense | Cache Components rule — see §6.3. |
 | Dev error "encountered the unstable value `crypto.getRandomValues()`" at `<UserNav />` | Auth.js generates random values before reading cookies. Always read the session through `getCurrentUser()` (it calls `await connection()` first) — never call `auth()` directly in components. |
 | Reset/invite link "not received" | Expected — check the server console for `[mail]` output. |
+| `next build` fails with Prisma connection errors | The homepage/catalog are prerendered from the database at build time — make sure `DATABASE_URL` is reachable during the build. |
+| Uploaded images 404 after a deploy | `storage/uploads` wasn't carried over — it's gitignored runtime data; mount and back it up like the database. |
+| Storefront shows old stock or prices | The code that changed catalog data didn't call `updateTag("catalog")` / `revalidateTag("catalog", "max")` (see §7.4). |
+| Server Action fails with "Body exceeded … limit" | The upload is bigger than 22 MB in total; raise both limits in `next.config.ts` together. |
 
 ---
 
-## 9. Verification Record (2026-10-14)
+## 10. Verification Record (2026-10-14)
 
 Run against a production build (`next build` + `next start`) on MariaDB 11.6, after `prisma migrate deploy` + `db:seed` on an empty database.
 
@@ -303,11 +443,33 @@ Run against a production build (`next build` + `next start`) on MariaDB 11.6, af
 
 Test accounts were deleted afterwards; the database holds only seed data.
 
+### Sprint 3 verification
+
+Fresh replay: all **3 migrations** applied to a new empty database → `migrate diff` *No difference detected*. `tsc`, `eslint` and `next build` clean. **Catalog end-to-end checks: 48 / 48 passed** (two consecutive runs), and the Sprint 2 suite re-run afterwards: **36 / 36 passed** (no regressions).
+
+| Area | Verified |
+| :--- | :--- |
+| Admin | Products and categories screens render; seeded taxonomy present; category created with slug |
+| Validation | Negative price rejected **and typed values kept**; a non-image file named `.jpg` rejected by content |
+| Create | Product with 2 uploaded images → SKU `…-OYS-BLU-1KG` generated, unique slug, opening stock, Restaurant tier, featured |
+| Uploads | Served as `image/png` with immutable caching; `..%2F` traversal → 404; `/_next/image` optimizes them |
+| Storefront | Listing, variety filter, category + in-stock filter, product page, homepage (featured + variety + live kg) |
+| SEO | JSON-LD `Product` with `InStock` offer and exact price; OpenGraph + canonical; sitemap lists visible products only; robots disallows `/admin` |
+| API | Public `GET`; `POST` 401 anonymous / 403 customer / 201 founder (SKU `…-200G`) / 409 duplicate SKU; invalid query 422 |
+| Notify me | Zero-stock product shows "Out of stock" + form; request stored; repeating it is idempotent |
+| Pricing rule | Farm Manager sees locked prices; price change rejected; non-price edit saved; Founder price change saved |
+| Cache | Storefront and API show edits immediately after saving (`updateTag`) |
+| Images | Removing an image and choosing a new main image works; a file still referenced by another product is **not** deleted |
+| Archive | Archived product disappears from listing, API and sitemap; its URL shows "not found" + `noindex` |
+| RBAC | Customer blocked from `/admin/products`; Farm Manager can manage categories |
+
+Two bugs were found by these tests and fixed before the final runs: a failed product save could delete image files it had only *referenced* (API image URLs), and removing an image deleted the file even when another product still used it.
+
 > **Gotcha seen during testing:** a `redirect()` from the DAL inside a page that is already streaming (behind `loading.tsx`) arrives as HTTP `200` with a `<meta http-equiv="refresh">` to the target, not a `307`. Browsers follow it normally. Automated tests and API clients must not treat `200` as "allowed" on pages; JSON APIs should return explicit `401`/`403` envelopes instead of calling `redirect()`.
 
 ---
 
-## 10. How to Add a Protected Feature (recipe)
+## 11. How to Add a Protected Feature (recipe)
 
 1. **Permission:** if needed, add a code to `PERMISSIONS`, `PERMISSION_DESCRIPTIONS` and the relevant roles in `ROLE_PERMISSIONS` (`lib/auth/permissions.ts`), then `npm run db:seed`.
 2. **Schema:** edit `prisma/schema.prisma` → `npm run prisma:migrate -- --name <change>`.
@@ -315,11 +477,15 @@ Test accounts were deleted afterwards; the database holds only seed data.
 4. **Service:** add functions in `services/<module>.service.ts`; throw `ServiceError` for expected failures; log mutations with `AuditService.logEvent` (pass the transaction client when inside `db.$transaction`).
 5. **Page:** `app/admin/<module>/page.tsx` → first line `await requirePermission(PERMISSIONS.X, "/admin/<module>")`.
 6. **Server Action:** `"use server"` file next to the page; call `requirePermission` **inside each action**, validate, call the service, `revalidatePath`, return `FormState`.
-7. **JSON API (if needed):** `app/api/v1/<module>/route.ts` (already behind the proxy's 401); still call the DAL for permission checks; respond with `apiSuccess` / `apiErrorFrom`.
+7. **JSON API (if needed):** `app/api/v1/<module>/route.ts` (already behind the proxy's 401 — add public read endpoints to `isPublicApi` in `proxy.ts`); check permissions with `authorizeApi` (step 10); respond with `apiSuccess` / `apiErrorFrom`.
 8. **Nav:** add the link in `components/auth/admin-nav.tsx` with its `visible: hasPermission(...)` condition.
+9. **Cache:** if the feature changes anything the storefront shows (stock, price, product status), call `updateTag("catalog")` in the Server Action (or `revalidateTag("catalog", "max")` in a route handler).
+10. **JSON API permission checks:** use `authorizeApi(PERMISSIONS.X)` from `lib/auth/api.ts` (returns `401`/`403` envelopes) — not the DAL's redirecting `require*` helpers.
 
 ---
 
-## 11. Next Up — Sprint 3 (Catalog & Storefront)
+## 12. Next Up — Sprint 4 (Cart, Checkout & Orders)
 
-Per DOC-00: `ProductPricingTier` model (+ migration), admin product CRUD with image upload / SKU / units / MOQ, B2B price tiers, storefront catalog with filters, product detail page. Before or alongside it, consider closing the Sprint 2 gaps in §7 (rate limiting, real email provider, tests).
+Per DOC-00: persistent cart (server + localStorage, guest and signed-in), slide-out cart drawer with delivery fee and free-delivery threshold, 3-step checkout (address with saved-address picker → delivery slot → payment method), order review with **stock verification**, `Order` / `OrderItem` / `OrderStatusHistory` written atomically, the order state machine (`PENDING → CONFIRMED → PROCESSING → PACKED → OUT_FOR_DELIVERY → DELIVERED`, or `CANCELLED` / `REFUNDED`), admin orders Kanban + table, packing slip / invoice PDF.
+
+Already in place for it: the product page quantity stepper and disabled **Add to cart** button, `minOrderQty`, B2B `pricingTiers` (apply by `customers.customer_type`), `allowBackorder`, `inventory_items.reserved_stock` (reserve on order, release on cancel) and the `catalog` cache tag (invalidate whenever stock changes). Open gaps from earlier sprints are listed in §8 (email provider, rate limiting, tests).

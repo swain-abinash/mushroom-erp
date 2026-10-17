@@ -11,6 +11,11 @@ export async function AdminNav() {
   const links = [
     { href: "/admin/dashboard", label: "Dashboard", visible: true },
     {
+      href: "/admin/orders",
+      label: "Orders & Delivery",
+      visible: hasPermission(user, PERMISSIONS.ORDERS_VIEW_ALL),
+    },
+    {
       href: "/admin/products",
       label: "Products",
       visible: hasPermission(user, PERMISSIONS.CATALOG_PRODUCT_VIEW),
@@ -21,9 +26,39 @@ export async function AdminNav() {
       visible: hasPermission(user, PERMISSIONS.CATALOG_PRODUCT_MANAGE),
     },
     {
+      href: "/admin/inventory",
+      label: "Inventory & Stock",
+      visible: hasPermission(user, PERMISSIONS.INVENTORY_VIEW_STOCK),
+    },
+    {
+      href: "/admin/production",
+      label: "Cultivation & Batches",
+      visible: user.isStaff,
+    },
+    {
+      href: "/admin/purchases",
+      label: "Purchases & Suppliers",
+      visible: hasPermission(user, PERMISSIONS.PURCHASES_CREATE),
+    },
+    {
+      href: "/admin/expenses",
+      label: "Expense Ledger",
+      visible: hasPermission(user, PERMISSIONS.EXPENSES_RECORD),
+    },
+    {
+      href: "/admin/reports/pnl",
+      label: "Real-Time P&L",
+      visible: hasPermission(user, PERMISSIONS.FINANCE_PNL_VIEW),
+    },
+    {
       href: "/admin/employees",
       label: "Employees",
       visible: hasPermission(user, PERMISSIONS.USERS_VIEW),
+    },
+    {
+      href: "/admin/settings",
+      label: "Business Settings",
+      visible: user.isFounder,
     },
   ];
 

@@ -60,19 +60,33 @@ export function ProductGallery({
   );
 }
 
+import { useCart } from "@/context/cart-context";
+import type { UnitType } from "@prisma/client";
+
 export function QuantitySelector({
   min,
   step,
   max,
   unitLabel,
   canOrder,
+  productInfo,
 }: {
   min: number;
   step: number;
   max: number | null;
   unitLabel: string;
   canOrder: boolean;
+  productInfo?: {
+    id: string;
+    name: string;
+    slug: string;
+    sku: string;
+    price: number;
+    unitType: UnitType;
+    imageUrl: string | null;
+  };
 }) {
+  const { addItem } = useCart();
   const [quantity, setQuantity] = useState(min);
   const clamp = (value: number) => {
     const rounded = Math.round(value * 100) / 100;
@@ -113,12 +127,32 @@ export function QuantitySelector({
       </div>
       <button
         type="button"
-        disabled
-        className="rounded-full bg-forest-primary px-6 py-3 font-display font-semibold text-spore-ivory disabled:opacity-60"
+        disabled={!canOrder}
+        onClick={() => {
+          if (productInfo) {
+            addItem(
+              {
+                productId: productInfo.id,
+                name: productInfo.name,
+                slug: productInfo.slug,
+                sku: productInfo.sku,
+                price: productInfo.price,
+                unitType: productInfo.unitType,
+                minOrderQty: min,
+                maxStock: max,
+                imageUrl: productInfo.imageUrl,
+              },
+              quantity,
+            );
+          }
+        }}
+        className="flex items-center justify-center gap-2 rounded-full bg-forest-primary px-6 py-3 font-display font-semibold text-spore-ivory hover:bg-forest-hover transition-colors shadow-md disabled:opacity-60 cursor-pointer"
       >
-        🛒 Add to cart
+        <span>🛒 Add to harvest basket</span>
       </button>
-      <p className="font-body text-xs text-forest-primary/60">Online ordering is coming soon.</p>
+      <p className="font-body text-xs text-forest-primary/60">
+        Dispatched fresh following our 5:00 AM morning harvest.
+      </p>
     </div>
   );
 }

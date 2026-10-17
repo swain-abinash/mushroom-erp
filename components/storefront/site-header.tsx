@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import { UserNav } from "@/components/auth/user-nav";
 import { getStoreSettings } from "@/lib/settings";
 
+import { CartButton } from "@/components/cart/cart-button";
+
 export const NAV_LINKS = [
   { href: "/products", label: "Shop" },
   { href: "/#varieties", label: "Varieties" },
@@ -36,7 +38,8 @@ export async function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-4 font-body text-sm text-forest-primary">
+        <div className="flex items-center gap-3 font-body text-sm text-forest-primary">
+          <CartButton />
           <Suspense fallback={<span className="w-14" />}>
             <UserNav />
           </Suspense>

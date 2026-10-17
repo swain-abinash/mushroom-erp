@@ -153,6 +153,15 @@ export default async function ProductPage({ params }: Props) {
               max={product.inStock && !product.allowBackorder ? product.availableStock : null}
               unitLabel={unit}
               canOrder={canOrder}
+              productInfo={{
+                id: product.id,
+                name: product.name,
+                slug: product.slug,
+                sku: product.sku,
+                price: product.retailPrice,
+                unitType: product.unitType,
+                imageUrl: product.images[0]?.url ?? null,
+              }}
             />
           ) : (
             <NotifyMeForm productId={product.id} />

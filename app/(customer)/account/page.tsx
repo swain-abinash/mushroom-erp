@@ -23,7 +23,13 @@ export default async function AccountPage() {
             Member since {formatDate(profile.createdAt)}
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/account/orders"
+            className="rounded-full bg-forest-primary px-6 py-3 font-display font-semibold text-spore-ivory hover:bg-forest-hover"
+          >
+            My Orders
+          </Link>
           {user.isStaff ? (
             <Link
               href="/admin/dashboard"

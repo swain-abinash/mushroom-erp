@@ -7,6 +7,7 @@ import { signOutAction } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { ChangePasswordForm, ProfileForm } from "./profile-forms";
 
+export const instant = false;
 export const metadata: Metadata = { title: "My account — SporeERP" };
 
 export default async function AccountPage() {

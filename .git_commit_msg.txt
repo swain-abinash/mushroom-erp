@@ -1,7 +1,0 @@
-fix: resolve storefront checkout compilation lag and console errors
-
-- Fix next.config.ts by adding remotePatterns for images and setting partialPrefetching: false to eliminate 40s PPR database compaction
-- Support guest and customer checkout seamlessly in CheckoutPage and placeOrderAction with automatic profile creation
-- Seed rich mushroom catalog across dev, uat, and default databases
-- Fix missing sizes attribute in checkout-form image elements
-- Verified full interactive browser storefront purchase flow and passed all 38/38 automated E2E tests

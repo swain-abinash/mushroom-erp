@@ -5,6 +5,7 @@ import { OrderService } from "@/services/order.service";
 import { formatCurrency } from "@/lib/utils";
 import { UNIT_LABELS } from "@/lib/catalog/format";
 
+export const instant = false;
 export const metadata = {
   title: "Order Confirmed — SporeERP",
 };

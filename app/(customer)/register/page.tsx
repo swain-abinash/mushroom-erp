@@ -3,6 +3,7 @@ import { AuthCard } from "@/components/forms/auth-card";
 import { safeCallbackUrl } from "@/lib/form-state";
 import { RegisterForm } from "./register-form";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Create account — SporeERP" };
 
 export default async function RegisterPage({

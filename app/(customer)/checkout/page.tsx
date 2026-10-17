@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/auth/dal";
 import { OrderService } from "@/services/order.service";
 import { CheckoutForm } from "./checkout-form";
 
+export const instant = false;
 export const metadata = {
   title: "Checkout — SporeERP Farm Fresh",
 };

@@ -2,6 +2,8 @@ import { SiteFooter } from "@/components/storefront/site-footer";
 import { SiteHeader } from "@/components/storefront/site-header";
 import { CartProviderClient } from "@/components/cart/cart-provider-client";
 
+export const instant = false;
+
 export default function CustomerLayout({ children }: { children: React.ReactNode }) {
   return (
     <CartProviderClient>

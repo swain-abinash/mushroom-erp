@@ -11,6 +11,8 @@ import { InfoTabs, NotifyMeForm, ProductGallery, QuantitySelector } from "./prod
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const instant = false;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getStorefrontProduct((await params).slug);
   if (!product) return { title: "Product not found — SporeERP" };

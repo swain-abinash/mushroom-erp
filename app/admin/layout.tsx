@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import { AdminNav } from "@/components/auth/admin-nav";
 
+export const instant = false;
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-charcoal-dark text-spore-ivory">

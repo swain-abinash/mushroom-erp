@@ -8,6 +8,7 @@ import {
 } from "@/lib/catalog/queries";
 import { cn } from "@/lib/utils";
 
+export const instant = false;
 export const metadata: Metadata = {
   title: "Shop fresh mushrooms — SporeERP",
   description:

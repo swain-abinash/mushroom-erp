@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { spawn, execSync } from "child_process";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
@@ -35,6 +35,34 @@ console.log(`📁 Config File : ${envFileName}`);
 console.log(`🌐 Target Port : ${port}`);
 console.log(`🗄️  Database    : ${parsedEnv.DATABASE_URL?.split("@")[1] || "configured"}`);
 console.log("=========================================================\n");
+
+function ensurePortIsFree(targetPort: number) {
+  if (process.platform !== "win32") return;
+  try {
+    const output = execSync(`netstat -ano | findstr :${targetPort}`, {
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "ignore"],
+    });
+    const lines = output.trim().split("\n");
+    for (const line of lines) {
+      if (line.includes("LISTENING")) {
+        const parts = line.trim().split(/\s+/);
+        const pid = parts[parts.length - 1];
+        if (pid && pid !== "0" && Number(pid) !== process.pid) {
+          console.log(`🧹 Port ${targetPort} was in use by PID ${pid}. Freeing port...`);
+          try {
+            execSync(`taskkill /F /PID ${pid}`, { stdio: "ignore" });
+            console.log(`✅ Port ${targetPort} is now free.`);
+          } catch {}
+        }
+      }
+    }
+  } catch {}
+}
+
+if (action === "dev" || action === "start") {
+  ensurePortIsFree(Number(port));
+}
 
 let commandArgs: string[] = [];
 if (action === "dev") {

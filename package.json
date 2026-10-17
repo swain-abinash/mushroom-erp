@@ -3,9 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "tsx scripts/run-env.ts dev dev",
+    "dev:uat": "tsx scripts/run-env.ts uat dev",
+    "dev:prod": "tsx scripts/run-env.ts prod dev",
     "build": "next build",
+    "build:uat": "tsx scripts/run-env.ts uat build",
+    "build:prod": "tsx scripts/run-env.ts prod build",
     "start": "next start",
+    "start:uat": "tsx scripts/run-env.ts uat start",
+    "start:prod": "tsx scripts/run-env.ts prod start",
     "lint": "eslint",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -13,7 +19,12 @@
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:migrate:status": "prisma migrate status",
     "prisma:studio": "prisma studio",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "env:setup": "node --conditions=react-server --import=tsx scripts/setup-environments.ts all",
+    "env:setup:dev": "node --conditions=react-server --import=tsx scripts/setup-environments.ts dev",
+    "env:setup:uat": "node --conditions=react-server --import=tsx scripts/setup-environments.ts uat",
+    "env:setup:prod": "node --conditions=react-server --import=tsx scripts/setup-environments.ts prod",
+    "test:e2e": "node --conditions=react-server --import=tsx scripts/test-e2e.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

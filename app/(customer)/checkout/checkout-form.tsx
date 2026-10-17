@@ -50,6 +50,7 @@ export function CheckoutForm({
     isDefault: savedAddresses.length === 0,
   });
 
+  const [email, setEmail] = useState(user.email ?? "");
   const [deliverySlot, setDeliverySlot] = useState<"MORNING_HARVEST_DISPATCH" | "EVENING_DISPATCH">(
     "MORNING_HARVEST_DISPATCH",
   );
@@ -84,6 +85,11 @@ export function CheckoutForm({
     setErrorMessage(null);
 
     const payload = {
+      customer: {
+        name: newAddress.recipientName?.trim() || user.name || "Customer",
+        email: email?.trim() || user.email || "guest@sporeerp.local",
+        phone: newAddress.recipientPhone?.trim() || user.phone || "9999999999",
+      },
       items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
       addressId: selectedAddressId !== "new" ? selectedAddressId : undefined,
       newAddress: selectedAddressId === "new" ? newAddress : undefined,
@@ -260,6 +266,19 @@ export function CheckoutForm({
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, recipientPhone: e.target.value })
                     }
+                    className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-forest-primary mb-1">
+                    Email Address (for order tracking) *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
                     className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
                   />
                 </div>
@@ -625,7 +644,13 @@ export function CheckoutForm({
               <div key={item.productId} className="flex gap-3 items-center text-sm">
                 <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-forest-primary/5">
                   {item.imageUrl ? (
-                    <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.name}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
                   ) : (
                     <span className="absolute inset-0 grid place-items-center text-xl">🍄</span>
                   )}

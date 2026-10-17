@@ -47,7 +47,11 @@ if (action === "dev") {
   commandArgs = [action, ...process.argv.slice(4)];
 }
 
-const child = spawn("npx", commandArgs, {
+const nextBin = process.platform === "win32"
+  ? path.resolve(process.cwd(), "node_modules", ".bin", "next.cmd")
+  : path.resolve(process.cwd(), "node_modules", ".bin", "next");
+
+const child = spawn(nextBin, commandArgs.slice(1), {
   stdio: "inherit",
   shell: true,
   env: {

@@ -1,4 +1,4 @@
-import { requireUser } from "@/lib/auth/dal";
+import { getCurrentUser } from "@/lib/auth/dal";
 import { OrderService } from "@/services/order.service";
 import { CheckoutForm } from "./checkout-form";
 
@@ -7,8 +7,8 @@ export const metadata = {
 };
 
 export default async function CheckoutPage() {
-  const user = await requireUser("/checkout");
-  const savedAddresses = await OrderService.getCustomerAddresses(user.id);
+  const user = await getCurrentUser();
+  const savedAddresses = user ? await OrderService.getCustomerAddresses(user.id) : [];
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 font-body">
@@ -22,7 +22,11 @@ export default async function CheckoutPage() {
       </div>
 
       <CheckoutForm
-        user={{ name: user.name, email: user.email, phone: user.phone }}
+        user={
+          user
+            ? { name: user.name, email: user.email, phone: user.phone }
+            : { name: "", email: "", phone: "" }
+        }
         savedAddresses={savedAddresses}
       />
     </div>

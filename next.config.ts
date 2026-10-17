@@ -3,10 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
-  partialPrefetching: true,
+  partialPrefetching: false,
   images: {
-    // Uploaded product/category photos served by app/uploads/[...path]/route.ts.
+    // Uploaded product/category photos served by app/uploads/[...path]/route.ts, plus external CDN images.
     localPatterns: [{ pathname: "/uploads/**", search: "" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" },
+    ],
   },
   experimental: {
     // Product forms upload up to 5 images × 4 MB; leave headroom for multipart overhead.

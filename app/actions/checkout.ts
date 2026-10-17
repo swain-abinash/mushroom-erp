@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath, revalidateTag } from "next/cache";
+import bcrypt from "bcryptjs";
 import { getCurrentUser } from "@/lib/auth/dal";
+import { db } from "@/lib/db";
 import { checkoutSchema, type CheckoutInput } from "@/lib/validations/order";
 import { OrderService } from "@/services/order.service";
 import { ServiceError } from "@/lib/errors";
@@ -14,14 +16,6 @@ export type CheckoutActionResult = {
 };
 
 export async function placeOrderAction(input: CheckoutInput): Promise<CheckoutActionResult> {
-  const user = await getCurrentUser();
-  if (!user) {
-    return {
-      success: false,
-      error: "Please sign in to complete your order.",
-    };
-  }
-
   const parsed = checkoutSchema.safeParse(input);
   if (!parsed.success) {
     const fieldErrors: Record<string, string[]> = {};
@@ -36,7 +30,55 @@ export async function placeOrderAction(input: CheckoutInput): Promise<CheckoutAc
   }
 
   try {
-    const result = await OrderService.createOrder(user.id, parsed.data, user.id);
+    const sessionUser = await getCurrentUser();
+    let customerUserId = sessionUser?.id;
+
+    if (!customerUserId) {
+      const email =
+        parsed.data.customer?.email?.trim().toLowerCase() ||
+        `guest_${Date.now()}@sporeerp.local`;
+      const name =
+        parsed.data.customer?.name?.trim() ||
+        parsed.data.newAddress?.recipientName?.trim() ||
+        "Valued Customer";
+      const phone =
+        parsed.data.customer?.phone?.trim() ||
+        parsed.data.newAddress?.recipientPhone?.trim() ||
+        null;
+
+      let existingUser = await db.user.findUnique({
+        where: { email },
+        include: { customer: true },
+      });
+
+      if (!existingUser) {
+        const dummyHash = await bcrypt.hash(`Guest@${Date.now()}`, 10);
+        existingUser = await db.user.create({
+          data: {
+            name,
+            email,
+            phone,
+            passwordHash: dummyHash,
+            customer: {
+              create: {
+                customerType: "RETAIL",
+              },
+            },
+          },
+          include: { customer: true },
+        });
+      } else if (!existingUser.customer) {
+        await db.customer.create({
+          data: {
+            userId: existingUser.id,
+            customerType: "RETAIL",
+          },
+        });
+      }
+      customerUserId = existingUser.id;
+    }
+
+    const result = await OrderService.createOrder(customerUserId, parsed.data, customerUserId);
     
     // Invalidate catalog cache so stock badges update immediately
     revalidateTag("catalog", "max");

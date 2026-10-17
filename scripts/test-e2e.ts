@@ -92,12 +92,13 @@ async function runEndToEndTests() {
   assert(!!category, "Category exists or created");
 
   const testSku = `MUSH-OYS-BLU-${Date.now().toString(36).toUpperCase()}`;
+  const testMushroomName = `Oyster Special ${Date.now().toString().slice(-4)}`;
   const product = await createProduct(
     founder!.id,
     productWriteFromApi({
-      name: `Blue Oyster Mushroom ${Date.now().toString().slice(-4)}`,
+      name: testMushroomName,
       categoryId: category.id,
-      variety: "Blue Oyster",
+      variety: testMushroomName,
       sku: testSku,
       shortDescription: "Tender, velvety caps harvested at 5:00 AM dawn.",
       description: "Organic Blue Oyster mushrooms grown on pasteurized straw substrate.",
@@ -227,7 +228,7 @@ async function runEndToEndTests() {
   // Create Batch
   const batch = await ProductionService.createBatch(
     {
-      mushroomType: "Blue Oyster",
+      mushroomType: testMushroomName,
       roomId: rooms[0].id,
       spawnQuantityKg: 5,
       substrateType: "Paddy Straw + Wheat Bran",

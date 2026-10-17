@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireUser } from "@/lib/auth/dal";
+import { getCurrentUser } from "@/lib/auth/dal";
 import { OrderService } from "@/services/order.service";
 import { formatCurrency } from "@/lib/utils";
 import { UNIT_LABELS } from "@/lib/catalog/format";
@@ -15,11 +15,11 @@ export default async function OrderSuccessPage({
   params: Promise<{ orderNumber: string }>;
 }) {
   const { orderNumber } = await params;
-  const user = await requireUser(`/checkout/success/${orderNumber}`);
+  const user = await getCurrentUser();
 
   let order;
   try {
-    order = await OrderService.getOrder(orderNumber, user.id);
+    order = await OrderService.getOrder(orderNumber, user?.id);
   } catch {
     notFound();
   }

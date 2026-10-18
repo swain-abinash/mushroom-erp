@@ -5,6 +5,7 @@ import { PERMISSIONS } from "@/lib/auth/permissions";
 import { getCategoryOptions, getVarietyNames } from "../category-options";
 import { ProductForm } from "../product-form";
 
+export const instant = false;
 export const metadata: Metadata = { title: "New product — SporeERP Admin" };
 
 export default async function NewProductPage() {

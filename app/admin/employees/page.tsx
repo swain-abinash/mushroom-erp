@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/utils";
 import { listEmployees, listStaffRoles } from "@/services/employee.service";
 import { AssignRolesForm, InviteEmployeeForm, ToggleActiveForm } from "./employee-forms";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Employees — SporeERP Admin" };
 
 export default async function EmployeesPage() {

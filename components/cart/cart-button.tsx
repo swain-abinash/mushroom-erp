@@ -9,7 +9,7 @@ export function CartButton() {
     <button
       type="button"
       onClick={openDrawer}
-      className="relative flex items-center justify-center rounded-full border border-forest-primary/20 p-2 text-forest-primary hover:bg-forest-primary/10 transition-colors"
+      className="relative flex size-9 items-center justify-center rounded-full border border-forest-primary/20 text-forest-primary hover:bg-forest-primary/10 transition-colors cursor-pointer shrink-0"
       aria-label={`Open Cart with ${itemCount} items`}
     >
       <span className="text-lg">🛒</span>

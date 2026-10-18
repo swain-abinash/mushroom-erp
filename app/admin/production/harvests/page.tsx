@@ -6,6 +6,7 @@ import { ProductionService } from "@/services/production.service";
 import { formatDate } from "@/lib/utils";
 import { RapidHarvestForm } from "./harvest-form";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Harvest Logger & Quality — SporeERP Admin" };
 
 export default async function AdminHarvestsPage() {

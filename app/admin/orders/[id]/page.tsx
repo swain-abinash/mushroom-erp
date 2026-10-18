@@ -9,6 +9,7 @@ import { UNIT_LABELS } from "@/lib/catalog/format";
 import { OrderStatus } from "@prisma/client";
 import { updateOrderStatusAction } from "../actions";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Manage Order — SporeERP Admin" };
 
 const NEXT_STATUS_MAP: Record<OrderStatus, OrderStatus | null> = {

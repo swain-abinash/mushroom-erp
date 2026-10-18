@@ -5,6 +5,7 @@ import { FinanceService } from "@/services/finance.service";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { CreateSupplierModal, CreatePurchaseModal } from "./purchases-forms";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Purchases & Suppliers — SporeERP Admin" };
 
 export default async function AdminPurchasesPage() {

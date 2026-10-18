@@ -6,6 +6,7 @@ import { OrderService } from "@/services/order.service";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { OrderStatus } from "@prisma/client";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Orders — SporeERP Admin" };
 
 const STATUS_PILLS: Record<OrderStatus, { label: string; style: string }> = {

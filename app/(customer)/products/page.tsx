@@ -41,10 +41,10 @@ function FilterLink({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "block rounded-lg px-3 py-1.5 font-body text-sm",
+        "block rounded-xl px-3 py-1.5 font-body text-sm transition-colors",
         active
-          ? "bg-forest-primary font-semibold text-spore-ivory"
-          : "text-forest-primary hover:bg-forest-primary/5",
+          ? "bg-forest-primary dark:bg-success-mint font-semibold text-spore-ivory dark:text-surface-charcoal"
+          : "text-forest-primary dark:text-spore-ivory/80 hover:bg-forest-primary/5 dark:hover:bg-white/5",
       )}
     >
       {children}
@@ -82,12 +82,12 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
             defaultValue={params.q}
             placeholder="Search mushrooms…"
             aria-label="Search products"
-            className="w-full rounded-lg border border-forest-primary/20 bg-surface-white px-3 py-2 font-body text-sm text-forest-primary"
+            className="w-full rounded-xl border border-forest-primary/20 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal px-3.5 py-2 font-body text-sm text-forest-primary dark:text-spore-ivory placeholder-forest-primary/40 dark:placeholder-spore-ivory/40 focus:outline-none focus:border-forest-primary dark:focus:border-success-mint"
           />
         </form>
 
         <nav aria-label="Categories" className="flex flex-col gap-1">
-          <h2 className="mb-1 font-display text-sm font-bold uppercase tracking-wide text-forest-primary/60">
+          <h2 className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-forest-primary/60 dark:text-spore-ivory/50">
             Category
           </h2>
           <FilterLink href={hrefWith(params, { category: undefined })} active={!params.category}>
@@ -119,7 +119,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
         {varieties.length ? (
           <nav aria-label="Varieties" className="flex flex-col gap-1">
-            <h2 className="mb-1 font-display text-sm font-bold uppercase tracking-wide text-forest-primary/60">
+            <h2 className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-forest-primary/60 dark:text-spore-ivory/50">
               Variety
             </h2>
             {varieties.map((variety) => (
@@ -137,7 +137,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         ) : null}
 
         <div className="flex flex-col gap-1">
-          <h2 className="mb-1 font-display text-sm font-bold uppercase tracking-wide text-forest-primary/60">
+          <h2 className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-forest-primary/60 dark:text-spore-ivory/50">
             Availability
           </h2>
           <FilterLink
@@ -151,17 +151,17 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
       <section className="flex flex-1 flex-col gap-6">
         <header className="flex flex-wrap items-end justify-between gap-2">
-          <h1 className="font-display text-3xl font-bold text-forest-primary">
+          <h1 className="font-display text-3xl font-bold text-forest-primary dark:text-spore-ivory">
             {params.variety ??
               categories.find((category) => category.slug === params.category)?.name ??
               "All products"}
           </h1>
-          <p className="font-body text-sm text-forest-primary/60">
+          <p className="font-body text-sm text-forest-primary/60 dark:text-spore-ivory/60">
             {total} {total === 1 ? "product" : "products"}
             {hasFilters ? (
               <>
                 {" · "}
-                <Link href="/products" className="underline">
+                <Link href="/products" className="underline text-forest-primary dark:text-success-mint">
                   Clear filters
                 </Link>
               </>

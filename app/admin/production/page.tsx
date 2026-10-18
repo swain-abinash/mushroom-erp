@@ -4,6 +4,7 @@ import { requireStaff } from "@/lib/auth/dal";
 import { ProductionService } from "@/services/production.service";
 import { formatDate } from "@/lib/utils";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Cultivation & Agronomy — SporeERP Admin" };
 
 export default async function ProductionDashboardPage() {

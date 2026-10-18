@@ -5,6 +5,7 @@ import { PERMISSIONS } from "@/lib/auth/permissions";
 import { FinanceService } from "@/services/finance.service";
 import { formatCurrency } from "@/lib/utils";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Executive P&L Statement — SporeERP Admin" };
 
 export default async function AdminPnlReportPage({

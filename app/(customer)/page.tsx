@@ -35,15 +35,21 @@ function SectionHeading({
       <span className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-shiitake-ochre">
         {eyebrow}
       </span>
-      <h2 className="font-display text-3xl font-bold sm:text-4xl">{title}</h2>
-      {body ? <p className="font-body text-forest-primary/70">{body}</p> : null}
+      <h2 className="font-display text-3xl font-bold sm:text-4xl text-forest-primary dark:text-spore-ivory">
+        {title}
+      </h2>
+      {body ? (
+        <p className="font-body text-forest-primary/70 dark:text-spore-ivory/70 leading-relaxed">
+          {body}
+        </p>
+      ) : null}
     </div>
   );
 }
 
 export default function HomePage() {
   return (
-    <div className="text-forest-primary">
+    <div className="text-forest-primary dark:text-spore-ivory transition-colors duration-200">
       <Hero />
       <Highlights />
       <Varieties />
@@ -138,12 +144,16 @@ async function HarvestBadge() {
 
 function Highlights() {
   return (
-    <section className="border-b border-forest-primary/10 bg-surface-white">
+    <section className="border-b border-forest-primary/10 dark:border-white/10 bg-surface-white dark:bg-surface-charcoal">
       <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-10 lg:grid-cols-4">
         {HIGHLIGHTS.map((item) => (
           <div key={item.label} className="flex flex-col gap-1 text-center">
-            <dt className="order-2 font-body text-sm text-forest-primary/70">{item.label}</dt>
-            <dd className="order-1 font-display text-3xl font-extrabold">{item.value}</dd>
+            <dt className="order-2 font-body text-sm text-forest-primary/70 dark:text-spore-ivory/60">
+              {item.label}
+            </dt>
+            <dd className="order-1 font-display text-3xl font-extrabold text-forest-primary dark:text-spore-ivory">
+              {item.value}
+            </dd>
           </div>
         ))}
       </dl>
@@ -169,14 +179,16 @@ async function Varieties() {
             <Link
               key={variety.name}
               href={live ? `/products?variety=${encodeURIComponent(live.name)}` : "/products"}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-forest-primary/10 bg-surface-white transition-shadow hover:shadow-md"
+              className="group flex flex-col overflow-hidden rounded-3xl border border-forest-primary/10 dark:border-white/10 bg-surface-white dark:bg-surface-charcoal transition-all hover:shadow-xl hover:-translate-y-1"
             >
               <div className={cn("grid h-28 place-items-center bg-gradient-to-br text-5xl", variety.tone)}>
                 <span aria-hidden>🍄</span>
               </div>
               <div className="flex flex-1 flex-col gap-2 p-5">
                 <div className="flex items-center justify-between gap-2">
-                  <h3 className="font-display text-xl font-bold group-hover:underline">{variety.name}</h3>
+                  <h3 className="font-display text-xl font-bold text-forest-primary dark:text-spore-ivory group-hover:underline">
+                    {variety.name}
+                  </h3>
                   {live ? (
                     <span
                       className={cn(
@@ -190,9 +202,12 @@ async function Varieties() {
                     </span>
                   ) : null}
                 </div>
-                <p className="font-body text-sm text-forest-primary/70">{variety.description}</p>
-                <p className="mt-auto font-body text-xs text-forest-primary/60">
-                  <span className="font-semibold text-forest-primary">Best for:</span> {variety.bestFor}
+                <p className="font-body text-sm text-forest-primary/70 dark:text-spore-ivory/70">
+                  {variety.description}
+                </p>
+                <p className="mt-auto font-body text-xs text-forest-primary/60 dark:text-spore-ivory/50">
+                  <span className="font-semibold text-forest-primary dark:text-spore-ivory">Best for:</span>{" "}
+                  {variety.bestFor}
                 </p>
               </div>
             </Link>
@@ -207,7 +222,7 @@ async function TodaysHarvest() {
   const products = await getFeaturedProducts(8);
 
   return (
-    <section className="bg-surface-white">
+    <section className="bg-surface-white dark:bg-[#0c1310] border-y border-forest-primary/5 dark:border-white/5">
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <SectionHeading
@@ -217,7 +232,10 @@ async function TodaysHarvest() {
             className="mb-0"
           />
           {products.length ? (
-            <Link href="/products" className="font-body text-sm font-semibold underline-offset-4 hover:underline">
+            <Link
+              href="/products"
+              className="font-body text-sm font-semibold text-forest-primary dark:text-success-mint underline-offset-4 hover:underline"
+            >
               View all products →
             </Link>
           ) : null}
@@ -260,15 +278,22 @@ function HowItWorks() {
       />
       <ol className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {STEPS.map((step, index) => (
-          <li key={step.title} className="relative flex flex-col gap-3 rounded-2xl bg-surface-white p-6">
-            <span className="absolute right-5 top-4 font-data text-sm text-forest-primary/30">
+          <li
+            key={step.title}
+            className="relative flex flex-col gap-3 rounded-3xl bg-surface-white dark:bg-surface-charcoal border border-forest-primary/5 dark:border-white/10 p-6 shadow-xs"
+          >
+            <span className="absolute right-5 top-4 font-data text-sm text-forest-primary/30 dark:text-spore-ivory/30">
               0{index + 1}
             </span>
             <span className="text-3xl" aria-hidden>
               {step.icon}
             </span>
-            <h3 className="font-display text-lg font-bold">{step.title}</h3>
-            <p className="font-body text-sm text-forest-primary/70">{step.body}</p>
+            <h3 className="font-display text-lg font-bold text-forest-primary dark:text-spore-ivory">
+              {step.title}
+            </h3>
+            <p className="font-body text-sm text-forest-primary/70 dark:text-spore-ivory/60 leading-relaxed">
+              {step.body}
+            </p>
           </li>
         ))}
       </ol>
@@ -284,17 +309,17 @@ function OurFarm() {
           <span className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-shiitake-ochre">
             Our farm
           </span>
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">
+          <h2 className="font-display text-3xl font-bold sm:text-4xl text-spore-ivory">
             Grown clean, the slow and careful way
           </h2>
-          <p className="font-body text-spore-ivory/80">
+          <p className="font-body text-spore-ivory/80 leading-relaxed">
             Our mushrooms grow on pasteurized paddy straw inside climate-controlled rooms. We watch
             temperature and humidity every day, harvest by hand, and track every batch from spawn to
             sale — so what reaches your kitchen is consistently fresh and safe.
           </p>
           <ul className="flex flex-col gap-3">
             {FARM_POINTS.map((point) => (
-              <li key={point} className="flex gap-3 font-body">
+              <li key={point} className="flex gap-3 font-body text-spore-ivory/90">
                 <span className="text-success-mint" aria-hidden>
                   ✓
                 </span>
@@ -310,11 +335,14 @@ function OurFarm() {
             ["♻️", "Zero waste", "Spent straw becomes compost for farms"],
             ["🔍", "Batch tracking", "Every pack traceable to its grow room"],
           ].map(([icon, title, body]) => (
-            <div key={title} className="flex flex-col gap-2 rounded-2xl bg-spore-ivory/5 p-5">
+            <div
+              key={title}
+              className="flex flex-col gap-2 rounded-2xl bg-spore-ivory/5 border border-spore-ivory/10 p-5 backdrop-blur-xs"
+            >
               <span className="text-2xl" aria-hidden>
                 {icon}
               </span>
-              <span className="font-display font-semibold">{title}</span>
+              <span className="font-display font-semibold text-spore-ivory">{title}</span>
               <span className="font-body text-sm text-spore-ivory/70">{body}</span>
             </div>
           ))}
@@ -334,12 +362,19 @@ function Nutrition() {
       />
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {NUTRITION.map((item) => (
-          <div key={item.title} className="flex flex-col gap-2 rounded-2xl border border-forest-primary/10 bg-surface-white p-6">
+          <div
+            key={item.title}
+            className="flex flex-col gap-2 rounded-3xl border border-forest-primary/10 dark:border-white/10 bg-surface-white dark:bg-surface-charcoal p-6 shadow-xs"
+          >
             <span className="text-3xl" aria-hidden>
               {item.icon}
             </span>
-            <h3 className="font-display text-lg font-bold">{item.title}</h3>
-            <p className="font-body text-sm text-forest-primary/70">{item.body}</p>
+            <h3 className="font-display text-lg font-bold text-forest-primary dark:text-spore-ivory">
+              {item.title}
+            </h3>
+            <p className="font-body text-sm text-forest-primary/70 dark:text-spore-ivory/60 leading-relaxed">
+              {item.body}
+            </p>
           </div>
         ))}
       </div>
@@ -349,7 +384,7 @@ function Nutrition() {
 
 function Recipes() {
   return (
-    <section id="recipes" className="scroll-mt-20 bg-surface-white">
+    <section id="recipes" className="scroll-mt-20 bg-surface-white dark:bg-[#0c1310] border-y border-forest-primary/5 dark:border-white/5">
       <div className="mx-auto max-w-6xl px-6 py-20">
         <SectionHeading
           eyebrow="Ways to cook"
@@ -358,12 +393,19 @@ function Recipes() {
         />
         <div className="grid gap-6 lg:grid-cols-3">
           {RECIPES.map((recipe) => (
-            <article key={recipe.title} className="flex flex-col gap-3 rounded-2xl bg-spore-ivory p-6">
-              <span className="self-start rounded-full bg-shiitake-ochre/15 px-2.5 py-0.5 font-data text-xs text-shiitake-ochre">
+            <article
+              key={recipe.title}
+              className="flex flex-col gap-3 rounded-3xl bg-spore-ivory dark:bg-surface-charcoal border border-forest-primary/5 dark:border-white/10 p-6 shadow-xs"
+            >
+              <span className="self-start rounded-full bg-shiitake-ochre/15 text-shiitake-ochre px-2.5 py-0.5 font-data text-xs font-semibold">
                 ⏱ {recipe.time}
               </span>
-              <h3 className="font-display text-xl font-bold">{recipe.title}</h3>
-              <p className="font-body text-sm text-forest-primary/70">{recipe.body}</p>
+              <h3 className="font-display text-xl font-bold text-forest-primary dark:text-spore-ivory">
+                {recipe.title}
+              </h3>
+              <p className="font-body text-sm text-forest-primary/70 dark:text-spore-ivory/60 leading-relaxed">
+                {recipe.body}
+              </p>
             </article>
           ))}
         </div>
@@ -375,13 +417,15 @@ function Recipes() {
 function ForBusiness() {
   return (
     <section id="business" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
-      <div className="grid gap-10 overflow-hidden rounded-3xl bg-shiitake-ochre/10 p-8 sm:p-12 lg:grid-cols-[1fr_1.2fr]">
+      <div className="grid gap-10 overflow-hidden rounded-3xl bg-shiitake-ochre/10 dark:bg-shiitake-ochre/5 border border-shiitake-ochre/20 p-8 sm:p-12 lg:grid-cols-[1fr_1.2fr]">
         <div className="flex flex-col gap-5">
           <span className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-shiitake-ochre">
             For restaurants & retailers
           </span>
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">Fresh supply for professional kitchens</h2>
-          <p className="font-body text-forest-primary/70">
+          <h2 className="font-display text-3xl font-bold sm:text-4xl text-forest-primary dark:text-spore-ivory">
+            Fresh supply for professional kitchens
+          </h2>
+          <p className="font-body text-forest-primary/70 dark:text-spore-ivory/70 leading-relaxed">
             Hotels, restaurants, cloud kitchens and grocers get dedicated B2B pricing and dependable
             daily supply.
           </p>
@@ -396,9 +440,16 @@ function ForBusiness() {
         </div>
         <ul className="grid gap-4 sm:grid-cols-2">
           {BUSINESS_POINTS.map((point) => (
-            <li key={point.title} className="flex flex-col gap-1 rounded-2xl bg-surface-white p-5">
-              <span className="font-display font-semibold">{point.title}</span>
-              <span className="font-body text-sm text-forest-primary/70">{point.body}</span>
+            <li
+              key={point.title}
+              className="flex flex-col gap-1 rounded-2xl bg-surface-white dark:bg-surface-charcoal border border-stone-200/60 dark:border-white/10 p-5 shadow-xs"
+            >
+              <span className="font-display font-semibold text-forest-primary dark:text-spore-ivory">
+                {point.title}
+              </span>
+              <span className="font-body text-sm text-forest-primary/70 dark:text-spore-ivory/60">
+                {point.body}
+              </span>
             </li>
           ))}
         </ul>
@@ -421,7 +472,7 @@ async function Faq() {
   };
 
   return (
-    <section id="faq" className="scroll-mt-20 bg-surface-white">
+    <section id="faq" className="scroll-mt-20 bg-surface-white dark:bg-[#0c1310] border-y border-forest-primary/5 dark:border-white/5">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-20 lg:grid-cols-[1fr_1.6fr]">
         <script
           type="application/ld+json"
@@ -432,16 +483,18 @@ async function Faq() {
           title="Frequently asked"
           body="Can't find what you're looking for? Reach us using the contact details below."
         />
-        <div className="flex flex-col divide-y divide-forest-primary/10 border-y border-forest-primary/10">
+        <div className="flex flex-col divide-y divide-forest-primary/10 dark:divide-white/10 border-y border-forest-primary/10 dark:border-white/10">
           {items.map((item) => (
             <details key={item.question} className="group py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-semibold">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-semibold text-forest-primary dark:text-spore-ivory">
                 {item.question}
                 <span className="text-xl transition-transform group-open:rotate-45" aria-hidden>
                   +
                 </span>
               </summary>
-              <p className="mt-3 font-body text-forest-primary/70">{item.answer}</p>
+              <p className="mt-3 font-body text-forest-primary/70 dark:text-spore-ivory/70 leading-relaxed">
+                {item.answer}
+              </p>
             </details>
           ))}
         </div>
@@ -451,6 +504,7 @@ async function Faq() {
 }
 
 function FinalCallToAction() {
+
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
       <div className="flex flex-col items-center gap-5 rounded-3xl bg-forest-primary px-6 py-14 text-center text-spore-ivory">

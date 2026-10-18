@@ -4,6 +4,7 @@ import { PERMISSIONS } from "@/lib/auth/permissions";
 import { listCategoriesForAdmin } from "@/services/catalog.service";
 import { CategoryForm } from "./category-form";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Categories — SporeERP Admin" };
 
 export default async function CategoriesPage() {

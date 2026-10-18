@@ -135,7 +135,7 @@ export async function listProductsForAdmin(filters: {
   q?: string;
   categoryId?: string;
   status?: ProductStatus;
-}) {
+} = {}) {
   const products = await db.product.findMany({
     where: {
       categoryId: filters.categoryId,

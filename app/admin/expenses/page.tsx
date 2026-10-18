@@ -7,6 +7,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { ExpenseCategory } from "@prisma/client";
 import { RecordExpenseModal } from "./expense-form";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Expense Ledger — SporeERP Admin" };
 
 const CATEGORY_LABELS: Record<ExpenseCategory, string> = {

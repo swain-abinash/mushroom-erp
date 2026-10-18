@@ -37,7 +37,16 @@ export class InventoryService {
       const isLowStock = available <= threshold;
 
       return {
-        ...item,
+        id: item.id,
+        productId: item.productId,
+        itemName: item.itemName,
+        itemCategory: item.itemCategory,
+        unit: item.unit,
+        updatedAt: item.updatedAt,
+        product: item.product,
+        availableStock: available,
+        reservedStock: reserved,
+        reorderThreshold: threshold,
         availableStockNum: available,
         reservedStockNum: reserved,
         sellableStockNum: sellable,

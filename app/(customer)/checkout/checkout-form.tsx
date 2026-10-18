@@ -31,7 +31,7 @@ export function CheckoutForm({
   savedAddresses: SavedAddress[];
 }) {
   const router = useRouter();
-  const { items, subtotal, deliveryFee, total, clearCart } = useCart();
+  const { items, subtotal, deliveryFee, total, clearCart, removeItem } = useCart();
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [selectedAddressId, setSelectedAddressId] = useState<string>(
@@ -118,14 +118,44 @@ export function CheckoutForm({
     <div className="grid gap-10 lg:grid-cols-12">
       {/* Checkout Steps (Left 7 Cols) */}
       <div className="lg:col-span-7 space-y-6">
-        {errorMessage && (
-          <div
-            role="alert"
-            className="rounded-xl bg-alert-coral/10 border border-alert-coral/20 p-4 text-sm text-alert-coral"
-          >
-            {errorMessage}
-          </div>
-        )}
+        {errorMessage && (() => {
+          const missingItem = items.find((item) => errorMessage.includes(item.productId));
+          return (
+            <div
+              role="alert"
+              className="rounded-xl bg-alert-coral/10 border border-alert-coral/20 p-4 text-sm text-alert-coral flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div>
+                <p className="font-semibold">{errorMessage}</p>
+                {missingItem && (
+                  <p className="text-xs text-alert-coral/80 mt-1">
+                    Item: <strong>{missingItem.name}</strong> was created in a previous test session and is not in the active database.
+                  </p>
+                )}
+              </div>
+              {missingItem ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    removeItem(missingItem.productId);
+                    setErrorMessage(null);
+                  }}
+                  className="shrink-0 rounded-lg bg-alert-coral px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 cursor-pointer shadow-sm"
+                >
+                  Remove &quot;{missingItem.name}&quot;
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setErrorMessage(null)}
+                  className="shrink-0 text-xs underline opacity-80 hover:opacity-100"
+                >
+                  Dismiss
+                </button>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Step Navigation Pill Indicator */}
         <div className="flex items-center justify-between border-b border-forest-primary/10 pb-4 text-xs font-semibold uppercase tracking-wider text-forest-primary/60">
@@ -664,9 +694,20 @@ export function CheckoutForm({
                     {formatCurrency(item.price)}
                   </p>
                 </div>
-                <span className="font-data font-bold text-xs text-forest-primary">
-                  {formatCurrency(item.price * item.quantity)}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="font-data font-bold text-xs text-forest-primary">
+                    {formatCurrency(item.price * item.quantity)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeItem(item.productId)}
+                    className="rounded-full p-1 text-forest-primary/40 hover:text-alert-coral hover:bg-forest-primary/5 transition-all text-xs leading-none"
+                    title={`Remove ${item.name}`}
+                    aria-label={`Remove ${item.name}`}
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
             ))}
           </div>

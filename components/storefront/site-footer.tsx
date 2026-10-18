@@ -47,7 +47,7 @@ export async function SiteFooter() {
   ].filter(Boolean) as Array<{ label: string; href: string; icon: string }>;
 
   return (
-    <footer className="bg-forest-primary text-spore-ivory">
+    <footer className="bg-forest-primary dark:bg-[#070e0b] text-spore-ivory dark:border-t dark:border-white/10 transition-colors duration-200">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="flex flex-col gap-4">
           <Link href="/" className="font-display text-2xl font-bold">
@@ -97,6 +97,7 @@ export async function SiteFooter() {
           <FooterLink href="/register">Create account</FooterLink>
           <FooterLink href="/login">Sign in</FooterLink>
           <FooterLink href="/account">My account</FooterLink>
+          <FooterLink href="/admin/dashboard">Admin Portal 🛡️</FooterLink>
           <FooterLink href="/#business">For restaurants & retailers</FooterLink>
         </FooterColumn>
       </div>

@@ -9,6 +9,7 @@ import { getCategoryOptions, getVarietyNames } from "../category-options";
 import { ProductForm } from "../product-form";
 import { ArchiveProductForm } from "./archive-form";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Edit product — SporeERP Admin" };
 
 const SAVED_MESSAGES: Record<string, string> = {

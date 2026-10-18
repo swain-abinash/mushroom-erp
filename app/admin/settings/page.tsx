@@ -4,6 +4,7 @@ import { requireStaff } from "@/lib/auth/dal";
 import { db } from "@/lib/db";
 import { updateBusinessSettingsAction } from "./actions";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Business Settings — SporeERP Admin" };
 
 export default async function AdminSettingsPage() {

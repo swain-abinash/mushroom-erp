@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { siteUrl } from "@/lib/url";
+import { CommandPalette } from "@/components/command/command-palette";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -29,13 +30,33 @@ export const metadata: Metadata = {
   openGraph: { siteName: "SporeERP", locale: "en_IN", type: "website" },
 };
 
+const themeInitScript = `
+  (function() {
+    try {
+      var t = localStorage.getItem('sporeerp_theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (t === 'dark' || (!t && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (e) {}
+  })();
+`;
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${outfit.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <CommandPalette />
+      </body>
     </html>
   );
 }

@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/utils";
 import { ItemCategory, InventoryTxType } from "@prisma/client";
 import { InventoryItemRow, CreateItemForm } from "./inventory-forms";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Inventory & Stock — SporeERP Admin" };
 
 const TX_BADGES: Record<InventoryTxType, { label: string; style: string }> = {
@@ -140,7 +141,22 @@ export default async function AdminInventoryPage({
                 </td>
               </tr>
             ) : (
-              items.map((item) => <InventoryItemRow key={item.id} item={item} />)
+              items.map((item) => (
+                <InventoryItemRow
+                  key={item.id}
+                  item={{
+                    id: item.id,
+                    itemName: item.itemName,
+                    unit: item.unit,
+                    itemCategory: item.itemCategory,
+                    availableStockNum: item.availableStockNum,
+                    reservedStockNum: item.reservedStockNum,
+                    sellableStockNum: item.sellableStockNum,
+                    reorderThresholdNum: item.reorderThresholdNum,
+                    isLowStock: item.isLowStock,
+                  }}
+                />
+              ))
             )}
           </tbody>
         </table>

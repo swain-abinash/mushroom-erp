@@ -4,6 +4,7 @@ import { requireStaff } from "@/lib/auth/dal";
 import { ProductionService } from "@/services/production.service";
 import { RoomMatrixClient, CreateRoomForm } from "./room-matrix-client";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Growing Rooms & Bed Matrix — SporeERP Admin" };
 
 export default async function AdminRoomsPage({

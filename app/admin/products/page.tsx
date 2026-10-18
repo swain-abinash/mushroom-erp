@@ -10,6 +10,7 @@ import { formatCurrency } from "@/lib/utils";
 import { listProductsForAdmin } from "@/services/catalog.service";
 import { getCategoryOptions } from "./category-options";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Products — SporeERP Admin" };
 
 const controlClass =

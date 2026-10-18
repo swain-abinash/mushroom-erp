@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/utils";
 import { BatchStatus } from "@prisma/client";
 import { CreateBatchForm, BatchStatusSelect } from "./batch-forms";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Production Batches — SporeERP Admin" };
 
 export default async function AdminBatchesPage({
@@ -53,7 +54,10 @@ export default async function AdminBatchesPage({
             End-to-end substrate preparation, spawn run, incubation, and flush harvest tracking.
           </p>
         </div>
-        <CreateBatchForm rooms={rooms} suppliers={suppliers} />
+        <CreateBatchForm
+          rooms={rooms.map((r) => ({ id: r.id, name: r.name }))}
+          suppliers={suppliers.map((s) => ({ id: s.id, name: s.name }))}
+        />
       </header>
 
       {/* Filter Tabs */}

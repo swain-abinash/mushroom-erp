@@ -111,7 +111,11 @@ export class OrderService {
       for (const item of input.items) {
         const product = productMap.get(item.productId);
         if (!product) {
-          throw new ServiceError("PRODUCT_NOT_FOUND", `Product not found: ${item.productId}`, 404);
+          throw new ServiceError(
+            "PRODUCT_NOT_FOUND",
+            `Product "${item.productId}" is no longer available in the harvest catalog. Please remove it from your basket to proceed.`,
+            404,
+          );
         }
 
         if (product.status === "ARCHIVED" || product.status === "DRAFT") {

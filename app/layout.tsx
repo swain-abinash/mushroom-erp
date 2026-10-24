@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { siteUrl } from "@/lib/url";
 import { CommandPalette } from "@/components/command/command-palette";
+import { NavigationTransition } from "@/components/ui/navigation-transition";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -43,6 +45,7 @@ const themeInitScript = `
     } catch (e) {}
   })();
 `;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -56,6 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col">
         {children}
         <CommandPalette />
+        <Suspense fallback={null}>
+          <NavigationTransition />
+        </Suspense>
       </body>
     </html>
   );

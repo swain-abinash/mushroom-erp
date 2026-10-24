@@ -84,3 +84,19 @@ body {
   animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Smooth page enter transition to eliminate flickering / visual pop */
+@keyframes pageSmoothEnter {
+  0% {
+    opacity: 0.85;
+    transform: translateY(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main {
+  animation: pageSmoothEnter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+

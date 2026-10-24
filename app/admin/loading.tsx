@@ -1,3 +1,9 @@
+import { MushroomLoader } from "@/components/ui/mushroom-loader";
+
 export default function AdminLoading() {
-  return <p className="font-body text-sm text-spore-ivory/60">Loading…</p>;
+  return (
+    <div className="flex min-h-[55vh] w-full items-center justify-center">
+      <MushroomLoader size="xl" />
+    </div>
+  );
 }

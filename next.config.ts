@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: false,
   images: {
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
     // Uploaded product/category photos served by app/uploads/[...path]/route.ts, plus external CDN images.
     localPatterns: [{ pathname: "/uploads/**", search: "" }],
     remotePatterns: [

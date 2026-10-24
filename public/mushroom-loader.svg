@@ -1,0 +1,226 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="100%" height="100%">
+  <defs>
+    <!-- Cap Gradients -->
+    <linearGradient id="mushroomCapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2ed573" />
+      <stop offset="45%" stop-color="#107c41" />
+      <stop offset="100%" stop-color="#093824" />
+    </linearGradient>
+    
+    <linearGradient id="stemGrad" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#f1ede2" />
+      <stop offset="100%" stop-color="#d9cfbe" />
+    </linearGradient>
+
+    <!-- Spore Glow Filter -->
+    <filter id="sporeGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Ground Shadow Expansion & Shrink */
+    @keyframes groundPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.25;
+      }
+      50% {
+        transform: scale(0.75);
+        opacity: 0.12;
+      }
+    }
+
+    /* Mushroom Body Squish & Bounce */
+    @keyframes mushroomBounce {
+      0%, 100% {
+        transform: translateY(0px) scale(1, 1);
+      }
+      35% {
+        transform: translateY(-14px) scale(0.96, 1.05);
+      }
+      50% {
+        transform: translateY(-16px) scale(1.02, 0.98);
+      }
+      75% {
+        transform: translateY(2px) scale(1.06, 0.93);
+      }
+    }
+
+    /* Floating Spores */
+    @keyframes floatSpore1 {
+      0% {
+        transform: translate(0, 0) scale(0.4);
+        opacity: 0;
+      }
+      25% {
+        opacity: 0.9;
+      }
+      80% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-18px, -65px) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes floatSpore2 {
+      0% {
+        transform: translate(0, 0) scale(0.4);
+        opacity: 0;
+      }
+      30% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translate(16px, -75px) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    @keyframes floatSpore3 {
+      0% {
+        transform: translate(0, 0) scale(0.3);
+        opacity: 0;
+      }
+      35% {
+        opacity: 0.85;
+      }
+      100% {
+        transform: translate(-4px, -85px) scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    @keyframes floatSpore4 {
+      0% {
+        transform: translate(0, 0) scale(0.4);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.95;
+      }
+      100% {
+        transform: translate(24px, -60px) scale(0.9);
+        opacity: 0;
+      }
+    }
+
+    .shadow-pulse {
+      transform-origin: 120px 198px;
+      animation: groundPulse 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .shroom-group {
+      transform-origin: 120px 195px;
+      animation: mushroomBounce 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .spore-1 {
+      animation: floatSpore1 2.2s ease-out infinite;
+      animation-delay: 0.1s;
+    }
+
+    .spore-2 {
+      animation: floatSpore2 2.2s ease-out infinite;
+      animation-delay: 0.6s;
+    }
+
+    .spore-3 {
+      animation: floatSpore3 2.2s ease-out infinite;
+      animation-delay: 1.1s;
+    }
+
+    .spore-4 {
+      animation: floatSpore4 2.2s ease-out infinite;
+      animation-delay: 1.6s;
+    }
+  </style>
+
+  <!-- Ground Shadow -->
+  <ellipse class="shadow-pulse" cx="120" cy="198" rx="46" ry="12" fill="#09271c" />
+
+  <!-- Animated Floating Spores -->
+  <g filter="url(#sporeGlow)">
+    <!-- Spore 1 (Left) -->
+    <circle class="spore-1" cx="95" cy="110" r="3.5" fill="#4ade80" />
+    <!-- Spore 2 (Right) -->
+    <circle class="spore-2" cx="145" cy="112" r="3" fill="#86efac" />
+    <!-- Spore 3 (Center high) -->
+    <circle class="spore-3" cx="120" cy="98" r="4" fill="#fbbf24" />
+    <!-- Spore 4 (Far right) -->
+    <circle class="spore-4" cx="152" cy="125" r="2.5" fill="#a7f3d0" />
+  </g>
+
+  <!-- Mushroom Main Character Group -->
+  <g class="shroom-group">
+    <!-- Mushroom Stem -->
+    <path
+      d="M102,142 C100,165 92,185 94,194 C96,198 108,200 120,200 C132,200 144,198 146,194 C148,185 140,165 138,142 Z"
+      fill="url(#stemGrad)"
+      stroke="#b5a995"
+      stroke-width="1.5"
+    />
+
+    <!-- Stem Details / Shading -->
+    <path
+      d="M107,155 C106,170 102,185 104,192"
+      stroke="#d0c4b2"
+      stroke-width="2"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <path
+      d="M133,155 C134,170 138,185 136,192"
+      stroke="#c2b49e"
+      stroke-width="2"
+      stroke-linecap="round"
+      fill="none"
+    />
+
+    <!-- Gills under cap -->
+    <ellipse cx="120" cy="142" rx="55" ry="14" fill="#f4ebd9" stroke="#cfc0a5" stroke-width="1.2" />
+    <path d="M120,142 L120,154 M100,142 L105,153 M140,142 L135,153 M85,140 L93,149 M155,140 L147,149 M75,138 L83,144 M165,138 L157,144" stroke="#d5c8b2" stroke-width="1.2" stroke-linecap="round" />
+
+    <!-- Mushroom Cap -->
+    <path
+      d="M60,140 C56,110 82,72 120,72 C158,72 184,110 180,140 C175,147 160,150 120,150 C80,150 65,147 60,140 Z"
+      fill="url(#mushroomCapGrad)"
+      stroke="#062618"
+      stroke-width="2"
+    />
+
+    <!-- Cap Highlights (Glossy top light) -->
+    <path
+      d="M78,110 C85,92 100,80 120,80 C128,80 136,83 142,88 C132,84 122,83 114,84 C95,86 82,97 78,110 Z"
+      fill="#ffffff"
+      opacity="0.32"
+    />
+
+    <!-- Cap Spots (Polka Dots) -->
+    <ellipse cx="92" cy="108" rx="8" ry="7" fill="#fbf9f5" opacity="0.92" />
+    <ellipse cx="140" cy="106" rx="9" ry="8" fill="#fbf9f5" opacity="0.92" />
+    <ellipse cx="118" cy="94" rx="7.5" ry="6.5" fill="#fbf9f5" opacity="0.95" />
+    <ellipse cx="74" cy="126" rx="5" ry="4" fill="#fbf9f5" opacity="0.85" />
+    <ellipse cx="164" cy="124" rx="5.5" ry="4.5" fill="#fbf9f5" opacity="0.85" />
+    <ellipse cx="119" cy="122" rx="6" ry="5" fill="#fbf9f5" opacity="0.9" />
+
+    <!-- Tiny cute eyes for personality -->
+    <circle cx="112" cy="166" r="2.2" fill="#2d3748" />
+    <circle cx="128" cy="166" r="2.2" fill="#2d3748" />
+    <!-- Cheeks blush -->
+    <ellipse cx="106" cy="170" rx="3" ry="1.8" fill="#f43f5e" opacity="0.4" />
+    <ellipse cx="134" cy="170" rx="3" ry="1.8" fill="#f43f5e" opacity="0.4" />
+    <!-- Gentle happy smile -->
+    <path d="M117,171 Q120,174 123,171" stroke="#4a5568" stroke-width="1.2" stroke-linecap="round" fill="none" />
+  </g>
+</svg>

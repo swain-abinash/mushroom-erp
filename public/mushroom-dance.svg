@@ -1,0 +1,320 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="100%" height="100%">
+  <defs>
+    <!-- Cap Gradients -->
+    <linearGradient id="danceCapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2ed573" />
+      <stop offset="45%" stop-color="#107c41" />
+      <stop offset="100%" stop-color="#093824" />
+    </linearGradient>
+
+    <!-- Stem Gradients -->
+    <linearGradient id="danceStemGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="65%" stop-color="#f4efe4" />
+      <stop offset="100%" stop-color="#ddd2be" />
+    </linearGradient>
+
+    <!-- Boots Ochre Gradient -->
+    <linearGradient id="danceBootGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c28b53" />
+      <stop offset="100%" stop-color="#8c5825" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="danceNoteGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Left to Right Stroll Runway (3.6s sync loop) */
+    @keyframes danceWalkTrack {
+      0% {
+        transform: translateX(-55px) scaleX(1);
+      }
+      44% {
+        transform: translateX(55px) scaleX(1);
+      }
+      48% {
+        transform: translateX(55px) scaleX(-1);
+      }
+      94% {
+        transform: translateX(-55px) scaleX(-1);
+      }
+      98%, 100% {
+        transform: translateX(-55px) scaleX(1);
+      }
+    }
+
+    /* Groovy Vertical Bounce & Head Tilt (0.9s beat) */
+    @keyframes danceBodyGroove {
+      0%, 100% {
+        transform: translateY(0px) rotate(-6deg);
+      }
+      25% {
+        transform: translateY(-11px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(0px) rotate(6deg);
+      }
+      75% {
+        transform: translateY(-11px) rotate(0deg);
+      }
+    }
+
+    /* Left Leg Step */
+    @keyframes stepLeftLeg {
+      0%, 100% {
+        transform: rotate(-18deg) translateY(0px);
+      }
+      25% {
+        transform: rotate(4deg) translateY(-10px);
+      }
+      50% {
+        transform: rotate(18deg) translateY(0px);
+      }
+      75% {
+        transform: rotate(0deg) translateY(-3px);
+      }
+    }
+
+    /* Right Leg Step (Counter-phase) */
+    @keyframes stepRightLeg {
+      0%, 100% {
+        transform: rotate(18deg) translateY(0px);
+      }
+      25% {
+        transform: rotate(0deg) translateY(-3px);
+      }
+      50% {
+        transform: rotate(-18deg) translateY(0px);
+      }
+      75% {
+        transform: rotate(4deg) translateY(-10px);
+      }
+    }
+
+    /* Arm Swings */
+    @keyframes swingLeftArm {
+      0%, 100% {
+        transform: rotate(26deg);
+      }
+      50% {
+        transform: rotate(-26deg);
+      }
+    }
+
+    @keyframes swingRightArm {
+      0%, 100% {
+        transform: rotate(-26deg);
+      }
+      50% {
+        transform: rotate(26deg);
+      }
+    }
+
+    /* Ground Shadow Breathing */
+    @keyframes shadowWalkPulse {
+      0%, 50%, 100% {
+        transform: scale(1, 1);
+        opacity: 0.28;
+      }
+      25%, 75% {
+        transform: scale(0.82, 0.7);
+        opacity: 0.16;
+      }
+    }
+
+    /* Floating Musical Notes & Sparkles */
+    @keyframes floatMusicNote1 {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0.4);
+      }
+      30% {
+        opacity: 0.95;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-24px, -50px) scale(1.15) rotate(-18deg);
+      }
+    }
+
+    @keyframes floatMusicNote2 {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0.4);
+      }
+      30% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(26px, -55px) scale(1.2) rotate(20deg);
+      }
+    }
+
+    /* Classes */
+    .track-stroll {
+      transform-origin: 160px 186px;
+      animation: danceWalkTrack 3.6s ease-in-out infinite;
+    }
+
+    .body-groove {
+      transform-origin: 160px 150px;
+      animation: danceBodyGroove 0.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .leg-left {
+      transform-origin: 148px 148px;
+      animation: stepLeftLeg 0.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .leg-right {
+      transform-origin: 172px 148px;
+      animation: stepRightLeg 0.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .arm-left {
+      transform-origin: 136px 125px;
+      animation: swingLeftArm 0.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .arm-right {
+      transform-origin: 184px 125px;
+      animation: swingRightArm 0.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .walk-shadow {
+      transform-origin: 160px 188px;
+      animation: shadowWalkPulse 0.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .note-1 {
+      animation: floatMusicNote1 2.2s ease-out infinite;
+      animation-delay: 0.1s;
+    }
+
+    .note-2 {
+      animation: floatMusicNote2 2.2s ease-out infinite;
+      animation-delay: 1.1s;
+    }
+  </style>
+
+  <!-- Left to Right Strolling Track Group -->
+  <g class="track-stroll">
+    <!-- Ground Shadow underneath walking character -->
+    <ellipse class="walk-shadow" cx="160" cy="188" rx="38" ry="9" fill="#09271c" />
+
+    <!-- Floating Musical Notes / Sparkles -->
+    <g filter="url(#danceNoteGlow)">
+      <!-- Musical Note 1 ♪ -->
+      <text class="note-1" x="122" y="90" fill="#22c55e" font-size="20" font-family="sans-serif" font-weight="bold">♪</text>
+      <!-- Musical Note 2 ♫ -->
+      <text class="note-2" x="185" y="82" fill="#f59e0b" font-size="22" font-family="sans-serif" font-weight="bold">♫</text>
+      <!-- Little golden sparkle -->
+      <circle class="note-1" cx="195" cy="105" r="3" fill="#fbbf24" />
+      <circle class="note-2" cx="120" cy="120" r="2.5" fill="#4ade80" />
+    </g>
+
+    <!-- LEFT LEG & BOOT (Back layer) -->
+    <g class="leg-left">
+      <!-- Leg Stipe -->
+      <path d="M148,145 C146,155 142,168 141,176" stroke="#d5c8b2" stroke-width="7" stroke-linecap="round" fill="none" />
+      <!-- Stylish Boot -->
+      <path
+        d="M130,174 C130,170 144,169 148,172 C152,176 150,186 142,186 C134,186 130,181 130,174 Z"
+        fill="url(#danceBootGrad)"
+        stroke="#5a3411"
+        stroke-width="1.2"
+      />
+      <!-- Boot sole -->
+      <path d="M130,183 L144,183" stroke="#3d2208" stroke-width="2.5" stroke-linecap="round" />
+    </g>
+
+    <!-- RIGHT LEG & BOOT (Front layer) -->
+    <g class="leg-right">
+      <!-- Leg Stipe -->
+      <path d="M172,145 C174,155 178,168 179,176" stroke="#d5c8b2" stroke-width="7" stroke-linecap="round" fill="none" />
+      <!-- Stylish Boot -->
+      <path
+        d="M170,174 C170,170 184,169 188,172 C192,176 190,186 182,186 C174,186 170,181 170,174 Z"
+        fill="url(#danceBootGrad)"
+        stroke="#5a3411"
+        stroke-width="1.2"
+      />
+      <!-- Boot sole -->
+      <path d="M170,183 L184,183" stroke="#3d2208" stroke-width="2.5" stroke-linecap="round" />
+    </g>
+
+    <!-- BODY, ARMS & CAP (Dancing Grooving Group) -->
+    <g class="body-groove">
+      <!-- Left Arm & Hand (Swinging) -->
+      <g class="arm-left">
+        <path d="M136,124 C124,120 114,132 118,140" stroke="#f4efe4" stroke-width="6.5" stroke-linecap="round" fill="none" />
+        <circle cx="118" cy="140" r="5" fill="#fdfcf9" stroke="#d9cfbe" stroke-width="1" />
+      </g>
+
+      <!-- Right Arm & Hand (Swinging) -->
+      <g class="arm-right">
+        <path d="M184,124 C196,120 206,132 202,140" stroke="#f4efe4" stroke-width="6.5" stroke-linecap="round" fill="none" />
+        <circle cx="202" cy="140" r="5" fill="#fdfcf9" stroke="#d9cfbe" stroke-width="1" />
+      </g>
+
+      <!-- Mushroom Stem / Body -->
+      <path
+        d="M142,108 C140,128 135,148 138,154 C140,158 150,160 160,160 C170,160 180,158 182,154 C185,148 180,128 178,108 Z"
+        fill="url(#danceStemGrad)"
+        stroke="#b5a995"
+        stroke-width="1.5"
+      />
+
+      <!-- Stem contours -->
+      <path d="M148,118 C146,132 143,145 145,152" stroke="#d0c4b2" stroke-width="1.8" stroke-linecap="round" fill="none" />
+      <path d="M172,118 C174,132 177,145 175,152" stroke="#c2b49e" stroke-width="1.8" stroke-linecap="round" fill="none" />
+
+      <!-- Gills under cap -->
+      <ellipse cx="160" cy="108" rx="52" ry="13" fill="#f4ebd9" stroke="#cfc0a5" stroke-width="1.2" />
+      <path d="M160,108 L160,119 M142,108 L146,118 M178,108 L174,118 M126,106 L133,114 M194,106 L187,114 M116,104 L123,110 M204,104 L197,110" stroke="#d5c8b2" stroke-width="1.2" stroke-linecap="round" />
+
+      <!-- Mushroom Cap -->
+      <path
+        d="M102,106 C98,78 122,44 160,44 C198,44 222,78 218,106 C213,113 198,116 160,116 C122,116 107,113 102,106 Z"
+        fill="url(#danceCapGrad)"
+        stroke="#062618"
+        stroke-width="2"
+      />
+
+      <!-- Cap Glossy Highlight -->
+      <path
+        d="M120,78 C126,62 140,52 160,52 C168,52 175,55 180,59 C171,56 162,55 154,56 C136,58 124,68 120,78 Z"
+        fill="#ffffff"
+        opacity="0.34"
+      />
+
+      <!-- Polka Dots -->
+      <ellipse cx="134" cy="76" rx="8" ry="7" fill="#fbf9f5" opacity="0.92" />
+      <ellipse cx="178" cy="74" rx="8.5" ry="7.5" fill="#fbf9f5" opacity="0.92" />
+      <ellipse cx="158" cy="64" rx="7" ry="6" fill="#fbf9f5" opacity="0.95" />
+      <ellipse cx="118" cy="94" rx="5" ry="4" fill="#fbf9f5" opacity="0.85" />
+      <ellipse cx="200" cy="92" rx="5.5" ry="4.5" fill="#fbf9f5" opacity="0.85" />
+      <ellipse cx="160" cy="90" rx="5.5" ry="4.5" fill="#fbf9f5" opacity="0.9" />
+
+      <!-- Cute Expressive Face -->
+      <!-- Happy closed wink eye (left) -->
+      <path d="M150,132 Q154,128 157,132" stroke="#2d3748" stroke-width="2.2" stroke-linecap="round" fill="none" />
+      <!-- Open sparkly eye (right) -->
+      <circle cx="169" cy="131" r="2.5" fill="#2d3748" />
+      <circle cx="170" cy="130" r="0.9" fill="#ffffff" />
+      <!-- Pink Blush Cheeks -->
+      <ellipse cx="145" cy="136" rx="3.5" ry="2" fill="#f43f5e" opacity="0.45" />
+      <ellipse cx="175" cy="136" rx="3.5" ry="2" fill="#f43f5e" opacity="0.45" />
+      <!-- Playful Swagger Smile -->
+      <path d="M157,137 Q161,142 166,138" stroke="#4a5568" stroke-width="1.6" stroke-linecap="round" fill="none" />
+    </g>
+  </g>
+</svg>

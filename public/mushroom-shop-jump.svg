@@ -1,0 +1,322 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 300" width="100%" height="100%">
+  <defs>
+    <!-- Cap Reddish-Amanita or Forest-Emerald 3D Gradient -->
+    <radialGradient id="jumpCapGrad" cx="38%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#ff4757" />
+      <stop offset="35%" stop-color="#ee2a3a" />
+      <stop offset="75%" stop-color="#b31221" />
+      <stop offset="100%" stop-color="#6e050f" />
+    </radialGradient>
+
+    <!-- Stem Organic Gradient -->
+    <linearGradient id="jumpStemGrad" x1="25%" y1="0%" x2="75%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="55%" stop-color="#fdf8ed" />
+      <stop offset="100%" stop-color="#e8dec8" />
+    </linearGradient>
+
+    <!-- Awning Striped Gradients -->
+    <linearGradient id="awningGreen" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#166534" />
+      <stop offset="100%" stop-color="#0e4422" />
+    </linearGradient>
+    <linearGradient id="awningCream" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fefce8" />
+      <stop offset="100%" stop-color="#faeed1" />
+    </linearGradient>
+
+    <!-- Shop Wall Timber Gradient -->
+    <linearGradient id="shopWood" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#92400e" />
+      <stop offset="100%" stop-color="#6b2f0a" />
+    </linearGradient>
+
+    <!-- Warm Golden Window Interior Glow -->
+    <radialGradient id="shopWindowGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="70%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </radialGradient>
+
+    <!-- Sparkle Glow Filter -->
+    <filter id="jumpSparkleGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Happy Jumping Mushroom Physics (1.35s seamless loop) */
+    @keyframes happyJumpPhysics {
+      0% {
+        transform: translateY(0px) scale(1.15, 0.85); /* Squash on landing */
+      }
+      14% {
+        transform: translateY(-8px) scale(0.92, 1.14); /* Spring upwards */
+      }
+      38% {
+        transform: translateY(-54px) scale(1.02, 0.98); /* Apex float */
+      }
+      50% {
+        transform: translateY(-56px) scale(1, 1); /* Hang time */
+      }
+      65% {
+        transform: translateY(-40px) scale(0.96, 1.08); /* Descending */
+      }
+      88% {
+        transform: translateY(-4px) scale(0.95, 1.1); /* About to impact */
+      }
+      94% {
+        transform: translateY(2px) scale(1.22, 0.78); /* Deep impact squash */
+      }
+      100% {
+        transform: translateY(0px) scale(1.15, 0.85); /* Return to ready */
+      }
+    }
+
+    /* Little Arms Happy Wave */
+    @keyframes happyArmWaveLeft {
+      0%, 100% { transform: rotate(10deg); }
+      45% { transform: rotate(-35deg); }
+      85% { transform: rotate(20deg); }
+    }
+
+    @keyframes happyArmWaveRight {
+      0%, 100% { transform: rotate(-10deg); }
+      45% { transform: rotate(35deg); }
+      85% { transform: rotate(-20deg); }
+    }
+
+    /* Roof Shadow Shrink & Expand */
+    @keyframes roofShadowPulse {
+      0%, 94%, 100% {
+        transform: scale(1.18, 1);
+        opacity: 0.35;
+      }
+      45%, 50% {
+        transform: scale(0.48, 0.4);
+        opacity: 0.1;
+      }
+    }
+
+    /* Awning Subtle Spring on Impact */
+    @keyframes awningJostle {
+      0%, 100% { transform: translateY(0px); }
+      93% { transform: translateY(2px); }
+      96% { transform: translateY(-1px); }
+    }
+
+    /* Floating Golden Sparkles */
+    @keyframes sparkleFloat1 {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-22px, -45px) scale(1.2) rotate(35deg); }
+    }
+
+    @keyframes sparkleFloat2 {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translate(25px, -50px) scale(1.3) rotate(-35deg); }
+    }
+
+    .shroom-jumper {
+      transform-origin: 140px 108px;
+      animation: happyJumpPhysics 1.35s cubic-bezier(0.3, 0.1, 0.3, 1) infinite;
+    }
+
+    .shroom-arm-l {
+      transform-origin: 124px 88px;
+      animation: happyArmWaveLeft 1.35s ease-in-out infinite;
+    }
+
+    .shroom-arm-r {
+      transform-origin: 156px 88px;
+      animation: happyArmWaveRight 1.35s ease-in-out infinite;
+    }
+
+    .roof-shadow {
+      transform-origin: 140px 108px;
+      animation: roofShadowPulse 1.35s cubic-bezier(0.3, 0.1, 0.3, 1) infinite;
+    }
+
+    .awning-bounce {
+      transform-origin: 140px 148px;
+      animation: awningJostle 1.35s ease-in-out infinite;
+    }
+
+    .spark-1 {
+      animation: sparkleFloat1 1.35s ease-out infinite;
+      animation-delay: 0.15s;
+    }
+
+    .spark-2 {
+      animation: sparkleFloat2 1.35s ease-out infinite;
+      animation-delay: 0.25s;
+    }
+  </style>
+
+  <!-- ================= MINIATURE SHOP ICON (STOREFRONT) ================= -->
+  <!-- Ground Grass Mound / Cobblestone Base -->
+  <ellipse cx="140" cy="275" rx="100" ry="14" fill="#365314" opacity="0.3" />
+  <path d="M48,272 C70,266 210,266 232,272 C238,276 230,284 216,286 C170,288 110,288 64,286 C50,284 42,276 48,272 Z" fill="#4d7c0f" />
+  <!-- Cobblestones -->
+  <ellipse cx="118" cy="278" rx="8" ry="4" fill="#78716c" opacity="0.8" />
+  <ellipse cx="138" cy="281" rx="10" ry="4.5" fill="#a8a29e" opacity="0.9" />
+  <ellipse cx="160" cy="278" rx="8" ry="4" fill="#78716c" opacity="0.8" />
+  <ellipse cx="140" cy="275" rx="6" ry="3" fill="#d6d3d1" />
+
+  <!-- Shop Timber Walls -->
+  <rect x="65" y="160" width="150" height="110" rx="10" fill="url(#shopWood)" stroke="#451a03" stroke-width="2.5" />
+
+  <!-- Wall Wood Planks detail -->
+  <line x1="65" y1="190" x2="215" y2="190" stroke="#451a03" stroke-width="1.2" opacity="0.4" />
+  <line x1="65" y1="220" x2="215" y2="220" stroke="#451a03" stroke-width="1.2" opacity="0.4" />
+  <line x1="65" y1="248" x2="215" y2="248" stroke="#451a03" stroke-width="1.2" opacity="0.4" />
+
+  <!-- Cozy Glowing Arched Doorway (Center) -->
+  <path d="M120,270 L120,212 C120,200 160,200 160,212 L160,270 Z" fill="#451a03" />
+  <path d="M123,268 L123,214 C123,205 157,205 157,214 L157,268 Z" fill="url(#shopWindowGlow)" stroke="#78350f" stroke-width="2" />
+  <!-- Door Glass Frame / Panel -->
+  <circle cx="152" cy="242" r="2.2" fill="#fef08a" stroke="#78350f" stroke-width="0.8" />
+  <path d="M128,218 C134,212 146,212 152,218 L152,230 L128,230 Z" fill="#ffffff" opacity="0.4" />
+
+  <!-- Left Display Window (Warm Glow with mini mushroom silhouette) -->
+  <rect x="76" y="202" width="34" height="42" rx="6" fill="url(#shopWindowGlow)" stroke="#451a03" stroke-width="2" />
+  <line x1="93" y1="202" x2="93" y2="244" stroke="#78350f" stroke-width="1.5" />
+  <line x1="76" y1="223" x2="110" y2="223" stroke="#78350f" stroke-width="1.5" />
+  <!-- Mini display mushroom silhouette -->
+  <path d="M90,236 C87,236 86,233 90,230 C94,228 98,233 96,236 Z" fill="#78350f" opacity="0.8" />
+  <rect x="92" y="236" width="2" height="4" fill="#78350f" opacity="0.8" />
+
+  <!-- Right Display Window / Shelves -->
+  <rect x="170" y="202" width="34" height="42" rx="6" fill="url(#shopWindowGlow)" stroke="#451a03" stroke-width="2" />
+  <line x1="187" y1="202" x2="187" y2="244" stroke="#78350f" stroke-width="1.5" />
+  <line x1="170" y1="223" x2="204" y2="223" stroke="#78350f" stroke-width="1.5" />
+  <!-- Display Jar silhouette -->
+  <ellipse cx="187" cy="237" rx="4" ry="5" fill="#78350f" opacity="0.75" />
+
+  <!-- Shop Sign Board ("SPORE" & Mini Logo) -->
+  <g>
+    <!-- Sign posts -->
+    <rect x="100" y="105" width="5" height="15" fill="#451a03" />
+    <rect x="175" y="105" width="5" height="15" fill="#451a03" />
+    <!-- Wooden Plaque -->
+    <rect x="90" y="102" width="100" height="24" rx="6" fill="#78350f" stroke="#451a03" stroke-width="2" />
+    <!-- Golden Sign Text & Mushroom Emblem -->
+    <text x="140" y="118" fill="#fef08a" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle" letter-spacing="2">🍄 SPORE</text>
+  </g>
+
+  <!-- Striped Canvas Awning (Overhang with Scalloped Edge) -->
+  <g class="awning-bounce">
+    <!-- Awning main polygon -->
+    <path d="M52,156 L65,130 L215,130 L228,156 Z" fill="#166534" stroke="#0e4422" stroke-width="2" />
+
+    <!-- Striped Segments (Alternating Green & Cream) -->
+    <!-- Segment 1: Cream -->
+    <path d="M52,156 L65,130 L87,130 L78,156 Z" fill="url(#awningCream)" />
+    <!-- Segment 2: Green -->
+    <path d="M78,156 L87,130 L109,130 L104,156 Z" fill="url(#awningGreen)" />
+    <!-- Segment 3: Cream -->
+    <path d="M104,156 L109,130 L131,130 L130,156 Z" fill="url(#awningCream)" />
+    <!-- Segment 4: Green -->
+    <path d="M130,156 L131,130 L153,130 L156,156 Z" fill="url(#awningGreen)" />
+    <!-- Segment 5: Cream -->
+    <path d="M156,156 L153,130 L175,130 L182,156 Z" fill="url(#awningCream)" />
+    <!-- Segment 6: Green -->
+    <path d="M182,156 L175,130 L197,130 L208,156 Z" fill="url(#awningGreen)" />
+    <!-- Segment 7: Cream -->
+    <path d="M208,156 L197,130 L215,130 L228,156 Z" fill="url(#awningCream)" />
+
+    <!-- Scalloped Frill Valance -->
+    <path
+      d="M52,156 Q65,166 78,156 Q91,166 104,156 Q117,166 130,156 Q143,166 156,156 Q169,166 182,156 Q195,166 208,156 Q218,166 228,156"
+      stroke="#451a03"
+      stroke-width="2"
+      fill="none"
+    />
+  </g>
+
+  <!-- Landing Shadow on Roof Plaque -->
+  <ellipse class="roof-shadow" cx="140" cy="108" rx="26" ry="6" fill="#09271c" />
+
+  <!-- ================= HAPPY JUMPING REALISTIC TINY MUSHROOM ================= -->
+  <!-- Floating Joyful Sparkles -->
+  <g filter="url(#jumpSparkleGlow)">
+    <text class="spark-1" x="110" y="55" fill="#fbbf24" font-size="16" font-family="sans-serif">✦</text>
+    <text class="spark-2" x="160" y="50" fill="#f59e0b" font-size="18" font-family="sans-serif">✨</text>
+    <circle class="spark-1" cx="158" cy="70" r="3" fill="#4ade80" />
+    <circle class="spark-2" cx="118" cy="76" r="2.5" fill="#fde047" />
+  </g>
+
+  <!-- Jumping Mushroom Character Group -->
+  <g class="shroom-jumper">
+    <!-- Tiny Boots / Feet -->
+    <ellipse cx="132" cy="104" rx="5.5" ry="4" fill="#78350f" stroke="#451a03" stroke-width="1" />
+    <ellipse cx="148" cy="104" rx="5.5" ry="4" fill="#78350f" stroke="#451a03" stroke-width="1" />
+
+    <!-- Left Joyful Arm -->
+    <g class="shroom-arm-l">
+      <path d="M124,84 C112,80 106,66 112,62" stroke="#fdf8ed" stroke-width="4.5" stroke-linecap="round" fill="none" />
+      <circle cx="112" cy="62" r="3.2" fill="#ffffff" />
+    </g>
+
+    <!-- Right Joyful Arm -->
+    <g class="shroom-arm-r">
+      <path d="M156,84 C168,80 174,66 168,62" stroke="#fdf8ed" stroke-width="4.5" stroke-linecap="round" fill="none" />
+      <circle cx="168" cy="62" r="3.2" fill="#ffffff" />
+    </g>
+
+    <!-- Mushroom Stipe / Plump Body -->
+    <path
+      d="M128,68 C126,80 123,98 126,102 C128,105 134,106 140,106 C146,106 152,105 154,102 C157,98 154,80 152,68 Z"
+      fill="url(#jumpStemGrad)"
+      stroke="#cbbba3"
+      stroke-width="1.2"
+    />
+
+    <!-- Stem 3D shading lines -->
+    <path d="M132,74 C130,84 128,95 130,100" stroke="#d5c8b2" stroke-width="1.5" stroke-linecap="round" fill="none" />
+    <path d="M148,74 C150,84 152,95 150,100" stroke="#c2b49e" stroke-width="1.5" stroke-linecap="round" fill="none" />
+
+    <!-- Under-Cap Gills (Radial lines with ivory ellipse) -->
+    <ellipse cx="140" cy="68" rx="38" ry="9" fill="#fef08a" opacity="0.9" stroke="#d4c39e" stroke-width="1" />
+    <path d="M140,68 L140,76 M128,68 L130,75 M152,68 L150,75 M116,66 L122,72 M164,66 L158,72 M108,65 L114,69 M172,65 L166,69" stroke="#c0af88" stroke-width="1.1" stroke-linecap="round" />
+
+    <!-- Mushroom 3D Realistic Curved Cap -->
+    <path
+      d="M96,66 C92,42 112,14 140,14 C168,14 188,42 184,66 C180,72 168,74 140,74 C112,74 100,72 96,66 Z"
+      fill="url(#jumpCapGrad)"
+      stroke="#50040a"
+      stroke-width="1.8"
+    />
+
+    <!-- Cap 3D Spherical Light Sheen -->
+    <path
+      d="M110,44 C115,28 126,20 140,20 C146,20 152,22 156,26 C148,23 142,22 136,23 C124,25 114,34 110,44 Z"
+      fill="#ffffff"
+      opacity="0.45"
+    />
+
+    <!-- Realistic Embossed Polka Dots -->
+    <ellipse cx="122" cy="40" rx="6.5" ry="5.5" fill="#ffffff" opacity="0.95" />
+    <ellipse cx="154" cy="38" rx="7" ry="6" fill="#ffffff" opacity="0.95" />
+    <ellipse cx="138" cy="28" rx="5.5" ry="4.8" fill="#ffffff" opacity="0.95" />
+    <ellipse cx="107" cy="56" rx="4" ry="3.2" fill="#ffffff" opacity="0.88" />
+    <ellipse cx="171" cy="55" rx="4.5" ry="3.5" fill="#ffffff" opacity="0.88" />
+    <ellipse cx="139" cy="53" rx="5" ry="4" fill="#ffffff" opacity="0.92" />
+
+    <!-- Adorable Happy Face -->
+    <!-- Happy curved eyes (smiling closed arches) -->
+    <path d="M133,85 Q136,81 139,85" stroke="#27272a" stroke-width="2.2" stroke-linecap="round" fill="none" />
+    <path d="M145,85 Q148,81 151,85" stroke="#27272a" stroke-width="2.2" stroke-linecap="round" fill="none" />
+    <!-- Rosy Cheek Blush -->
+    <ellipse cx="130" cy="88" rx="3.5" ry="2" fill="#f43f5e" opacity="0.55" />
+    <ellipse cx="154" cy="88" rx="3.5" ry="2" fill="#f43f5e" opacity="0.55" />
+    <!-- Happy Open Joyful Smile -->
+    <path d="M138,89 Q142,95 146,89 Z" fill="#991b1b" stroke="#450a0a" stroke-width="1.2" />
+    <path d="M140,92 Q142,94 144,92" stroke="#fca5a5" stroke-width="1.5" stroke-linecap="round" fill="none" />
+  </g>
+</svg>

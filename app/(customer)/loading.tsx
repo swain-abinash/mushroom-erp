@@ -1,5 +1,9 @@
+import { MushroomLoader } from "@/components/ui/mushroom-loader";
+
 export default function CustomerLoading() {
   return (
-    <p className="px-6 py-16 text-center font-body text-sm text-forest-primary/60">Loading…</p>
+    <div className="flex min-h-[50vh] w-full items-center justify-center py-16">
+      <MushroomLoader size="xl" />
+    </div>
   );
 }

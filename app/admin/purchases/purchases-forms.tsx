@@ -13,7 +13,7 @@ export function CreateSupplierModal() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-full border border-spore-ivory/20 px-4 py-2 font-display text-xs font-semibold text-spore-ivory hover:bg-spore-ivory/5"
+        className="rounded-full border border-stone-200 dark:border-spore-ivory/20 px-4 py-2 font-display text-xs font-semibold text-stone-900 dark:text-spore-ivory hover:bg-stone-100 dark:hover:bg-spore-ivory/5"
       >
         + Add New Supplier
       </button>
@@ -39,20 +39,20 @@ export function CreateSupplierModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 font-body">
-      <div className="w-full max-w-md rounded-2xl border border-spore-ivory/20 bg-surface-charcoal p-6 shadow-2xl text-spore-ivory space-y-4">
-        <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-3">
+      <div className="w-full max-w-md rounded-2xl border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal p-6 shadow-2xl text-stone-900 dark:text-spore-ivory space-y-4">
+        <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
           <h3 className="font-display font-bold text-lg">Add Raw Material Supplier</h3>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="text-spore-ivory/60 hover:text-spore-ivory"
+            className="text-stone-600 dark:text-spore-ivory/60 hover:text-stone-900 dark:hover:text-spore-ivory"
           >
             ✕
           </button>
         </div>
 
         {error && (
-          <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2 text-xs text-alert-coral">
+          <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2 text-xs text-red-600 dark:text-alert-coral">
             {error}
           </div>
         )}
@@ -65,7 +65,7 @@ export function CreateSupplierModal() {
               name="name"
               required
               placeholder="e.g. Balasore Biomass & Straw"
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
           <div>
@@ -74,7 +74,7 @@ export function CreateSupplierModal() {
               type="text"
               name="contactPerson"
               placeholder="e.g. Ramesh Nayak"
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
           <div>
@@ -84,7 +84,7 @@ export function CreateSupplierModal() {
               name="phone"
               required
               placeholder="e.g. 9876543210"
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
           <div>
@@ -93,7 +93,7 @@ export function CreateSupplierModal() {
               type="email"
               name="email"
               placeholder="supplier@example.com"
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
           <div>
@@ -102,15 +102,15 @@ export function CreateSupplierModal() {
               type="text"
               name="materialsSupplied"
               defaultValue="Organic Paddy Straw, Grain Spawn, Bran"
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-3 border-t border-spore-ivory/10">
+          <div className="flex justify-end gap-2 pt-3 border-t border-stone-200 dark:border-spore-ivory/10">
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-full border border-spore-ivory/20 px-4 py-2 font-semibold hover:bg-spore-ivory/5"
+              className="rounded-full border border-stone-200 dark:border-spore-ivory/20 px-4 py-2 font-semibold hover:bg-stone-100 dark:hover:bg-spore-ivory/5"
             >
               Cancel
             </button>
@@ -168,25 +168,25 @@ export function CreatePurchaseModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 font-body">
-      <div className="w-full max-w-lg rounded-2xl border border-spore-ivory/20 bg-surface-charcoal p-6 shadow-2xl text-spore-ivory space-y-4">
-        <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-3">
+      <div className="w-full max-w-lg rounded-2xl border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal p-6 shadow-2xl text-stone-900 dark:text-spore-ivory space-y-4">
+        <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
           <div>
             <h3 className="font-display font-bold text-lg">Record Material Purchase</h3>
-            <p className="text-xs text-spore-ivory/60">
+            <p className="text-xs text-stone-600 dark:text-spore-ivory/60">
               Inward stock updates raw material inventory automatically.
             </p>
           </div>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="text-spore-ivory/60 hover:text-spore-ivory"
+            className="text-stone-600 dark:text-spore-ivory/60 hover:text-stone-900 dark:hover:text-spore-ivory"
           >
             ✕
           </button>
         </div>
 
         {error && (
-          <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2 text-xs text-alert-coral">
+          <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2 text-xs text-red-600 dark:text-alert-coral">
             {error}
           </div>
         )}
@@ -198,7 +198,7 @@ export function CreatePurchaseModal({
               <select
                 name="supplierId"
                 required
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               >
                 {suppliers.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -215,7 +215,7 @@ export function CreatePurchaseModal({
                 name="purchaseDate"
                 required
                 defaultValue={new Date().toISOString().slice(0, 10)}
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
           </div>
@@ -227,7 +227,7 @@ export function CreatePurchaseModal({
               name="materialName"
               required
               placeholder="e.g. Master Oyster Grain Spawn, Wheat Straw Bales..."
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
 
@@ -240,7 +240,7 @@ export function CreatePurchaseModal({
                 name="quantity"
                 required
                 placeholder="e.g. 50"
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
             <div>
@@ -249,7 +249,7 @@ export function CreatePurchaseModal({
                 type="text"
                 name="unit"
                 defaultValue="KG"
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
             <div>
@@ -260,16 +260,16 @@ export function CreatePurchaseModal({
                 name="unitPrice"
                 required
                 placeholder="e.g. 60"
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-3 border-t border-spore-ivory/10">
+          <div className="flex justify-end gap-2 pt-3 border-t border-stone-200 dark:border-spore-ivory/10">
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-full border border-spore-ivory/20 px-4 py-2 font-semibold hover:bg-spore-ivory/5"
+              className="rounded-full border border-stone-200 dark:border-spore-ivory/20 px-4 py-2 font-semibold hover:bg-stone-100 dark:hover:bg-spore-ivory/5"
             >
               Cancel
             </button>

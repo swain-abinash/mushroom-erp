@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser, hasPermission } from "@/lib/auth/dal";
-import { PERMISSIONS } from "@/lib/auth/permissions";
+import { isDeliveryOnly, PERMISSIONS } from "@/lib/auth/permissions";
 import { signOutAction } from "@/app/actions/auth";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
@@ -9,8 +9,17 @@ export async function AdminNav() {
   const user = await getCurrentUser();
   if (!user) return null;
 
+  const deliveryOnly = isDeliveryOnly(user.roles);
   const links = [
-    { href: "/admin/dashboard", label: "Dashboard", icon: "📊", visible: true },
+    { href: "/admin/dashboard", label: "Dashboard", icon: "📊", visible: !deliveryOnly },
+    {
+      href: "/admin/deliveries",
+      label: deliveryOnly ? "My Deliveries" : "Deliveries",
+      icon: "🚚",
+      visible:
+        hasPermission(user, PERMISSIONS.DELIVERIES_VIEW_ALL) ||
+        hasPermission(user, PERMISSIONS.DELIVERIES_VIEW_OWN),
+    },
     {
       href: "/admin/orders",
       label: "Orders & Delivery",
@@ -39,7 +48,7 @@ export async function AdminNav() {
       href: "/admin/production",
       label: "Cultivation & Batches",
       icon: "🌱",
-      visible: user.isStaff,
+      visible: user.isStaff && !deliveryOnly,
     },
     {
       href: "/admin/purchases",
@@ -115,7 +124,7 @@ export async function AdminNav() {
               <button
                 type="submit"
                 title="Sign out"
-                className="text-[11px] text-alert-coral hover:underline font-semibold cursor-pointer"
+                className="text-[11px] text-red-600 dark:text-alert-coral hover:underline font-semibold cursor-pointer"
               >
                 Exit
               </button>

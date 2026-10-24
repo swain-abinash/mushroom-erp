@@ -45,37 +45,37 @@ export function CreateBatchForm({
   };
 
   return (
-    <div className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6 space-y-4 font-body">
-      <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-3">
+    <div className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6 space-y-4 font-body">
+      <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
         <div>
-          <h3 className="font-display font-bold text-lg text-spore-ivory">
+          <h3 className="font-display font-bold text-lg text-stone-900 dark:text-spore-ivory">
             Start New Production Batch
           </h3>
-          <p className="text-xs text-spore-ivory/60">
+          <p className="text-xs text-stone-600 dark:text-spore-ivory/60">
             Initializes spawn inoculation and automatically provisions bed records in the growing room.
           </p>
         </div>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="text-xs text-spore-ivory/60 hover:text-spore-ivory"
+          className="text-xs text-stone-600 dark:text-spore-ivory/60 hover:text-stone-900 dark:hover:text-spore-ivory"
         >
           ✕ Cancel
         </button>
       </div>
 
       {error && (
-        <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2.5 text-xs text-alert-coral">
+        <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2.5 text-xs text-red-600 dark:text-alert-coral">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 text-xs text-spore-ivory">
+      <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 text-xs text-stone-900 dark:text-spore-ivory">
         <div>
           <label className="block font-semibold mb-1">Mushroom Variety *</label>
           <select
             name="mushroomType"
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           >
             <option value="Blue Oyster">Blue Oyster (Pleurotus columbinus)</option>
             <option value="Pink Oyster">Pink Oyster (Pleurotus djamor)</option>
@@ -90,7 +90,7 @@ export function CreateBatchForm({
           <select
             name="roomId"
             required
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           >
             {rooms.map((r) => (
               <option key={r.id} value={r.id}>
@@ -104,7 +104,7 @@ export function CreateBatchForm({
           <label className="block font-semibold mb-1">Spawn Supplier (Optional)</label>
           <select
             name="spawnSupplierId"
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           >
             <option value="">In-House / None</option>
             {suppliers.map((s) => (
@@ -123,7 +123,7 @@ export function CreateBatchForm({
             name="spawnQuantityKg"
             required
             defaultValue="5.0"
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           />
         </div>
 
@@ -133,7 +133,7 @@ export function CreateBatchForm({
             type="text"
             name="substrateType"
             defaultValue="Paddy Straw + Wheat Bran"
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           />
         </div>
 
@@ -145,7 +145,7 @@ export function CreateBatchForm({
             name="substrateDryWeightKg"
             required
             defaultValue="50.0"
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           />
         </div>
 
@@ -158,7 +158,7 @@ export function CreateBatchForm({
             defaultValue="20"
             min="1"
             max="100"
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           />
         </div>
 
@@ -169,7 +169,7 @@ export function CreateBatchForm({
             name="inoculationDate"
             required
             defaultValue={new Date().toISOString().slice(0, 10)}
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           />
         </div>
 
@@ -179,15 +179,15 @@ export function CreateBatchForm({
             type="number"
             name="expectedHarvestDays"
             defaultValue="21"
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           />
         </div>
 
-        <div className="sm:col-span-2 flex justify-end gap-2 pt-3 border-t border-spore-ivory/10">
+        <div className="sm:col-span-2 flex justify-end gap-2 pt-3 border-t border-stone-200 dark:border-spore-ivory/10">
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="rounded-full border border-spore-ivory/20 px-5 py-2 font-semibold hover:bg-spore-ivory/5"
+            className="rounded-full border border-stone-200 dark:border-spore-ivory/20 px-5 py-2 font-semibold hover:bg-stone-100 dark:hover:bg-spore-ivory/5"
           >
             Cancel
           </button>
@@ -231,7 +231,7 @@ export function BatchStatusSelect({
         value={currentStatus}
         disabled={isUpdating}
         onChange={handleChange}
-        className="rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-2.5 py-1 text-xs text-spore-ivory focus:border-forest-primary focus:outline-hidden disabled:opacity-50"
+        className="rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-2.5 py-1 text-xs text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden disabled:opacity-50"
       >
         <option value={BatchStatus.PLANNED}>Planned</option>
         <option value={BatchStatus.PREPARATION}>Preparation</option>
@@ -242,7 +242,7 @@ export function BatchStatusSelect({
         <option value={BatchStatus.COMPLETED}>Completed</option>
         <option value={BatchStatus.CONTAMINATED}>Contaminated (Loss)</option>
       </select>
-      {isUpdating && <span className="text-[10px] text-spore-ivory/50">...</span>}
+      {isUpdating && <span className="text-[10px] text-stone-600 dark:text-spore-ivory/50">...</span>}
     </div>
   );
 }

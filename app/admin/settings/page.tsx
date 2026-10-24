@@ -17,10 +17,10 @@ export default async function AdminSettingsPage() {
   const settingsMap = new Map(rawSettings.map((s) => [s.key, s.value]));
 
   return (
-    <div className="mx-auto max-w-4xl flex flex-col gap-8 font-body text-spore-ivory">
+    <div className="mx-auto max-w-4xl flex flex-col gap-8 font-body text-stone-900 dark:text-spore-ivory">
       <header>
         <h1 className="font-display text-2xl font-bold">Business Settings &amp; Store Profile</h1>
-        <p className="mt-1 text-sm text-spore-ivory/70">
+        <p className="mt-1 text-sm text-stone-700 dark:text-spore-ivory/70">
           Founder controls: Contact numbers, WhatsApp link, farm physical address, and delivery zone.
         </p>
       </header>
@@ -30,7 +30,7 @@ export default async function AdminSettingsPage() {
           "use server";
           await updateBusinessSettingsAction(formData);
         }}
-        className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-8 space-y-6 shadow-sm"
+        className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-8 space-y-6 shadow-sm"
       >
         <div className="grid gap-6 sm:grid-cols-2 text-xs">
           <div className="sm:col-span-2">
@@ -40,9 +40,9 @@ export default async function AdminSettingsPage() {
               name="store_name"
               required
               defaultValue={settingsMap.get("store_name") ?? "Spore Organic Mushroom Farm"}
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3.5 py-2.5 text-sm text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3.5 py-2.5 text-sm text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
-            <p className="text-[11px] text-spore-ivory/50 mt-1">
+            <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50 mt-1">
               Shown in the customer storefront header, invoice PDFs, and Google SEO title.
             </p>
           </div>
@@ -53,7 +53,7 @@ export default async function AdminSettingsPage() {
               type="tel"
               name="contact_phone"
               defaultValue={settingsMap.get("contact_phone") ?? "+91 98765 43210"}
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-sm text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-sm text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
 
@@ -64,7 +64,7 @@ export default async function AdminSettingsPage() {
               name="contact_whatsapp"
               defaultValue={settingsMap.get("contact_whatsapp") ?? "+919876543210"}
               placeholder="+919876543210"
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-sm text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-sm text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
 
@@ -74,7 +74,7 @@ export default async function AdminSettingsPage() {
               type="email"
               name="contact_email"
               defaultValue={settingsMap.get("contact_email") ?? "support@sporemushroom.local"}
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-sm text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-sm text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
 
@@ -87,7 +87,7 @@ export default async function AdminSettingsPage() {
                 settingsMap.get("service_area") ??
                 "Bhubaneswar, Cuttack & Khurda Metropolitan Region"
               }
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-sm text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-sm text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
 
@@ -100,12 +100,12 @@ export default async function AdminSettingsPage() {
                 settingsMap.get("contact_address") ??
                 "Plot 42, Spore Agri-Bio Zone, Chandaka-Khurda Road, Bhubaneswar, Odisha 751024"
               }
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3.5 py-2.5 text-sm text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3.5 py-2.5 text-sm text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-spore-ivory/10">
+        <div className="flex justify-end pt-4 border-t border-stone-200 dark:border-spore-ivory/10">
           <button
             type="submit"
             className="rounded-full bg-forest-primary px-8 py-3 font-display text-sm font-bold text-spore-ivory hover:bg-forest-hover transition-colors shadow-md cursor-pointer"

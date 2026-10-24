@@ -11,7 +11,7 @@ export async function UserNav() {
       <div className="flex items-center gap-3">
         <Link
           href="/login"
-          className="font-body text-xs font-semibold text-forest-primary underline-offset-4 hover:underline px-2 py-1"
+          className="font-body text-xs font-semibold text-forest-primary dark:text-spore-ivory underline-offset-4 hover:underline px-2 py-1"
         >
           Sign in
         </Link>

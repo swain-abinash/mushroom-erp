@@ -19,12 +19,17 @@ export async function placeOrderAction(input: CheckoutInput): Promise<CheckoutAc
   const parsed = checkoutSchema.safeParse(input);
   if (!parsed.success) {
     const fieldErrors: Record<string, string[]> = {};
-    for (const [key, issues] of Object.entries(parsed.error.flatten().fieldErrors)) {
-      fieldErrors[key] = issues as string[];
+    for (const issue of parsed.error.issues) {
+      const key = issue.path.join(".") || "form";
+      (fieldErrors[key] ??= []).push(issue.message);
     }
+    const detail = parsed.error.issues
+      .slice(0, 3)
+      .map((i) => i.message)
+      .join(" · ");
     return {
       success: false,
-      error: "Please check your delivery address and order details.",
+      error: `Please check your delivery address and order details. ${detail}`,
       fieldErrors,
     };
   }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AuthCard } from "@/components/forms/auth-card";
 import { ResetPasswordForm } from "./reset-password-form";
 
+export const instant = false;
 export const metadata: Metadata = { title: "Set password — SporeERP" };
 
 export default async function ResetPasswordPage({

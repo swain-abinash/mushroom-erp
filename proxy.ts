@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import { authConfig } from "@/auth.config";
-import { isStaff, ROLES } from "@/lib/auth/permissions";
+import { isDeliveryOnly, isStaff, ROLES } from "@/lib/auth/permissions";
 
 // Optimistic route guard based on the signed JWT (no database access). Pages and server actions
 // re-check roles and permissions against the database via `lib/auth/dal.ts`.
@@ -41,6 +41,10 @@ export const proxy = auth((req) => {
   if (pathname.startsWith("/admin")) {
     if (!isStaff(roles)) {
       return NextResponse.redirect(new URL("/unauthorized", req.nextUrl));
+    }
+    // Delivery agents may only use their own delivery list.
+    if (isDeliveryOnly(roles) && !pathname.startsWith("/admin/deliveries")) {
+      return NextResponse.redirect(new URL("/admin/deliveries", req.nextUrl));
     }
     const founderOnly = FOUNDER_ONLY_PREFIXES.some((prefix) => pathname.startsWith(prefix));
     if (founderOnly && !roles.includes(ROLES.FOUNDER_ADMIN)) {

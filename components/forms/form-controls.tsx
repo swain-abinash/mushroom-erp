@@ -36,7 +36,7 @@ export function Field({ label, name, errors, className, ...props }: FieldProps) 
         {...props}
       />
       {errors?.length ? (
-        <span id={errorId} className="text-xs text-alert-coral">
+        <span id={errorId} className="text-xs text-red-600 dark:text-alert-coral">
           {errors[0]}
         </span>
       ) : null}
@@ -58,7 +58,7 @@ export function FormMessage({ state }: { state: FormState }) {
     return (
       <p
         role="alert"
-        className="rounded-lg bg-alert-coral/10 px-3 py-2 font-body text-sm text-alert-coral"
+        className="rounded-lg bg-alert-coral/10 px-3 py-2 font-body text-sm text-red-600 dark:text-alert-coral"
       >
         {state.error}
       </p>
@@ -68,7 +68,7 @@ export function FormMessage({ state }: { state: FormState }) {
     return (
       <p
         role="status"
-        className="rounded-lg bg-success-mint/10 px-3 py-2 font-body text-sm text-success-mint"
+        className="rounded-lg bg-success-mint/10 px-3 py-2 font-body text-sm text-green-700 dark:text-success-mint"
       >
         {state.success}
       </p>
@@ -82,7 +82,7 @@ const controlClass =
 
 function FieldError({ name, errors }: { name: string; errors?: string[] }) {
   return errors?.length ? (
-    <span id={`${name}-error`} className="text-xs text-alert-coral">
+    <span id={`${name}-error`} className="text-xs text-red-600 dark:text-alert-coral">
       {errors[0]}
     </span>
   ) : null;

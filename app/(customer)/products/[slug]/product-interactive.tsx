@@ -47,7 +47,7 @@ export function ProductGallery({
               className={cn(
                 "relative size-20 shrink-0 overflow-hidden rounded-lg border-2",
                 index === active
-                  ? "border-forest-primary"
+                  ? "border-forest-primary dark:border-white/15"
                   : "border-transparent opacity-70 hover:opacity-100",
               )}
             >
@@ -96,7 +96,7 @@ export function QuantitySelector({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-4">
-        <div className="flex items-center rounded-full border border-forest-primary/30">
+        <div className="flex items-center rounded-full border border-forest-primary/30 dark:border-white/15">
           <button
             type="button"
             aria-label="Decrease quantity"
@@ -120,7 +120,7 @@ export function QuantitySelector({
           </button>
         </div>
         {max !== null && canOrder ? (
-          <span className="font-body text-xs text-forest-primary/60">
+          <span className="font-body text-xs text-forest-primary/60 dark:text-spore-ivory/60">
             {max} {unitLabel} available
           </span>
         ) : null}
@@ -150,7 +150,7 @@ export function QuantitySelector({
       >
         <span>🛒 Add to harvest basket</span>
       </button>
-      <p className="font-body text-xs text-forest-primary/60">
+      <p className="font-body text-xs text-forest-primary/60 dark:text-spore-ivory/60">
         Dispatched fresh following our 5:00 AM morning harvest.
       </p>
     </div>
@@ -167,7 +167,7 @@ export function InfoTabs({
 
   return (
     <div className="flex flex-col gap-4">
-      <div role="tablist" className="flex gap-2 border-b border-forest-primary/10">
+      <div role="tablist" className="flex gap-2 border-b border-forest-primary/10 dark:border-white/15">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -180,8 +180,8 @@ export function InfoTabs({
             className={cn(
               "-mb-px border-b-2 px-4 py-2 font-display text-sm font-semibold",
               active === tab.id
-                ? "border-forest-primary text-forest-primary"
-                : "border-transparent text-forest-primary/60",
+                ? "border-forest-primary dark:border-white/15 text-forest-primary dark:text-spore-ivory"
+                : "border-transparent text-forest-primary/60 dark:text-spore-ivory/60",
             )}
           >
             {tab.label}
@@ -195,7 +195,7 @@ export function InfoTabs({
           role="tabpanel"
           aria-labelledby={`tab-${tab.id}`}
           hidden={active !== tab.id}
-          className="whitespace-pre-line font-body text-forest-primary/80"
+          className="whitespace-pre-line font-body text-forest-primary/80 dark:text-spore-ivory/80"
         >
           {tab.content}
         </div>
@@ -212,14 +212,14 @@ export function NotifyMeForm({ productId }: { productId: string }) {
   return (
     <form
       action={formAction}
-      className="flex flex-col gap-3 rounded-2xl border border-forest-primary/10 bg-surface-white p-4"
+      className="flex flex-col gap-3 rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-4"
     >
-      <p className="font-display font-semibold text-forest-primary">
+      <p className="font-display font-semibold text-forest-primary dark:text-spore-ivory">
         Notify me when it&apos;s back
       </p>
       <FormMessage state={state} />
       <input type="hidden" name="productId" value={productId} />
-      <div className="flex flex-wrap items-end gap-3 text-forest-primary">
+      <div className="flex flex-wrap items-end gap-3 text-forest-primary dark:text-spore-ivory">
         <Field
           label="Email"
           name="email"

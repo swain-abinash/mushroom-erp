@@ -15,12 +15,12 @@ export function AvailabilityBadge({
     ? product.availableStock <= 5
       ? [
           `Only ${product.availableStock} ${UNIT_LABELS[product.unitType].short} left`,
-          "bg-warning-amber/15 text-warning-amber border-warning-amber/20",
+          "bg-warning-amber/15 text-amber-700 dark:text-warning-amber border-warning-amber/20",
         ]
       : ["Fresh in stock", "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"]
     : product.allowBackorder
-      ? ["Available on back-order", "bg-shiitake-ochre/15 text-shiitake-ochre border-shiitake-ochre/20"]
-      : ["Sold out for today", "bg-alert-coral/10 text-alert-coral border-alert-coral/20"];
+      ? ["Available on back-order", "bg-shiitake-ochre/15 text-amber-800 dark:text-shiitake-ochre border-shiitake-ochre/20"]
+      : ["Sold out for today", "bg-alert-coral/10 text-red-600 dark:text-alert-coral border-alert-coral/20"];
 
   return (
     <span
@@ -101,7 +101,7 @@ export function ProductCard({
 
       <div className="flex flex-1 flex-col gap-2 p-5">
         <div className="flex items-center justify-between gap-2">
-          <span className="font-body text-[11px] uppercase font-bold tracking-wider text-shiitake-ochre">
+          <span className="font-body text-[11px] uppercase font-bold tracking-wider text-amber-800 dark:text-shiitake-ochre">
             {product.variety ?? product.category.name}
           </span>
           <AvailabilityBadge product={product} />

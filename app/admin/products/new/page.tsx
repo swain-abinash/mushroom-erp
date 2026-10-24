@@ -15,13 +15,13 @@ export default async function NewProductPage() {
   return (
     <div className="flex max-w-4xl flex-col gap-6 font-body">
       <header>
-        <Link href="/admin/products" className="text-sm text-spore-ivory/60 hover:underline">
+        <Link href="/admin/products" className="text-sm text-stone-600 dark:text-spore-ivory/60 hover:underline">
           ← Products
         </Link>
         <h1 className="mt-2 font-display text-2xl font-bold">New product</h1>
       </header>
       {categories.length === 0 ? (
-        <p className="rounded-lg bg-warning-amber/10 px-3 py-2 text-sm text-warning-amber">
+        <p className="rounded-lg bg-warning-amber/10 px-3 py-2 text-sm text-amber-700 dark:text-warning-amber">
           Create a category first under{" "}
           <Link href="/admin/categories" className="underline">
             Categories

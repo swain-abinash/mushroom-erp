@@ -3,9 +3,10 @@ import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { ServiceError } from "@/lib/errors";
 import { sendMail } from "@/lib/mail";
+import { inviteEmail } from "@/lib/mail-templates";
 import { appUrl } from "@/lib/url";
 import { generateToken, hashPassword } from "@/lib/auth/password";
-import { isStaff, ROLES, STAFF_ROLES } from "@/lib/auth/permissions";
+import { isStaff, ROLE_DEFINITIONS, ROLES, STAFF_ROLES, type RoleName } from "@/lib/auth/permissions";
 import { AuditService } from "@/services/audit.service";
 import { createPasswordToken, INVITE_TOKEN_TTL_MS } from "@/services/auth.service";
 import type { InviteEmployeeInput } from "@/lib/validations/auth";
@@ -85,8 +86,15 @@ export async function inviteEmployee(actorId: string, input: InviteEmployeeInput
     const inviteUrl = appUrl(`/reset-password?token=${token}&invite=1`);
     await sendMail({
       to: user.email,
-      subject: "You're invited to SporeERP",
-      text: `Hi ${user.name},\n\nAn account has been created for you on SporeERP. Set your password using this link (valid for 72 hours):\n${inviteUrl}`,
+      ...inviteEmail({
+        name: user.name,
+        email: user.email,
+        roleLabels: input.roles.map(
+          (role) => ROLE_DEFINITIONS[role as RoleName]?.displayName ?? role,
+        ),
+        inviteUrl,
+        loginUrl: appUrl("/login"),
+      }),
     });
     return { user, inviteUrl };
   } catch (error) {

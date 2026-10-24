@@ -55,29 +55,29 @@ export function RapidHarvestForm({
   };
 
   return (
-    <div className="rounded-2xl border border-forest-primary/30 bg-surface-charcoal p-6 shadow-xl space-y-5 font-body text-spore-ivory">
-      <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-3">
+    <div className="rounded-2xl border border-forest-primary/30 dark:border-white/15 bg-white dark:bg-surface-charcoal p-6 shadow-xl space-y-5 font-body text-stone-900 dark:text-spore-ivory">
+      <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
         <div>
-          <h2 className="font-display font-bold text-lg text-success-mint">
+          <h2 className="font-display font-bold text-lg text-green-700 dark:text-success-mint">
             ⚡ Rapid Harvest Logger (&lt;30 Seconds)
           </h2>
-          <p className="text-xs text-spore-ivory/60">
+          <p className="text-xs text-stone-600 dark:text-spore-ivory/60">
             Automatically increments finished stock and updates batch biological efficiency.
           </p>
         </div>
-        <span className="rounded-full bg-success-mint/15 px-3 py-1 text-xs font-bold text-success-mint">
+        <span className="rounded-full bg-success-mint/15 px-3 py-1 text-xs font-bold text-green-700 dark:text-success-mint">
           Auto-Inventory Sync Active
         </span>
       </div>
 
       {error && (
-        <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2.5 text-xs text-alert-coral">
+        <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2.5 text-xs text-red-600 dark:text-alert-coral">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="rounded-lg bg-success-mint/15 border border-success-mint/30 p-3 text-xs text-success-mint font-semibold flex items-center gap-2">
+        <div className="rounded-lg bg-success-mint/15 border border-success-mint/30 p-3 text-xs text-green-700 dark:text-success-mint font-semibold flex items-center gap-2">
           <span>✓</span>
           <span>Harvest logged successfully! Finished goods inventory has been updated.</span>
         </div>
@@ -90,7 +90,7 @@ export function RapidHarvestForm({
             <select
               name="batchId"
               required
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory text-xs focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory text-xs focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             >
               {batches.map((b) => (
                 <option key={b.id} value={b.id}>
@@ -104,7 +104,7 @@ export function RapidHarvestForm({
             <label className="block font-semibold mb-1">Harvest Flush</label>
             <select
               name="flushNumber"
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory text-xs focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory text-xs focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             >
               <option value="1">Flush #1 (Peak First Break)</option>
               <option value="2">Flush #2 (Secondary Flush)</option>
@@ -119,14 +119,14 @@ export function RapidHarvestForm({
               name="harvestDate"
               required
               defaultValue={new Date().toISOString().slice(0, 10)}
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory text-xs focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory text-xs focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
         </div>
 
         {/* Primary Total Yield Input */}
         <div className="rounded-xl border border-success-mint/30 bg-success-mint/5 p-4 space-y-2">
-          <label className="block font-display text-sm font-bold text-success-mint">
+          <label className="block font-display text-sm font-bold text-green-700 dark:text-success-mint">
             Total Harvest Weight (KG) *
           </label>
           <input
@@ -137,19 +137,19 @@ export function RapidHarvestForm({
             placeholder="e.g. 15.5"
             value={totalWeight}
             onChange={(e) => handleTotalChange(e.target.value)}
-            className="w-full rounded-xl border border-success-mint/40 bg-surface-charcoal px-4 py-3 font-data text-2xl font-bold text-spore-ivory focus:border-success-mint focus:outline-hidden"
+            className="w-full rounded-xl border border-success-mint/40 bg-white dark:bg-surface-charcoal px-4 py-3 font-data text-2xl font-bold text-stone-900 dark:text-spore-ivory focus:border-success-mint focus:outline-hidden"
           />
-          <p className="text-[11px] text-spore-ivory/60">
+          <p className="text-[11px] text-stone-600 dark:text-spore-ivory/60">
             Tip: Entering total weight automatically calculates default quality splits below.
           </p>
         </div>
 
         {/* Quality Split Breakdown */}
         <div className="space-y-2">
-          <p className="font-semibold text-spore-ivory/80">Quality Grading Split (KG):</p>
+          <p className="font-semibold text-stone-700 dark:text-spore-ivory/80">Quality Grading Split (KG):</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div>
-              <label className="block text-[11px] font-semibold text-success-mint mb-1">
+              <label className="block text-[11px] font-semibold text-green-700 dark:text-success-mint mb-1">
                 Grade A (Whole/Premium)
               </label>
               <input
@@ -158,12 +158,12 @@ export function RapidHarvestForm({
                 name="gradeAKg"
                 value={gradeA}
                 onChange={(e) => setGradeA(e.target.value)}
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-warning-amber mb-1">
+              <label className="block text-[11px] font-semibold text-amber-700 dark:text-warning-amber mb-1">
                 Grade B (Button/Small)
               </label>
               <input
@@ -172,12 +172,12 @@ export function RapidHarvestForm({
                 name="gradeBKg"
                 value={gradeB}
                 onChange={(e) => setGradeB(e.target.value)}
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-shiitake-ochre mb-1">
+              <label className="block text-[11px] font-semibold text-amber-800 dark:text-shiitake-ochre mb-1">
                 Grade C (Dry / Powder)
               </label>
               <input
@@ -186,12 +186,12 @@ export function RapidHarvestForm({
                 name="gradeCDryKg"
                 value={gradeC}
                 onChange={(e) => setGradeC(e.target.value)}
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-alert-coral mb-1">
+              <label className="block text-[11px] font-semibold text-red-600 dark:text-alert-coral mb-1">
                 Wastage / Spoiled
               </label>
               <input
@@ -200,7 +200,7 @@ export function RapidHarvestForm({
                 name="wastageKg"
                 value={wastage}
                 onChange={(e) => setWastage(e.target.value)}
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
           </div>
@@ -212,7 +212,7 @@ export function RapidHarvestForm({
             type="text"
             name="notes"
             placeholder="e.g. Clean flush, tight clusters, zero cap spotting..."
-            className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           />
         </div>
 

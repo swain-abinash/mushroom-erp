@@ -39,14 +39,14 @@ export default async function EditProductPage({
   return (
     <div className="flex max-w-4xl flex-col gap-6 font-body">
       <header className="flex flex-col gap-2">
-        <Link href="/admin/products" className="text-sm text-spore-ivory/60 hover:underline">
+        <Link href="/admin/products" className="text-sm text-stone-600 dark:text-spore-ivory/60 hover:underline">
           ← Products
         </Link>
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="font-display text-2xl font-bold">{product.name}</h1>
           <StatusBadge status={product.status} />
         </div>
-        <p className="font-data text-xs text-spore-ivory/60">
+        <p className="font-data text-xs text-stone-600 dark:text-spore-ivory/60">
           {product.sku} ·{" "}
           {visible ? (
             <Link href={`/products/${product.slug}`} className="underline" target="_blank">
@@ -61,7 +61,7 @@ export default async function EditProductPage({
       {saved && SAVED_MESSAGES[saved] ? (
         <p
           role="status"
-          className="rounded-lg bg-success-mint/10 px-3 py-2 text-sm text-success-mint"
+          className="rounded-lg bg-success-mint/10 px-3 py-2 text-sm text-green-700 dark:text-success-mint"
         >
           {SAVED_MESSAGES[saved]}
         </p>
@@ -79,7 +79,7 @@ export default async function EditProductPage({
       {product.status !== "ARCHIVED" ? (
         <section className="rounded-2xl border border-alert-coral/30 p-6">
           <h2 className="mb-2 font-display text-lg font-bold">Remove from sale</h2>
-          <p className="mb-4 text-sm text-spore-ivory/70">
+          <p className="mb-4 text-sm text-stone-700 dark:text-spore-ivory/70">
             Products are archived rather than deleted so past orders keep their history.
           </p>
           <ArchiveProductForm productId={product.id} />

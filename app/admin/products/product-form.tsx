@@ -27,7 +27,7 @@ const STATUS_OPTIONS: Array<{ value: ProductStatus; label: string }> = [
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-4 rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6">
+    <section className="flex flex-col gap-4 rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6">
       <h2 className="font-display text-lg font-bold">{title}</h2>
       {children}
     </section>
@@ -128,7 +128,7 @@ export function ProductForm({
             <button
               type="button"
               onClick={fillSku}
-              className="mb-px rounded-lg border border-spore-ivory/20 px-3 py-2 font-body text-sm hover:bg-charcoal-dark"
+              className="mb-px rounded-lg border border-stone-200 dark:border-spore-ivory/20 px-3 py-2 font-body text-sm hover:bg-stone-50 dark:hover:bg-charcoal-dark"
             >
               Generate
             </button>
@@ -153,7 +153,7 @@ export function ProductForm({
 
       <Section title="Units & pricing">
         {pricingLocked ? (
-          <p className="rounded-lg bg-warning-amber/10 px-3 py-2 font-body text-sm text-warning-amber">
+          <p className="rounded-lg bg-warning-amber/10 px-3 py-2 font-body text-sm text-amber-700 dark:text-warning-amber">
             Prices of existing products can only be changed by a founder admin.
           </p>
         ) : null}
@@ -188,7 +188,7 @@ export function ProductForm({
           />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <fieldset className="flex flex-col gap-3 rounded-xl border border-spore-ivory/10 p-4">
+          <fieldset className="flex flex-col gap-3 rounded-xl border border-stone-200 dark:border-spore-ivory/10 p-4">
             <legend className="px-1 font-body text-sm font-medium">Restaurant (B2B) tier</legend>
             <Field
               label="Price (₹ per unit)"
@@ -212,7 +212,7 @@ export function ProductForm({
               errors={errors?.restaurantMinQty}
             />
           </fieldset>
-          <fieldset className="flex flex-col gap-3 rounded-xl border border-spore-ivory/10 p-4">
+          <fieldset className="flex flex-col gap-3 rounded-xl border border-stone-200 dark:border-spore-ivory/10 p-4">
             <legend className="px-1 font-body text-sm font-medium">Wholesale tier</legend>
             <Field
               label="Price (₹ per unit)"
@@ -237,7 +237,7 @@ export function ProductForm({
             />
           </fieldset>
         </div>
-        <p className="font-body text-xs text-spore-ivory/60">
+        <p className="font-body text-xs text-stone-600 dark:text-spore-ivory/60">
           Leave a tier blank to sell that customer type at the retail price.
         </p>
       </Section>
@@ -250,7 +250,7 @@ export function ProductForm({
               <span className="py-2 font-data">
                 {product.stock ?? 0} {UNIT_LABELS[product.unitType].short}
               </span>
-              <span className="text-xs text-spore-ivory/60">
+              <span className="text-xs text-stone-600 dark:text-spore-ivory/60">
                 Adjusted from Inventory (Sprint 5).
               </span>
             </div>
@@ -326,7 +326,7 @@ export function ProductForm({
                   />
                   Main image
                 </label>
-                <label className="flex items-center gap-2 text-alert-coral">
+                <label className="flex items-center gap-2 text-red-600 dark:text-alert-coral">
                   <input type="checkbox" name="removeImageIds" value={image.id} />
                   Remove
                 </label>
@@ -348,14 +348,14 @@ export function ProductForm({
                 forState: state,
               })
             }
-            className="font-body text-sm file:mr-3 file:rounded-full file:border-0 file:bg-spore-ivory file:px-4 file:py-2 file:font-semibold file:text-forest-primary"
+            className="font-body text-sm file:mr-3 file:rounded-full file:border-0 file:bg-stone-100 dark:file:bg-spore-ivory file:px-4 file:py-2 file:font-semibold file:text-forest-primary dark:file:text-spore-ivory"
           />
-          <span className="text-xs text-spore-ivory/60">
+          <span className="text-xs text-stone-600 dark:text-spore-ivory/60">
             JPEG, PNG, WebP or AVIF · up to 4 MB each · 5 per save. The first image becomes the main
             image unless you pick one.
           </span>
           {errors?.images ? (
-            <span className="text-xs text-alert-coral">{errors.images[0]}</span>
+            <span className="text-xs text-red-600 dark:text-alert-coral">{errors.images[0]}</span>
           ) : null}
         </label>
 

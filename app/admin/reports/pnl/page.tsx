@@ -30,19 +30,19 @@ export default async function AdminPnlReportPage({
   ];
 
   return (
-    <div className="flex flex-col gap-8 font-body text-spore-ivory">
+    <div className="flex flex-col gap-8 font-body text-stone-900 dark:text-spore-ivory">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold">
             Executive Financial Command Center &amp; P&amp;L
           </h1>
-          <p className="mt-1 text-sm text-spore-ivory/70">
+          <p className="mt-1 text-sm text-stone-700 dark:text-spore-ivory/70">
             Automated real-time profit &amp; loss statement computed directly from customer orders, raw purchases, and farm expenses.
           </p>
         </div>
 
         {/* Time Period Filter Pills */}
-        <div className="flex gap-1.5 rounded-full border border-spore-ivory/10 bg-surface-charcoal p-1 text-xs">
+        <div className="flex gap-1.5 rounded-full border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-1 text-xs">
           {periods.map((p) => {
             const active = activePeriod === p.value;
             return (
@@ -52,7 +52,7 @@ export default async function AdminPnlReportPage({
                 className={`rounded-full px-4 py-1.5 font-semibold transition-colors ${
                   active
                     ? "bg-forest-primary text-spore-ivory shadow-xs"
-                    : "text-spore-ivory/60 hover:text-spore-ivory"
+                    : "text-stone-600 hover:text-stone-900 dark:text-spore-ivory/60 dark:hover:text-spore-ivory"
                 }`}
               >
                 {p.label}
@@ -64,18 +64,18 @@ export default async function AdminPnlReportPage({
 
       {/* Top Level Financial KPIs */}
       <div className="grid gap-4 sm:grid-cols-4">
-        <div className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-5 space-y-1">
-          <p className="text-xs uppercase font-semibold text-spore-ivory/60">Sales Revenue</p>
-          <p className="font-data text-2xl font-bold text-spore-ivory">
+        <div className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-5 space-y-1">
+          <p className="text-xs uppercase font-semibold text-stone-600 dark:text-spore-ivory/60">Sales Revenue</p>
+          <p className="font-data text-2xl font-bold text-stone-900 dark:text-spore-ivory">
             {formatCurrency(pnl.salesRevenue)}
           </p>
-          <p className="text-[11px] text-spore-ivory/50">
+          <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">
             {pnl.totalOrdersCount} orders • {pnl.totalMushroomsSoldKg.toFixed(1)} KG sold
           </p>
         </div>
 
-        <div className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-5 space-y-1">
-          <p className="text-xs uppercase font-semibold text-spore-ivory/60">Gross Profit</p>
+        <div className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-5 space-y-1">
+          <p className="text-xs uppercase font-semibold text-stone-600 dark:text-spore-ivory/60">Gross Profit</p>
           <p
             className={`font-data text-2xl font-bold ${
               pnl.grossProfit >= 0 ? "text-success-mint" : "text-alert-coral"
@@ -83,21 +83,21 @@ export default async function AdminPnlReportPage({
           >
             {formatCurrency(pnl.grossProfit)}
           </p>
-          <p className="text-[11px] text-spore-ivory/50">
+          <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">
             {pnl.grossMarginPercent.toFixed(1)}% Gross Margin
           </p>
         </div>
 
-        <div className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-5 space-y-1">
-          <p className="text-xs uppercase font-semibold text-spore-ivory/60">Operating Expenses</p>
-          <p className="font-data text-2xl font-bold text-alert-coral">
+        <div className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-5 space-y-1">
+          <p className="text-xs uppercase font-semibold text-stone-600 dark:text-spore-ivory/60">Operating Expenses</p>
+          <p className="font-data text-2xl font-bold text-red-600 dark:text-alert-coral">
             {formatCurrency(pnl.totalOperatingExpenses)}
           </p>
-          <p className="text-[11px] text-spore-ivory/50">Utilities, labor, fuel &amp; rent</p>
+          <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">Utilities, labor, fuel &amp; rent</p>
         </div>
 
-        <div className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-5 space-y-1">
-          <p className="text-xs uppercase font-semibold text-spore-ivory/60">Net Profit (EBITDA)</p>
+        <div className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-5 space-y-1">
+          <p className="text-xs uppercase font-semibold text-stone-600 dark:text-spore-ivory/60">Net Profit (EBITDA)</p>
           <p
             className={`font-data text-2xl font-bold ${
               pnl.netProfit >= 0 ? "text-success-mint" : "text-alert-coral"
@@ -105,22 +105,22 @@ export default async function AdminPnlReportPage({
           >
             {formatCurrency(pnl.netProfit)}
           </p>
-          <p className="text-[11px] text-spore-ivory/50">
+          <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">
             {pnl.netMarginPercent.toFixed(1)}% Net Margin
           </p>
         </div>
       </div>
 
       {/* Main P&L Statement */}
-      <section className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-8 space-y-6">
-        <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-4">
+      <section className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-8 space-y-6">
+        <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-4">
           <div>
             <h2 className="font-display text-xl font-bold">Standard Income &amp; Expense Statement</h2>
-            <p className="text-xs text-spore-ivory/60">
+            <p className="text-xs text-stone-600 dark:text-spore-ivory/60">
               Period: {activePeriod.toUpperCase()} (Automated double-entry reconciliation)
             </p>
           </div>
-          <span className="rounded-full bg-forest-primary/20 px-3 py-1 text-xs font-bold text-spore-ivory">
+          <span className="rounded-full bg-forest-primary/20 px-3 py-1 text-xs font-bold text-stone-900 dark:text-spore-ivory">
             Currency: INR (₹)
           </span>
         </div>
@@ -128,11 +128,11 @@ export default async function AdminPnlReportPage({
         <div className="space-y-4 text-sm font-body">
           {/* Revenue Section */}
           <div className="space-y-2">
-            <div className="flex justify-between font-bold text-base text-spore-ivory border-b border-spore-ivory/10 pb-1">
+            <div className="flex justify-between font-bold text-base text-stone-900 dark:text-spore-ivory border-b border-stone-200 dark:border-spore-ivory/10 pb-1">
               <span>1. Total Operating Revenue</span>
               <span className="font-data">{formatCurrency(pnl.salesRevenue)}</span>
             </div>
-            <div className="flex justify-between text-xs text-spore-ivory/70 pl-4">
+            <div className="flex justify-between text-xs text-stone-700 dark:text-spore-ivory/70 pl-4">
               <span>Fresh Mushroom Sales &amp; Delivery Income</span>
               <span className="font-data">{formatCurrency(pnl.salesRevenue)}</span>
             </div>
@@ -140,21 +140,21 @@ export default async function AdminPnlReportPage({
 
           {/* COGS Section */}
           <div className="space-y-2 pt-2">
-            <div className="flex justify-between font-bold text-base text-alert-coral border-b border-spore-ivory/10 pb-1">
+            <div className="flex justify-between font-bold text-base text-red-600 dark:text-alert-coral border-b border-stone-200 dark:border-spore-ivory/10 pb-1">
               <span>2. Less: Cost of Goods Sold (COGS)</span>
               <span className="font-data">- {formatCurrency(pnl.cogs)}</span>
             </div>
-            <div className="flex justify-between text-xs text-spore-ivory/70 pl-4">
+            <div className="flex justify-between text-xs text-stone-700 dark:text-spore-ivory/70 pl-4">
               <span>Raw Materials (Grain Spawn, Paddy Straw, Wheat Bran, Lime)</span>
               <span className="font-data">{formatCurrency(pnl.cogs)}</span>
             </div>
           </div>
 
           {/* Gross Profit Subtotal */}
-          <div className="rounded-xl bg-spore-ivory/5 p-4 flex justify-between font-bold text-base text-spore-ivory">
+          <div className="rounded-xl bg-stone-100 dark:bg-spore-ivory/5 p-4 flex justify-between font-bold text-base text-stone-900 dark:text-spore-ivory">
             <div>
               <span>GROSS PROFIT</span>
-              <span className="ml-3 text-xs font-normal text-spore-ivory/60">
+              <span className="ml-3 text-xs font-normal text-stone-600 dark:text-spore-ivory/60">
                 (Margin: {pnl.grossMarginPercent.toFixed(1)}%)
               </span>
             </div>
@@ -169,16 +169,16 @@ export default async function AdminPnlReportPage({
 
           {/* Operating Expenses Section */}
           <div className="space-y-2 pt-2">
-            <div className="flex justify-between font-bold text-base text-alert-coral border-b border-spore-ivory/10 pb-1">
+            <div className="flex justify-between font-bold text-base text-red-600 dark:text-alert-coral border-b border-stone-200 dark:border-spore-ivory/10 pb-1">
               <span>3. Less: Operating Expenses (OPEX)</span>
               <span className="font-data">- {formatCurrency(pnl.totalOperatingExpenses)}</span>
             </div>
 
             {Object.entries(pnl.expensesByCategory).length === 0 ? (
-              <p className="text-xs text-spore-ivory/40 pl-4">No operating expenses recorded yet.</p>
+              <p className="text-xs text-stone-500 dark:text-spore-ivory/40 pl-4">No operating expenses recorded yet.</p>
             ) : (
               Object.entries(pnl.expensesByCategory).map(([cat, amt]) => (
-                <div key={cat} className="flex justify-between text-xs text-spore-ivory/70 pl-4">
+                <div key={cat} className="flex justify-between text-xs text-stone-700 dark:text-spore-ivory/70 pl-4">
                   <span>{cat.replace(/_/g, " ")}</span>
                   <span className="font-data">{formatCurrency(amt)}</span>
                 </div>
@@ -187,10 +187,10 @@ export default async function AdminPnlReportPage({
           </div>
 
           {/* Net Profit Final */}
-          <div className="rounded-2xl bg-forest-primary/20 border border-forest-primary/40 p-5 flex justify-between items-center font-bold text-lg text-spore-ivory">
+          <div className="rounded-2xl bg-forest-primary/20 border border-forest-primary/40 dark:border-white/15 p-5 flex justify-between items-center font-bold text-lg text-stone-900 dark:text-spore-ivory">
             <div>
               <span className="font-display">NET EARNINGS / EBITDA</span>
-              <span className="ml-3 text-xs font-normal text-spore-ivory/70">
+              <span className="ml-3 text-xs font-normal text-stone-700 dark:text-spore-ivory/70">
                 (Net Margin: {pnl.netMarginPercent.toFixed(1)}%)
               </span>
             </div>
@@ -206,31 +206,31 @@ export default async function AdminPnlReportPage({
       </section>
 
       {/* Production Agronomy Unit Economics */}
-      <section className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6 space-y-4">
+      <section className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6 space-y-4">
         <h2 className="font-display text-lg font-bold">Agronomy &amp; Unit Economics</h2>
         <div className="grid gap-4 sm:grid-cols-3 text-xs">
-          <div className="rounded-xl border border-spore-ivory/10 p-4 space-y-1">
-            <p className="text-spore-ivory/60 uppercase font-semibold">Total Harvested Volume</p>
-            <p className="font-data text-xl font-bold text-success-mint">
+          <div className="rounded-xl border border-stone-200 dark:border-spore-ivory/10 p-4 space-y-1">
+            <p className="text-stone-600 dark:text-spore-ivory/60 uppercase font-semibold">Total Harvested Volume</p>
+            <p className="font-data text-xl font-bold text-green-700 dark:text-success-mint">
               {pnl.totalHarvestedKg.toFixed(1)} KG
             </p>
-            <p className="text-[11px] text-spore-ivory/50">From active fruiting batches</p>
+            <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">From active fruiting batches</p>
           </div>
 
-          <div className="rounded-xl border border-spore-ivory/10 p-4 space-y-1">
-            <p className="text-spore-ivory/60 uppercase font-semibold">Total Fulfillment Volume</p>
-            <p className="font-data text-xl font-bold text-spore-ivory">
+          <div className="rounded-xl border border-stone-200 dark:border-spore-ivory/10 p-4 space-y-1">
+            <p className="text-stone-600 dark:text-spore-ivory/60 uppercase font-semibold">Total Fulfillment Volume</p>
+            <p className="font-data text-xl font-bold text-stone-900 dark:text-spore-ivory">
               {pnl.totalMushroomsSoldKg.toFixed(1)} KG
             </p>
-            <p className="text-[11px] text-spore-ivory/50">Dispatched to customers &amp; B2B</p>
+            <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">Dispatched to customers &amp; B2B</p>
           </div>
 
-          <div className="rounded-xl border border-spore-ivory/10 p-4 space-y-1">
-            <p className="text-spore-ivory/60 uppercase font-semibold">All-In Production Cost / KG</p>
-            <p className="font-data text-xl font-bold text-warning-amber">
+          <div className="rounded-xl border border-stone-200 dark:border-spore-ivory/10 p-4 space-y-1">
+            <p className="text-stone-600 dark:text-spore-ivory/60 uppercase font-semibold">All-In Production Cost / KG</p>
+            <p className="font-data text-xl font-bold text-amber-700 dark:text-warning-amber">
               {pnl.costPerKgProduced > 0 ? formatCurrency(pnl.costPerKgProduced) : "₹0.00"} / KG
             </p>
-            <p className="text-[11px] text-spore-ivory/50">(COGS + OPEX) / Harvest Yield</p>
+            <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">(COGS + OPEX) / Harvest Yield</p>
           </div>
         </div>
       </section>

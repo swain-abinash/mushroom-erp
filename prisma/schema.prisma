@@ -85,6 +85,8 @@ enum InventoryTxType {
   WASTAGE_SPOILAGE
   RETURN
   MANUAL_ADJUSTMENT
+  DRIVER_DISPATCH
+  DRIVER_RETURN
 }
 
 enum RoomType {
@@ -488,6 +490,7 @@ model InventoryItem {
 
   product      Product?               @relation(fields: [productId], references: [id], onDelete: SetNull)
   transactions InventoryTransaction[]
+  driverStock  DriverStock[]
 
   @@map("inventory_items")
 }
@@ -679,8 +682,9 @@ model Employee {
   joiningDate DateTime @map("joining_date") @db.Date
   isActive    Boolean  @default(true) @map("is_active")
 
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  deliveries Delivery[] @relation("DeliveryDriver")
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries  Delivery[]    @relation("DeliveryDriver")
+  driverStock DriverStock[]
 
   @@map("employees")
 }
@@ -698,7 +702,23 @@ model Delivery {
   order  Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   driver Employee? @relation("DeliveryDriver", fields: [driverId], references: [id], onDelete: SetNull)
 
+  @@index([driverId, status], map: "idx_deliveries_driver_status")
   @@map("deliveries")
+}
+
+/// Finished stock currently in a delivery agent's custody (collected, not yet delivered).
+model DriverStock {
+  id              String   @id @default(uuid()) @db.VarChar(36)
+  driverId        String   @map("driver_id") @db.VarChar(36)
+  inventoryItemId String   @map("inventory_item_id") @db.VarChar(36)
+  quantity        Decimal  @default(0.00) @db.Decimal(10, 2)
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  driver        Employee      @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id], onDelete: Restrict)
+
+  @@unique([driverId, inventoryItemId], map: "uq_driver_stock")
+  @@map("driver_stock")
 }
 
 // ------------------------------------------------------------------------------

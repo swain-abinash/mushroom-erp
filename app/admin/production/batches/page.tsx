@@ -40,17 +40,17 @@ export default async function AdminBatchesPage({
   ];
 
   return (
-    <div className="flex flex-col gap-8 font-body text-spore-ivory">
+    <div className="flex flex-col gap-8 font-body text-stone-900 dark:text-spore-ivory">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <nav aria-label="Breadcrumb" className="text-xs text-spore-ivory/60 mb-2">
+          <nav aria-label="Breadcrumb" className="text-xs text-stone-600 dark:text-spore-ivory/60 mb-2">
             <Link href="/admin/production" className="hover:underline">
               Cultivation Hub
             </Link>{" "}
             / Batches
           </nav>
           <h1 className="font-display text-2xl font-bold">Production Batches</h1>
-          <p className="mt-1 text-sm text-spore-ivory/70">
+          <p className="mt-1 text-sm text-stone-700 dark:text-spore-ivory/70">
             End-to-end substrate preparation, spawn run, incubation, and flush harvest tracking.
           </p>
         </div>
@@ -61,7 +61,7 @@ export default async function AdminBatchesPage({
       </header>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-spore-ivory/10 pb-3">
+      <div className="flex flex-wrap gap-2 border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
         {statuses.map((s) => {
           const active = (statusFilter ?? "") === s.value;
           return (
@@ -71,7 +71,7 @@ export default async function AdminBatchesPage({
               className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
                 active
                   ? "bg-forest-primary text-spore-ivory"
-                  : "bg-surface-charcoal border border-spore-ivory/10 text-spore-ivory/70 hover:text-spore-ivory"
+                  : "bg-surface-charcoal border border-stone-200 dark:border-spore-ivory/10 text-spore-ivory/70 hover:text-spore-ivory"
               }`}
             >
               {s.label}
@@ -81,9 +81,9 @@ export default async function AdminBatchesPage({
       </div>
 
       {/* Batches Table */}
-      <section className="overflow-x-auto rounded-2xl border border-spore-ivory/10 bg-surface-charcoal">
+      <section className="overflow-x-auto rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-spore-ivory/10 bg-surface-charcoal/80 text-xs uppercase tracking-wide text-spore-ivory/60">
+          <thead className="border-b border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal/80 text-xs uppercase tracking-wide text-stone-600 dark:text-spore-ivory/60">
             <tr>
               <th className="px-4 py-3">Batch Number</th>
               <th className="px-4 py-3">Mushroom Variety</th>
@@ -97,44 +97,44 @@ export default async function AdminBatchesPage({
               <th className="px-4 py-3">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-spore-ivory/10">
+          <tbody className="divide-y divide-stone-200 dark:divide-spore-ivory/10">
             {batches.length === 0 ? (
               <tr>
-                <td colSpan={10} className="py-12 text-center text-spore-ivory/60">
+                <td colSpan={10} className="py-12 text-center text-stone-600 dark:text-spore-ivory/60">
                   No batches found for this status. Create a new batch using the button above.
                 </td>
               </tr>
             ) : (
               batches.map((batch) => (
-                <tr key={batch.id} className="hover:bg-spore-ivory/5 transition-colors">
-                  <td className="px-4 py-3 font-data font-bold text-spore-ivory">
+                <tr key={batch.id} className="hover:bg-stone-100 dark:hover:bg-spore-ivory/5 transition-colors">
+                  <td className="px-4 py-3 font-data font-bold text-stone-900 dark:text-spore-ivory">
                     {batch.batchNumber}
-                    <div className="text-[11px] font-normal text-spore-ivory/50">
+                    <div className="text-[11px] font-normal text-stone-600 dark:text-spore-ivory/50">
                       by {batch.creator.name}
                     </div>
                   </td>
-                  <td className="px-4 py-3 font-semibold text-spore-ivory">
+                  <td className="px-4 py-3 font-semibold text-stone-900 dark:text-spore-ivory">
                     {batch.mushroomType}
                   </td>
                   <td className="px-4 py-3 font-data text-xs">
                     {batch.numberOfBeds} beds
                   </td>
-                  <td className="px-4 py-3 text-xs text-spore-ivory/70">
+                  <td className="px-4 py-3 text-xs text-stone-700 dark:text-spore-ivory/70">
                     {batch.spawnSupplier?.name ?? "In-House"}
                   </td>
                   <td className="px-4 py-3 font-data text-xs">
                     {Number(batch.substrateDryWeightKg)} KG
                   </td>
-                  <td className="px-4 py-3 font-data text-xs text-spore-ivory/70">
+                  <td className="px-4 py-3 font-data text-xs text-stone-700 dark:text-spore-ivory/70">
                     {formatDate(batch.inoculationDate)}
                   </td>
-                  <td className="px-4 py-3 font-data text-xs text-warning-amber">
+                  <td className="px-4 py-3 font-data text-xs text-amber-700 dark:text-warning-amber">
                     {formatDate(batch.expectedHarvestDate)}
                   </td>
-                  <td className="px-4 py-3 font-data font-bold text-success-mint">
+                  <td className="px-4 py-3 font-data font-bold text-green-700 dark:text-success-mint">
                     {Number(batch.totalHarvestedKg).toFixed(1)} KG
                   </td>
-                  <td className="px-4 py-3 font-data text-xs text-spore-ivory/80">
+                  <td className="px-4 py-3 font-data text-xs text-stone-700 dark:text-spore-ivory/80">
                     {batch.biologicalEfficiency
                       ? `${Number(batch.biologicalEfficiency).toFixed(1)}%`
                       : "—"}

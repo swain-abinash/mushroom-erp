@@ -62,12 +62,12 @@ export function CheckoutForm({
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-forest-primary/10 bg-surface-white p-12 text-center">
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-12 text-center">
         <span className="text-6xl mb-4">🧺</span>
-        <h2 className="font-display text-2xl font-bold text-forest-primary">
+        <h2 className="font-display text-2xl font-bold text-forest-primary dark:text-spore-ivory">
           Your basket is empty
         </h2>
-        <p className="mt-2 text-sm text-forest-primary/70 max-w-md">
+        <p className="mt-2 text-sm text-forest-primary/70 dark:text-spore-ivory/70 max-w-md">
           You don&apos;t have any fresh mushrooms in your cart. Choose from our fresh harvest to proceed with checkout.
         </p>
         <Link
@@ -123,7 +123,7 @@ export function CheckoutForm({
           return (
             <div
               role="alert"
-              className="rounded-xl bg-alert-coral/10 border border-alert-coral/20 p-4 text-sm text-alert-coral flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+              className="rounded-xl bg-alert-coral/10 border border-alert-coral/20 p-4 text-sm text-red-600 dark:text-alert-coral flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
                 <p className="font-semibold">{errorMessage}</p>
@@ -158,7 +158,7 @@ export function CheckoutForm({
         })()}
 
         {/* Step Navigation Pill Indicator */}
-        <div className="flex items-center justify-between border-b border-forest-primary/10 pb-4 text-xs font-semibold uppercase tracking-wider text-forest-primary/60">
+        <div className="flex items-center justify-between border-b border-forest-primary/10 dark:border-white/15 pb-4 text-xs font-semibold uppercase tracking-wider text-forest-primary/60 dark:text-spore-ivory/60">
           <button
             type="button"
             onClick={() => setStep(1)}
@@ -206,9 +206,9 @@ export function CheckoutForm({
 
         {/* Step 1: Delivery Address */}
         {step === 1 && (
-          <section className="rounded-2xl border border-forest-primary/10 bg-surface-white p-6 shadow-xs space-y-5">
+          <section className="rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-6 shadow-xs space-y-5">
             <div className="flex justify-between items-center">
-              <h2 className="font-display text-xl font-bold text-forest-primary">
+              <h2 className="font-display text-xl font-bold text-forest-primary dark:text-spore-ivory">
                 1. Delivery Address
               </h2>
               {savedAddresses.length > 0 && (
@@ -217,7 +217,7 @@ export function CheckoutForm({
                   onClick={() =>
                     setSelectedAddressId(selectedAddressId === "new" ? savedAddresses[0].id : "new")
                   }
-                  className="text-xs font-semibold text-forest-primary underline"
+                  className="text-xs font-semibold text-forest-primary dark:text-spore-ivory underline"
                 >
                   {selectedAddressId === "new" ? "Choose Saved Address" : "+ Enter New Address"}
                 </button>
@@ -246,22 +246,22 @@ export function CheckoutForm({
                     />
                     <div className="text-sm">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-forest-primary">{addr.recipientName}</span>
-                        <span className="rounded-full bg-forest-primary/10 px-2 py-0.5 text-[10px] font-bold text-forest-primary">
+                        <span className="font-bold text-forest-primary dark:text-spore-ivory">{addr.recipientName}</span>
+                        <span className="rounded-full bg-forest-primary/10 px-2 py-0.5 text-[10px] font-bold text-forest-primary dark:text-spore-ivory">
                           {addr.addressType}
                         </span>
                         {addr.isDefault && (
-                          <span className="rounded-full bg-success-mint/15 px-2 py-0.5 text-[10px] font-bold text-success-mint">
+                          <span className="rounded-full bg-success-mint/15 px-2 py-0.5 text-[10px] font-bold text-green-700 dark:text-success-mint">
                             DEFAULT
                           </span>
                         )}
                       </div>
-                      <p className="text-forest-primary/70 mt-1">
+                      <p className="text-forest-primary/70 dark:text-spore-ivory/70 mt-1">
                         {addr.addressLine1}
                         {addr.addressLine2 ? `, ${addr.addressLine2}` : ""}, {addr.city},{" "}
                         {addr.state} — {addr.pincode}
                       </p>
-                      <p className="text-xs text-forest-primary/60 mt-0.5">📞 {addr.recipientPhone}</p>
+                      <p className="text-xs text-forest-primary/60 dark:text-spore-ivory/60 mt-0.5">📞 {addr.recipientPhone}</p>
                     </div>
                   </label>
                 ))}
@@ -272,7 +272,7 @@ export function CheckoutForm({
             {selectedAddressId === "new" && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-semibold text-forest-primary mb-1">
+                  <label className="block text-xs font-semibold text-forest-primary dark:text-spore-ivory mb-1">
                     Recipient Name *
                   </label>
                   <input
@@ -282,11 +282,11 @@ export function CheckoutForm({
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, recipientName: e.target.value })
                     }
-                    className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                    className="w-full rounded-lg border border-forest-primary/20 dark:border-white/15 px-3 py-2 text-sm focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-forest-primary mb-1">
+                  <label className="block text-xs font-semibold text-forest-primary dark:text-spore-ivory mb-1">
                     Phone Number (10 digits) *
                   </label>
                   <input
@@ -296,11 +296,11 @@ export function CheckoutForm({
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, recipientPhone: e.target.value })
                     }
-                    className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                    className="w-full rounded-lg border border-forest-primary/20 dark:border-white/15 px-3 py-2 text-sm focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-forest-primary mb-1">
+                  <label className="block text-xs font-semibold text-forest-primary dark:text-spore-ivory mb-1">
                     Email Address (for order tracking) *
                   </label>
                   <input
@@ -309,11 +309,11 @@ export function CheckoutForm({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                    className="w-full rounded-lg border border-forest-primary/20 dark:border-white/15 px-3 py-2 text-sm focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-forest-primary mb-1">
+                  <label className="block text-xs font-semibold text-forest-primary dark:text-spore-ivory mb-1">
                     Address Line 1 (House/Flat No, Building, Street) *
                   </label>
                   <input
@@ -323,11 +323,11 @@ export function CheckoutForm({
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, addressLine1: e.target.value })
                     }
-                    className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                    className="w-full rounded-lg border border-forest-primary/20 dark:border-white/15 px-3 py-2 text-sm focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-forest-primary mb-1">
+                  <label className="block text-xs font-semibold text-forest-primary dark:text-spore-ivory mb-1">
                     Address Line 2 (Landmark, Area)
                   </label>
                   <input
@@ -336,11 +336,11 @@ export function CheckoutForm({
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, addressLine2: e.target.value })
                     }
-                    className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                    className="w-full rounded-lg border border-forest-primary/20 dark:border-white/15 px-3 py-2 text-sm focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-forest-primary mb-1">
+                  <label className="block text-xs font-semibold text-forest-primary dark:text-spore-ivory mb-1">
                     City *
                   </label>
                   <input
@@ -348,11 +348,11 @@ export function CheckoutForm({
                     required
                     value={newAddress.city}
                     onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                    className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                    className="w-full rounded-lg border border-forest-primary/20 dark:border-white/15 px-3 py-2 text-sm focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-forest-primary mb-1">
+                  <label className="block text-xs font-semibold text-forest-primary dark:text-spore-ivory mb-1">
                     Pincode *
                   </label>
                   <input
@@ -360,7 +360,7 @@ export function CheckoutForm({
                     required
                     value={newAddress.pincode}
                     onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })}
-                    className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                    className="w-full rounded-lg border border-forest-primary/20 dark:border-white/15 px-3 py-2 text-sm focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
                   />
                 </div>
                 <div className="sm:col-span-2 flex items-center gap-2">
@@ -373,7 +373,7 @@ export function CheckoutForm({
                     }
                     className="accent-forest-primary"
                   />
-                  <label htmlFor="saveDefault" className="text-xs text-forest-primary/80">
+                  <label htmlFor="saveDefault" className="text-xs text-forest-primary/80 dark:text-spore-ivory/80">
                     Set this as my default delivery address
                   </label>
                 </div>
@@ -404,11 +404,11 @@ export function CheckoutForm({
 
         {/* Step 2: Delivery Slot */}
         {step === 2 && (
-          <section className="rounded-2xl border border-forest-primary/10 bg-surface-white p-6 shadow-xs space-y-5">
-            <h2 className="font-display text-xl font-bold text-forest-primary">
+          <section className="rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-6 shadow-xs space-y-5">
+            <h2 className="font-display text-xl font-bold text-forest-primary dark:text-spore-ivory">
               2. Choose Harvest Dispatch Schedule
             </h2>
-            <p className="text-xs text-forest-primary/70">
+            <p className="text-xs text-forest-primary/70 dark:text-spore-ivory/70">
               Mushrooms are living organisms. To preserve maximum taste and shelf life, select when our harvest truck should arrive:
             </p>
 
@@ -430,14 +430,14 @@ export function CheckoutForm({
                 />
                 <div className="text-sm">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-forest-primary">
+                    <span className="font-bold text-forest-primary dark:text-spore-ivory">
                       🌅 Morning Harvest Dispatch (8:00 AM – 11:00 AM)
                     </span>
-                    <span className="rounded-full bg-success-mint/15 px-2 py-0.5 text-[10px] font-bold text-success-mint">
+                    <span className="rounded-full bg-success-mint/15 px-2 py-0.5 text-[10px] font-bold text-green-700 dark:text-success-mint">
                       RECOMMENDED
                     </span>
                   </div>
-                  <p className="text-xs text-forest-primary/70 mt-1">
+                  <p className="text-xs text-forest-primary/70 dark:text-spore-ivory/70 mt-1">
                     Harvested fresh at 5:00 AM dawn today. Chilled and sent straight to your door.
                   </p>
                 </div>
@@ -459,10 +459,10 @@ export function CheckoutForm({
                   className="mt-1 accent-forest-primary"
                 />
                 <div className="text-sm">
-                  <span className="font-bold text-forest-primary">
+                  <span className="font-bold text-forest-primary dark:text-spore-ivory">
                     🌆 Evening Dispatch (4:00 PM – 7:00 PM)
                   </span>
-                  <p className="text-xs text-forest-primary/70 mt-1">
+                  <p className="text-xs text-forest-primary/70 dark:text-spore-ivory/70 mt-1">
                     Midday harvest batch. Ideal for dinner preparation and evening restaurant kitchens.
                   </p>
                 </div>
@@ -470,7 +470,7 @@ export function CheckoutForm({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-forest-primary mb-1">
+              <label className="block text-xs font-semibold text-forest-primary dark:text-spore-ivory mb-1">
                 Delivery Instructions (Optional)
               </label>
               <textarea
@@ -478,7 +478,7 @@ export function CheckoutForm({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Gate code, landmark, or kitchen delivery entrance notes..."
-                className="w-full rounded-lg border border-forest-primary/20 px-3 py-2 text-sm focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-forest-primary/20 dark:border-white/15 px-3 py-2 text-sm focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
 
@@ -486,7 +486,7 @@ export function CheckoutForm({
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="rounded-full border border-forest-primary/20 px-6 py-3 font-display text-sm font-semibold text-forest-primary hover:bg-forest-primary/5"
+                className="rounded-full border border-forest-primary/20 dark:border-white/15 px-6 py-3 font-display text-sm font-semibold text-forest-primary dark:text-spore-ivory hover:bg-forest-primary/5"
               >
                 ← Back
               </button>
@@ -503,8 +503,8 @@ export function CheckoutForm({
 
         {/* Step 3: Payment Method */}
         {step === 3 && (
-          <section className="rounded-2xl border border-forest-primary/10 bg-surface-white p-6 shadow-xs space-y-5">
-            <h2 className="font-display text-xl font-bold text-forest-primary">
+          <section className="rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-6 shadow-xs space-y-5">
+            <h2 className="font-display text-xl font-bold text-forest-primary dark:text-spore-ivory">
               3. Payment Method
             </h2>
 
@@ -525,10 +525,10 @@ export function CheckoutForm({
                   className="mt-1 accent-forest-primary"
                 />
                 <div className="text-sm">
-                  <span className="font-bold text-forest-primary">
+                  <span className="font-bold text-forest-primary dark:text-spore-ivory">
                     💵 Cash on Fresh Delivery (COD) / UPI at Doorstep
                   </span>
-                  <p className="text-xs text-forest-primary/70 mt-1">
+                  <p className="text-xs text-forest-primary/70 dark:text-spore-ivory/70 mt-1">
                     Inspect your fresh mushrooms upon arrival, then pay cash or scan delivery agent&apos;s UPI QR.
                   </p>
                 </div>
@@ -550,10 +550,10 @@ export function CheckoutForm({
                   className="mt-1 accent-forest-primary"
                 />
                 <div className="text-sm">
-                  <span className="font-bold text-forest-primary">
+                  <span className="font-bold text-forest-primary dark:text-spore-ivory">
                     ⚡ Instant UPI / Razorpay / Net Banking
                   </span>
-                  <p className="text-xs text-forest-primary/70 mt-1">
+                  <p className="text-xs text-forest-primary/70 dark:text-spore-ivory/70 mt-1">
                     Pay securely using Google Pay, PhonePe, Paytm, Cards, or Net Banking.
                   </p>
                 </div>
@@ -575,10 +575,10 @@ export function CheckoutForm({
                   className="mt-1 accent-forest-primary"
                 />
                 <div className="text-sm">
-                  <span className="font-bold text-forest-primary">
+                  <span className="font-bold text-forest-primary dark:text-spore-ivory">
                     🏢 B2B Credit Invoice (7/15 Day Terms)
                   </span>
-                  <p className="text-xs text-forest-primary/70 mt-1">
+                  <p className="text-xs text-forest-primary/70 dark:text-spore-ivory/70 mt-1">
                     Available for registered restaurants, caterers, and wholesale partners with active credit accounts.
                   </p>
                 </div>
@@ -589,7 +589,7 @@ export function CheckoutForm({
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="rounded-full border border-forest-primary/20 px-6 py-3 font-display text-sm font-semibold text-forest-primary hover:bg-forest-primary/5"
+                className="rounded-full border border-forest-primary/20 dark:border-white/15 px-6 py-3 font-display text-sm font-semibold text-forest-primary dark:text-spore-ivory hover:bg-forest-primary/5"
               >
                 ← Back
               </button>
@@ -606,29 +606,29 @@ export function CheckoutForm({
 
         {/* Step 4: Review & Place Order */}
         {step === 4 && (
-          <section className="rounded-2xl border border-forest-primary/10 bg-surface-white p-6 shadow-xs space-y-5">
-            <h2 className="font-display text-xl font-bold text-forest-primary">
+          <section className="rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-6 shadow-xs space-y-5">
+            <h2 className="font-display text-xl font-bold text-forest-primary dark:text-spore-ivory">
               4. Review & Confirm Order
             </h2>
 
-            <div className="rounded-xl border border-forest-primary/10 bg-spore-ivory/30 p-4 space-y-3 text-sm">
-              <div className="flex justify-between items-center border-b border-forest-primary/10 pb-2">
-                <span className="font-semibold text-forest-primary">Delivery Slot</span>
-                <span className="text-xs font-bold text-forest-primary">
+            <div className="rounded-xl border border-forest-primary/10 dark:border-white/15 bg-stone-100 dark:bg-spore-ivory/30 p-4 space-y-3 text-sm">
+              <div className="flex justify-between items-center border-b border-forest-primary/10 dark:border-white/15 pb-2">
+                <span className="font-semibold text-forest-primary dark:text-spore-ivory">Delivery Slot</span>
+                <span className="text-xs font-bold text-forest-primary dark:text-spore-ivory">
                   {deliverySlot === "MORNING_HARVEST_DISPATCH"
                     ? "🌅 Morning Dispatch (8:00–11:00 AM)"
                     : "🌆 Evening Dispatch (4:00–7:00 PM)"}
                 </span>
               </div>
-              <div className="flex justify-between items-center border-b border-forest-primary/10 pb-2">
-                <span className="font-semibold text-forest-primary">Payment Mode</span>
-                <span className="text-xs font-bold text-forest-primary">
+              <div className="flex justify-between items-center border-b border-forest-primary/10 dark:border-white/15 pb-2">
+                <span className="font-semibold text-forest-primary dark:text-spore-ivory">Payment Mode</span>
+                <span className="text-xs font-bold text-forest-primary dark:text-spore-ivory">
                   {paymentMethod.replace(/_/g, " ")}
                 </span>
               </div>
               {notes && (
-                <div className="text-xs text-forest-primary/70">
-                  <span className="font-semibold text-forest-primary">Note: </span>
+                <div className="text-xs text-forest-primary/70 dark:text-spore-ivory/70">
+                  <span className="font-semibold text-forest-primary dark:text-spore-ivory">Note: </span>
                   {notes}
                 </div>
               )}
@@ -638,7 +638,7 @@ export function CheckoutForm({
               <button
                 type="button"
                 onClick={() => setStep(3)}
-                className="rounded-full border border-forest-primary/20 px-6 py-3 font-display text-sm font-semibold text-forest-primary hover:bg-forest-primary/5"
+                className="rounded-full border border-forest-primary/20 dark:border-white/15 px-6 py-3 font-display text-sm font-semibold text-forest-primary dark:text-spore-ivory hover:bg-forest-primary/5"
               >
                 ← Back
               </button>
@@ -661,10 +661,10 @@ export function CheckoutForm({
 
       {/* Order Summary Sidebar (Right 5 Cols) */}
       <aside className="lg:col-span-5">
-        <div className="rounded-2xl border border-forest-primary/10 bg-surface-white p-6 shadow-sm space-y-5 sticky top-24">
-          <div className="flex justify-between items-center border-b border-forest-primary/10 pb-3">
-            <h3 className="font-display text-lg font-bold text-forest-primary">Order Summary</h3>
-            <span className="text-xs font-semibold text-forest-primary/60">
+        <div className="rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-6 shadow-sm space-y-5 sticky top-24">
+          <div className="flex justify-between items-center border-b border-forest-primary/10 dark:border-white/15 pb-3">
+            <h3 className="font-display text-lg font-bold text-forest-primary dark:text-spore-ivory">Order Summary</h3>
+            <span className="text-xs font-semibold text-forest-primary/60 dark:text-spore-ivory/60">
               {items.length} {items.length === 1 ? "variety" : "varieties"}
             </span>
           </div>
@@ -686,22 +686,22 @@ export function CheckoutForm({
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-display font-semibold text-forest-primary truncate text-xs">
+                  <p className="font-display font-semibold text-forest-primary dark:text-spore-ivory truncate text-xs">
                     {item.name}
                   </p>
-                  <p className="text-[11px] text-forest-primary/60">
+                  <p className="text-[11px] text-forest-primary/60 dark:text-spore-ivory/60">
                     {item.quantity} {UNIT_LABELS[item.unitType]?.short ?? "unit"} ×{" "}
                     {formatCurrency(item.price)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-data font-bold text-xs text-forest-primary">
+                  <span className="font-data font-bold text-xs text-forest-primary dark:text-spore-ivory">
                     {formatCurrency(item.price * item.quantity)}
                   </span>
                   <button
                     type="button"
                     onClick={() => removeItem(item.productId)}
-                    className="rounded-full p-1 text-forest-primary/40 hover:text-alert-coral hover:bg-forest-primary/5 transition-all text-xs leading-none"
+                    className="rounded-full p-1 text-forest-primary/40 dark:text-spore-ivory/40 hover:text-red-600 dark:hover:text-alert-coral hover:bg-forest-primary/5 transition-all text-xs leading-none"
                     title={`Remove ${item.name}`}
                     aria-label={`Remove ${item.name}`}
                   >
@@ -712,32 +712,32 @@ export function CheckoutForm({
             ))}
           </div>
 
-          <div className="border-t border-forest-primary/10 pt-4 space-y-2 text-sm">
-            <div className="flex justify-between text-forest-primary/70">
+          <div className="border-t border-forest-primary/10 dark:border-white/15 pt-4 space-y-2 text-sm">
+            <div className="flex justify-between text-forest-primary/70 dark:text-spore-ivory/70">
               <span>Subtotal</span>
-              <span className="font-data font-semibold text-forest-primary">
+              <span className="font-data font-semibold text-forest-primary dark:text-spore-ivory">
                 {formatCurrency(subtotal)}
               </span>
             </div>
-            <div className="flex justify-between text-forest-primary/70">
+            <div className="flex justify-between text-forest-primary/70 dark:text-spore-ivory/70">
               <span>Delivery Fee</span>
-              <span className="font-data font-semibold text-forest-primary">
+              <span className="font-data font-semibold text-forest-primary dark:text-spore-ivory">
                 {deliveryFee === 0 ? (
-                  <span className="text-success-mint font-bold uppercase text-xs">FREE</span>
+                  <span className="text-green-700 dark:text-success-mint font-bold uppercase text-xs">FREE</span>
                 ) : (
                   formatCurrency(deliveryFee)
                 )}
               </span>
             </div>
-            <div className="flex justify-between text-lg font-bold text-forest-primary pt-3 border-t border-forest-primary/10">
+            <div className="flex justify-between text-lg font-bold text-forest-primary dark:text-spore-ivory pt-3 border-t border-forest-primary/10 dark:border-white/15">
               <span>Total Payable</span>
-              <span className="font-data text-xl text-forest-primary">
+              <span className="font-data text-xl text-forest-primary dark:text-spore-ivory">
                 {formatCurrency(total)}
               </span>
             </div>
           </div>
 
-          <div className="rounded-xl bg-forest-primary/5 p-3 text-xs text-forest-primary/80 flex items-center gap-2">
+          <div className="rounded-xl bg-forest-primary/5 p-3 text-xs text-forest-primary/80 dark:text-spore-ivory/80 flex items-center gap-2">
             <span>🛡️</span>
             <span>
               <strong>100% Spore Quality Promise:</strong> Direct harvest without cold-storage delays.

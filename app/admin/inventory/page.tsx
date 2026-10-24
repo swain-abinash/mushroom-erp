@@ -11,13 +11,15 @@ export const instant = false;
 export const metadata: Metadata = { title: "Inventory & Stock — SporeERP Admin" };
 
 const TX_BADGES: Record<InventoryTxType, { label: string; style: string }> = {
-  PURCHASE: { label: "Purchase (+)", style: "bg-success-mint/15 text-success-mint" },
-  PRODUCTION_USE: { label: "Production (-)", style: "bg-shiitake-ochre/15 text-shiitake-ochre" },
-  HARVEST_INJECTION: { label: "Harvest (+)", style: "bg-success-mint/20 text-success-mint" },
-  CUSTOMER_SALE: { label: "Order Sale (-)", style: "bg-forest-primary/20 text-spore-ivory" },
-  WASTAGE_SPOILAGE: { label: "Spoilage (-)", style: "bg-alert-coral/15 text-alert-coral" },
-  RETURN: { label: "Return (+)", style: "bg-warning-amber/15 text-warning-amber" },
-  MANUAL_ADJUSTMENT: { label: "Adjustment", style: "bg-spore-ivory/15 text-spore-ivory" },
+  PURCHASE: { label: "Purchase (+)", style: "bg-success-mint/15 text-green-700 dark:text-success-mint" },
+  PRODUCTION_USE: { label: "Production (-)", style: "bg-shiitake-ochre/15 text-amber-800 dark:text-shiitake-ochre" },
+  HARVEST_INJECTION: { label: "Harvest (+)", style: "bg-success-mint/20 text-green-700 dark:text-success-mint" },
+  CUSTOMER_SALE: { label: "Delivered to Customer", style: "bg-forest-primary/20 text-stone-900 dark:text-spore-ivory" },
+  DRIVER_DISPATCH: { label: "Handed to Agent (-)", style: "bg-shiitake-ochre/15 text-amber-800 dark:text-shiitake-ochre" },
+  DRIVER_RETURN: { label: "Returned by Agent (+)", style: "bg-warning-amber/15 text-amber-700 dark:text-warning-amber" },
+  WASTAGE_SPOILAGE: { label: "Spoilage (-)", style: "bg-alert-coral/15 text-red-600 dark:text-alert-coral" },
+  RETURN: { label: "Return (+)", style: "bg-warning-amber/15 text-amber-700 dark:text-warning-amber" },
+  MANUAL_ADJUSTMENT: { label: "Adjustment", style: "bg-stone-100 dark:bg-spore-ivory/15 text-stone-900 dark:text-spore-ivory" },
 };
 
 export default async function AdminInventoryPage({
@@ -57,11 +59,11 @@ export default async function AdminInventoryPage({
   ];
 
   return (
-    <div className="flex flex-col gap-8 font-body text-spore-ivory">
+    <div className="flex flex-col gap-8 font-body text-stone-900 dark:text-spore-ivory">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold">Inventory Ledger & Stock Control</h1>
-          <p className="mt-1 text-sm text-spore-ivory/70">
+          <p className="mt-1 text-sm text-stone-700 dark:text-spore-ivory/70">
             Real-time double-entry inventory tracking, stock adjustments, and harvest injections.
           </p>
         </div>
@@ -70,37 +72,37 @@ export default async function AdminInventoryPage({
 
       {/* KPI Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-5 space-y-1">
-          <p className="text-xs uppercase font-semibold text-spore-ivory/60">
+        <div className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-5 space-y-1">
+          <p className="text-xs uppercase font-semibold text-stone-600 dark:text-spore-ivory/60">
             Total Finished Mushrooms In Stock
           </p>
-          <p className="font-data text-2xl font-bold text-success-mint">
+          <p className="font-data text-2xl font-bold text-green-700 dark:text-success-mint">
             {totalFinishedStock.toFixed(1)} KG
           </p>
-          <p className="text-[11px] text-spore-ivory/50">Sellable across store and B2B</p>
+          <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">Sellable across store and B2B</p>
         </div>
 
-        <div className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-5 space-y-1">
-          <p className="text-xs uppercase font-semibold text-spore-ivory/60">
+        <div className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-5 space-y-1">
+          <p className="text-xs uppercase font-semibold text-stone-600 dark:text-spore-ivory/60">
             Reserved for Confirmed Orders
           </p>
-          <p className="font-data text-2xl font-bold text-warning-amber">
+          <p className="font-data text-2xl font-bold text-amber-700 dark:text-warning-amber">
             {totalReservedStock.toFixed(1)} KG
           </p>
-          <p className="text-[11px] text-spore-ivory/50">Locked to prevent overselling</p>
+          <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">Locked to prevent overselling</p>
         </div>
 
-        <div className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-5 space-y-1">
-          <p className="text-xs uppercase font-semibold text-spore-ivory/60">Low Stock Warnings</p>
-          <p className="font-data text-2xl font-bold text-alert-coral">
+        <div className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-5 space-y-1">
+          <p className="text-xs uppercase font-semibold text-stone-600 dark:text-spore-ivory/60">Low Stock Warnings</p>
+          <p className="font-data text-2xl font-bold text-red-600 dark:text-alert-coral">
             {lowStockCount} {lowStockCount === 1 ? "Item" : "Items"}
           </p>
-          <p className="text-[11px] text-spore-ivory/50">At or below reorder threshold</p>
+          <p className="text-[11px] text-stone-600 dark:text-spore-ivory/50">At or below reorder threshold</p>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-spore-ivory/10 pb-3">
+      <div className="flex flex-wrap gap-2 border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
         {categories.map((c) => {
           const active = (categoryFilter ?? "") === c.value;
           return (
@@ -110,7 +112,7 @@ export default async function AdminInventoryPage({
               className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
                 active
                   ? "bg-forest-primary text-spore-ivory"
-                  : "bg-surface-charcoal border border-spore-ivory/10 text-spore-ivory/70 hover:text-spore-ivory"
+                  : "bg-surface-charcoal border border-stone-200 dark:border-spore-ivory/10 text-spore-ivory/70 hover:text-spore-ivory"
               }`}
             >
               {c.label}
@@ -120,9 +122,9 @@ export default async function AdminInventoryPage({
       </div>
 
       {/* Inventory Items Table */}
-      <section className="overflow-x-auto rounded-2xl border border-spore-ivory/10 bg-surface-charcoal">
+      <section className="overflow-x-auto rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-spore-ivory/10 bg-surface-charcoal/80 text-xs uppercase tracking-wide text-spore-ivory/60">
+          <thead className="border-b border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal/80 text-xs uppercase tracking-wide text-stone-600 dark:text-spore-ivory/60">
             <tr>
               <th className="px-4 py-3">Item Name</th>
               <th className="px-4 py-3">Category</th>
@@ -133,10 +135,10 @@ export default async function AdminInventoryPage({
               <th className="px-4 py-3">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-spore-ivory/10">
+          <tbody className="divide-y divide-stone-200 dark:divide-spore-ivory/10">
             {items.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-12 text-center text-spore-ivory/60">
+                <td colSpan={7} className="py-12 text-center text-stone-600 dark:text-spore-ivory/60">
                   No inventory items found. Create a product or add raw material supplies above.
                 </td>
               </tr>
@@ -163,20 +165,20 @@ export default async function AdminInventoryPage({
       </section>
 
       {/* Real-Time Stock Transaction Log */}
-      <section className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6 space-y-4">
-        <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-3">
+      <section className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6 space-y-4">
+        <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
           <div>
             <h2 className="font-display text-lg font-bold">Recent Stock Transaction Log</h2>
-            <p className="text-xs text-spore-ivory/60">
+            <p className="text-xs text-stone-600 dark:text-spore-ivory/60">
               Audit trail of every gram moved across sales, harvests, spoilage, and adjustments.
             </p>
           </div>
-          <span className="text-xs text-spore-ivory/40">Showing last 15 movements</span>
+          <span className="text-xs text-stone-500 dark:text-spore-ivory/40">Showing last 15 movements</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-spore-ivory/10 text-spore-ivory/60 uppercase">
+            <thead className="border-b border-stone-200 dark:border-spore-ivory/10 text-stone-600 dark:text-spore-ivory/60 uppercase">
               <tr>
                 <th className="py-2.5">Date & Time</th>
                 <th className="py-2.5">Item</th>
@@ -187,10 +189,10 @@ export default async function AdminInventoryPage({
                 <th className="py-2.5">Logged By</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-spore-ivory/10">
+            <tbody className="divide-y divide-stone-200 dark:divide-spore-ivory/10">
               {transactions.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-spore-ivory/50">
+                  <td colSpan={7} className="py-8 text-center text-stone-600 dark:text-spore-ivory/50">
                     No transactions recorded yet.
                   </td>
                 </tr>
@@ -198,15 +200,15 @@ export default async function AdminInventoryPage({
                 transactions.map((tx) => {
                   const badge = TX_BADGES[tx.transactionType] ?? {
                     label: tx.transactionType,
-                    style: "bg-spore-ivory/10 text-spore-ivory",
+                    style: "bg-stone-100 dark:bg-spore-ivory/10 text-stone-900 dark:text-spore-ivory",
                   };
                   const qty = Number(tx.quantity);
                   return (
-                    <tr key={tx.id} className="hover:bg-spore-ivory/5">
-                      <td className="py-2.5 text-spore-ivory/50 font-data">
+                    <tr key={tx.id} className="hover:bg-stone-100 dark:hover:bg-spore-ivory/5">
+                      <td className="py-2.5 text-stone-600 dark:text-spore-ivory/50 font-data">
                         {formatDate(tx.createdAt)}
                       </td>
-                      <td className="py-2.5 font-semibold text-spore-ivory">
+                      <td className="py-2.5 font-semibold text-stone-900 dark:text-spore-ivory">
                         {tx.inventoryItem.itemName}
                       </td>
                       <td className="py-2.5">
@@ -221,13 +223,13 @@ export default async function AdminInventoryPage({
                       >
                         {qty > 0 ? `+${qty}` : qty} {tx.inventoryItem.unit}
                       </td>
-                      <td className="py-2.5 font-data font-semibold text-spore-ivory">
+                      <td className="py-2.5 font-data font-semibold text-stone-900 dark:text-spore-ivory">
                         {Number(tx.balanceAfter)} {tx.inventoryItem.unit}
                       </td>
-                      <td className="py-2.5 text-spore-ivory/80 max-w-xs truncate">
+                      <td className="py-2.5 text-stone-700 dark:text-spore-ivory/80 max-w-xs truncate">
                         {tx.reason ?? "—"}
                       </td>
-                      <td className="py-2.5 text-spore-ivory/60">
+                      <td className="py-2.5 text-stone-600 dark:text-spore-ivory/60">
                         {tx.actor?.name ?? "System"}
                       </td>
                     </tr>

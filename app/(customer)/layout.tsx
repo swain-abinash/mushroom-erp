@@ -7,7 +7,7 @@ export const instant = false;
 export default function CustomerLayout({ children }: { children: React.ReactNode }) {
   return (
     <CartProviderClient>
-      <div className="flex min-h-screen flex-col bg-spore-ivory">
+      <div className="flex min-h-screen flex-col bg-spore-ivory dark:bg-charcoal-dark">
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

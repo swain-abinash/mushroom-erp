@@ -5,9 +5,9 @@ export const metadata: Metadata = { title: "Access denied — SporeERP" };
 
 export default function UnauthorizedPage() {
   return (
-    <main className="mx-auto flex max-w-md flex-1 flex-col items-center justify-center gap-4 px-6 py-24 text-center text-forest-primary">
+    <main className="mx-auto flex max-w-md flex-1 flex-col items-center justify-center gap-4 px-6 py-24 text-center text-forest-primary dark:text-spore-ivory">
       <h1 className="font-display text-3xl font-bold">Access denied</h1>
-      <p className="font-body text-forest-primary/70">
+      <p className="font-body text-forest-primary/70 dark:text-spore-ivory/70">
         Your account doesn&apos;t have permission to view that page. If you think this is a mistake,
         ask a founder admin to check your role.
       </p>

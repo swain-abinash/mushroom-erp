@@ -16,13 +16,13 @@ export default async function CategoriesPage() {
     <div className="flex max-w-4xl flex-col gap-8 font-body">
       <header>
         <h1 className="font-display text-2xl font-bold">Categories</h1>
-        <p className="mt-1 text-sm text-spore-ivory/70">
+        <p className="mt-1 text-sm text-stone-700 dark:text-spore-ivory/70">
           Two levels deep, e.g. Processed Products › Dry Mushrooms. Renaming keeps the storefront
           URL.
         </p>
       </header>
 
-      <section className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6">
+      <section className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6">
         <h2 className="mb-4 font-display text-lg font-bold">New category</h2>
         {/* React resets the fields after a successful create, while the success message stays. */}
         <CategoryForm parents={parents} />
@@ -32,7 +32,7 @@ export default async function CategoriesPage() {
         {categories.map((category) => (
           <details
             key={category.id}
-            className="rounded-2xl border border-spore-ivory/10 p-4 open:bg-surface-charcoal"
+            className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 p-4 open:bg-white dark:open:bg-surface-charcoal"
           >
             <summary className="flex cursor-pointer flex-wrap items-center justify-between gap-2">
               <span>
@@ -40,9 +40,9 @@ export default async function CategoriesPage() {
                   {category.parentCategory ? `${category.parentCategory.name} › ` : ""}
                   {category.name}
                 </span>
-                <span className="ml-2 font-data text-xs text-spore-ivory/60">/{category.slug}</span>
+                <span className="ml-2 font-data text-xs text-stone-600 dark:text-spore-ivory/60">/{category.slug}</span>
               </span>
-              <span className="text-xs text-spore-ivory/60">
+              <span className="text-xs text-stone-600 dark:text-spore-ivory/60">
                 {category._count.products} products
                 {category._count.subCategories
                   ? ` · ${category._count.subCategories} sub-categories`

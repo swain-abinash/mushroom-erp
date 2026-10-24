@@ -489,3 +489,19 @@ Two bugs were found by these tests and fixed before the final runs: a failed pro
 Per DOC-00: persistent cart (server + localStorage, guest and signed-in), slide-out cart drawer with delivery fee and free-delivery threshold, 3-step checkout (address with saved-address picker → delivery slot → payment method), order review with **stock verification**, `Order` / `OrderItem` / `OrderStatusHistory` written atomically, the order state machine (`PENDING → CONFIRMED → PROCESSING → PACKED → OUT_FOR_DELIVERY → DELIVERED`, or `CANCELLED` / `REFUNDED`), admin orders Kanban + table, packing slip / invoice PDF.
 
 Already in place for it: the product page quantity stepper and disabled **Add to cart** button, `minOrderQty`, B2B `pricingTiers` (apply by `customers.customer_type`), `allowBackorder`, `inventory_items.reserved_stock` (reserve on order, release on cancel) and the `catalog` cache tag (invalidate whenever stock changes). Open gaps from earlier sprints are listed in §8 (email provider, rate limiting, tests).
+
+---
+
+## 13. Delivery Agent role & delivery cycle (2026-10-25)
+
+New role `DELIVERY_STAFF` ("Delivery Agent"). Permissions: `deliveries:view_own`, `deliveries:update_own`. Operations Staff and Farm Manager also get `deliveries:view_all` + `deliveries:assign`; Founder has all 28. Migration `20261025000000_add_delivery_agent_driver_stock` (+ re-run `npm run db:seed`).
+
+| Step | Who | What happens |
+|---|---|---|
+| Confirm → Processing → Packed | Ops / Farm Manager | Existing order screens. Transitions are now validated (no skipping). |
+| Assign agent | Ops / Farm Manager | `/admin/deliveries` → creates `deliveries` row (ASSIGNED). Dispatch is blocked until an agent is assigned. |
+| Collect stock | Delivery Agent (or Ops "Dispatch") | Order → OUT_FOR_DELIVERY. Warehouse `available`/`reserved` drop, `driver_stock` rises, ledger row `DRIVER_DISPATCH`. |
+| Mark delivered | Delivery Agent | Order → DELIVERED, `driver_stock` drops, ledger row `CUSTOMER_SALE`, COD payment marked PAID, `deliveredAt` set. |
+| Cancel while out | Ops / Farm Manager | Stock returns to warehouse (`DRIVER_RETURN`), delivery → FAILED_ATTEMPT. |
+
+Delivery agents can only open `/admin/deliveries` (enforced in `proxy.ts` and `requireStaff`). Admins see per-agent assigned / in transit / delivered today / delivered total / value / stock in hand on the same page.

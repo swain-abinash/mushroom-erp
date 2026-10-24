@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { ServiceError } from "@/lib/errors";
 import { sendMail } from "@/lib/mail";
+import { resetEmail } from "@/lib/mail-templates";
 import { appUrl } from "@/lib/url";
 import { generateToken, hashPassword, hashToken, verifyPassword } from "@/lib/auth/password";
 import { ROLES } from "@/lib/auth/permissions";
@@ -72,10 +73,7 @@ export async function requestPasswordReset(email: string): Promise<void> {
   const token = await createPasswordToken(user.id, RESET_TOKEN_TTL_MS);
   await sendMail({
     to: user.email,
-    subject: "Reset your SporeERP password",
-    text: `Hi ${user.name},\n\nReset your password using this link (valid for 1 hour):\n${appUrl(
-      `/reset-password?token=${token}`,
-    )}\n\nIf you didn't request this, you can ignore this email.`,
+    ...resetEmail({ name: user.name, resetUrl: appUrl(`/reset-password?token=${token}`) }),
   });
 }
 

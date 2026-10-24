@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { signIn, signOut } from "@/auth";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth/dal";
-import { isStaff } from "@/lib/auth/permissions";
+import { isDeliveryOnly, isStaff } from "@/lib/auth/permissions";
 import {
   safeCallbackUrl,
   serviceFailure,
@@ -43,7 +43,9 @@ async function defaultLandingPage(email: string): Promise<string> {
     where: { user: { email } },
     select: { role: { select: { name: true } } },
   });
-  return isStaff(userRoles.map(({ role }) => role.name)) ? "/admin/dashboard" : "/account";
+  const roles = userRoles.map(({ role }) => role.name);
+  if (isDeliveryOnly(roles)) return "/admin/deliveries";
+  return isStaff(roles) ? "/admin/dashboard" : "/account";
 }
 
 export async function loginAction(_prev: FormState, formData: FormData): Promise<FormState> {

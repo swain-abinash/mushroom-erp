@@ -199,7 +199,7 @@ export default async function AdminDashboardPage({
 
           <div className="mt-4 pt-4 border-t border-stone-200/80 dark:border-white/10 grid grid-cols-3 gap-2 text-xs">
             <div>
-              <p className="text-[10px] uppercase font-semibold text-stone-400 dark:text-spore-ivory/40">
+              <p className="text-[10px] uppercase font-semibold text-stone-500 dark:text-spore-ivory/40">
                 Gross Revenue
               </p>
               <p className="font-data font-bold text-stone-800 dark:text-spore-ivory mt-0.5 truncate">
@@ -207,7 +207,7 @@ export default async function AdminDashboardPage({
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase font-semibold text-stone-400 dark:text-spore-ivory/40">
+              <p className="text-[10px] uppercase font-semibold text-stone-500 dark:text-spore-ivory/40">
                 Total COGS
               </p>
               <p className="font-data font-bold text-stone-800 dark:text-spore-ivory mt-0.5 truncate">
@@ -215,7 +215,7 @@ export default async function AdminDashboardPage({
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase font-semibold text-stone-400 dark:text-spore-ivory/40">
+              <p className="text-[10px] uppercase font-semibold text-stone-500 dark:text-spore-ivory/40">
                 Farm OPEX
               </p>
               <p className="font-data font-bold text-stone-800 dark:text-spore-ivory mt-0.5 truncate">
@@ -235,7 +235,7 @@ export default async function AdminDashboardPage({
               <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-spore-ivory/50">
                 Sellable Stock
               </span>
-              <span className="text-base group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-stone-400">
+              <span className="text-base group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-stone-500">
                 ↗
               </span>
             </div>
@@ -253,7 +253,7 @@ export default async function AdminDashboardPage({
 
             {/* Visual Stock Progress Bar */}
             <div className="mt-4">
-              <div className="flex justify-between text-[10px] text-stone-400 dark:text-spore-ivory/40 mb-1 font-semibold">
+              <div className="flex justify-between text-[10px] text-stone-500 dark:text-spore-ivory/40 mb-1 font-semibold">
                 <span>Free: {sellableKg.toFixed(1)} KG</span>
                 <span>Reserved: {reservedKg.toFixed(1)} KG</span>
               </div>
@@ -463,7 +463,7 @@ export default async function AdminDashboardPage({
               <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-spore-ivory/50">
                 Operations Launchpad · Instant Actions
               </span>
-              <span className="text-[10px] text-stone-400 dark:text-spore-ivory/40">
+              <span className="text-[10px] text-stone-500 dark:text-spore-ivory/40">
                 Single-click workflows
               </span>
             </div>
@@ -581,7 +581,7 @@ export default async function AdminDashboardPage({
             <tbody className="divide-y divide-stone-200/60 dark:divide-white/10">
               {recentOrders.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-10 text-center text-stone-400 dark:text-spore-ivory/40">
+                  <td colSpan={7} className="py-10 text-center text-stone-500 dark:text-spore-ivory/40">
                     No active orders placed yet. Customers can order fresh mushrooms on the storefront.
                   </td>
                 </tr>
@@ -602,7 +602,7 @@ export default async function AdminDashboardPage({
                         >
                           {order.orderNumber}
                         </Link>
-                        <div className="text-[10px] text-stone-400 dark:text-spore-ivory/40">
+                        <div className="text-[10px] text-stone-500 dark:text-spore-ivory/40">
                           {formatDate(order.createdAt)}
                         </div>
                       </td>

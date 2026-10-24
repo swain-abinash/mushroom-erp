@@ -35,20 +35,20 @@ export function CartDrawer() {
         aria-label="Shopping Cart Drawer"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-forest-primary/10 px-6 py-4 bg-spore-ivory/50">
+        <div className="flex items-center justify-between border-b border-forest-primary/10 dark:border-white/15 px-6 py-4 bg-stone-100 dark:bg-spore-ivory/50">
           <div className="flex items-center gap-2">
             <span className="text-xl">🍄</span>
-            <h2 className="font-display text-lg font-bold text-forest-primary">
+            <h2 className="font-display text-lg font-bold text-forest-primary dark:text-spore-ivory">
               Fresh Harvest Basket
             </h2>
-            <span className="rounded-full bg-forest-primary/10 px-2 py-0.5 text-xs font-semibold text-forest-primary">
+            <span className="rounded-full bg-forest-primary/10 px-2 py-0.5 text-xs font-semibold text-forest-primary dark:text-spore-ivory">
               {items.length} {items.length === 1 ? "item" : "items"}
             </span>
           </div>
           <button
             type="button"
             onClick={closeDrawer}
-            className="rounded-full p-2 text-forest-primary/60 hover:bg-forest-primary/10 hover:text-forest-primary transition-colors"
+            className="rounded-full p-2 text-forest-primary/60 dark:text-spore-ivory/60 hover:bg-forest-primary/10 hover:text-forest-primary dark:hover:text-spore-ivory transition-colors"
             aria-label="Close cart"
           >
             ✕
@@ -56,8 +56,8 @@ export function CartDrawer() {
         </div>
 
         {/* Free Delivery Banner */}
-        <div className="bg-forest-primary/5 px-6 py-3 border-b border-forest-primary/10">
-          <div className="flex justify-between text-xs font-semibold text-forest-primary">
+        <div className="bg-forest-primary/5 px-6 py-3 border-b border-forest-primary/10 dark:border-white/15">
+          <div className="flex justify-between text-xs font-semibold text-forest-primary dark:text-spore-ivory">
             <span>
               {amountToFreeDelivery > 0
                 ? `Add ${formatCurrency(amountToFreeDelivery)} more for FREE Delivery`
@@ -79,10 +79,10 @@ export function CartDrawer() {
             <div className="flex h-full flex-col items-center justify-center text-center gap-4 py-12">
               <span className="text-6xl">🧺</span>
               <div className="space-y-1">
-                <p className="font-display text-lg font-bold text-forest-primary">
+                <p className="font-display text-lg font-bold text-forest-primary dark:text-spore-ivory">
                   Your basket is empty
                 </p>
-                <p className="text-sm text-forest-primary/60 max-w-xs">
+                <p className="text-sm text-forest-primary/60 dark:text-spore-ivory/60 max-w-xs">
                   Discover fresh, hand-harvested organic mushrooms grown with zero chemicals.
                 </p>
               </div>
@@ -101,7 +101,7 @@ export function CartDrawer() {
               return (
                 <div
                   key={item.productId}
-                  className="flex gap-4 rounded-xl border border-forest-primary/10 p-3 bg-spore-ivory/20 hover:border-forest-primary/20 transition-colors"
+                  className="flex gap-4 rounded-xl border border-forest-primary/10 dark:border-white/15 p-3 bg-stone-100 dark:bg-spore-ivory/20 hover:border-forest-primary/20 dark:hover:border-white/15 transition-colors"
                 >
                   <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-forest-primary/5">
                     {item.imageUrl ? (
@@ -122,47 +122,47 @@ export function CartDrawer() {
                         <Link
                           href={`/products/${item.slug}`}
                           onClick={closeDrawer}
-                          className="font-display text-sm font-bold text-forest-primary hover:underline line-clamp-1"
+                          className="font-display text-sm font-bold text-forest-primary dark:text-spore-ivory hover:underline line-clamp-1"
                         >
                           {item.name}
                         </Link>
                         <button
                           type="button"
                           onClick={() => removeItem(item.productId)}
-                          className="text-forest-primary/40 hover:text-alert-coral text-xs transition-colors"
+                          className="text-forest-primary/40 dark:text-spore-ivory/40 hover:text-red-600 dark:hover:text-alert-coral text-xs transition-colors"
                           title="Remove item"
                         >
                           🗑
                         </button>
                       </div>
-                      <p className="text-xs text-forest-primary/60">
+                      <p className="text-xs text-forest-primary/60 dark:text-spore-ivory/60">
                         {formatCurrency(item.price)} / {unit}
                       </p>
                     </div>
 
                     <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center rounded-full border border-forest-primary/20 bg-surface-white">
+                      <div className="flex items-center rounded-full border border-forest-primary/20 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal">
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.productId, item.quantity - step)}
-                          className="size-7 rounded-full text-base font-bold text-forest-primary hover:bg-forest-primary/5 disabled:opacity-30"
+                          className="size-7 rounded-full text-base font-bold text-forest-primary dark:text-spore-ivory hover:bg-forest-primary/5 disabled:opacity-30"
                           disabled={item.quantity <= item.minOrderQty}
                         >
                           −
                         </button>
-                        <span className="min-w-12 text-center text-xs font-semibold text-forest-primary font-data">
+                        <span className="min-w-12 text-center text-xs font-semibold text-forest-primary dark:text-spore-ivory font-data">
                           {item.quantity} {unit}
                         </span>
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.productId, item.quantity + step)}
-                          className="size-7 rounded-full text-base font-bold text-forest-primary hover:bg-forest-primary/5 disabled:opacity-30"
+                          className="size-7 rounded-full text-base font-bold text-forest-primary dark:text-spore-ivory hover:bg-forest-primary/5 disabled:opacity-30"
                           disabled={item.maxStock !== null && item.quantity + step > item.maxStock}
                         >
                           +
                         </button>
                       </div>
-                      <span className="font-data text-sm font-bold text-forest-primary">
+                      <span className="font-data text-sm font-bold text-forest-primary dark:text-spore-ivory">
                         {formatCurrency(item.price * item.quantity)}
                       </span>
                     </div>
@@ -175,33 +175,33 @@ export function CartDrawer() {
 
         {/* Footer Summary & Checkout */}
         {items.length > 0 && (
-          <div className="border-t border-forest-primary/10 bg-spore-ivory/40 p-6 space-y-4">
+          <div className="border-t border-forest-primary/10 dark:border-white/15 bg-stone-100 dark:bg-spore-ivory/40 p-6 space-y-4">
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between text-forest-primary/70">
+              <div className="flex justify-between text-forest-primary/70 dark:text-spore-ivory/70">
                 <span>Subtotal</span>
-                <span className="font-data font-semibold text-forest-primary">
+                <span className="font-data font-semibold text-forest-primary dark:text-spore-ivory">
                   {formatCurrency(subtotal)}
                 </span>
               </div>
-              <div className="flex justify-between text-forest-primary/70">
+              <div className="flex justify-between text-forest-primary/70 dark:text-spore-ivory/70">
                 <span>Delivery Fee</span>
-                <span className="font-data font-semibold text-forest-primary">
+                <span className="font-data font-semibold text-forest-primary dark:text-spore-ivory">
                   {deliveryFee === 0 ? (
-                    <span className="text-success-mint font-bold uppercase text-xs">FREE</span>
+                    <span className="text-green-700 dark:text-success-mint font-bold uppercase text-xs">FREE</span>
                   ) : (
                     formatCurrency(deliveryFee)
                   )}
                 </span>
               </div>
-              <div className="flex justify-between text-base font-bold text-forest-primary pt-2 border-t border-forest-primary/10">
+              <div className="flex justify-between text-base font-bold text-forest-primary dark:text-spore-ivory pt-2 border-t border-forest-primary/10 dark:border-white/15">
                 <span>Estimated Total</span>
-                <span className="font-data text-lg text-forest-primary">
+                <span className="font-data text-lg text-forest-primary dark:text-spore-ivory">
                   {formatCurrency(total)}
                 </span>
               </div>
             </div>
 
-            <div className="rounded-lg bg-surface-white p-2.5 border border-forest-primary/10 flex items-center gap-2.5 text-xs text-forest-primary/80">
+            <div className="rounded-lg bg-surface-white dark:bg-surface-charcoal p-2.5 border border-forest-primary/10 dark:border-white/15 flex items-center gap-2.5 text-xs text-forest-primary/80 dark:text-spore-ivory/80">
               <span className="text-base">🌅</span>
               <span>
                 Harvested at 5:00 AM on dispatch day. 100% farm fresh guarantee.

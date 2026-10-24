@@ -40,20 +40,20 @@ export function RecordExpenseModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 font-body">
-      <div className="w-full max-w-md rounded-2xl border border-spore-ivory/20 bg-surface-charcoal p-6 shadow-2xl text-spore-ivory space-y-4">
-        <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-3">
+      <div className="w-full max-w-md rounded-2xl border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal p-6 shadow-2xl text-stone-900 dark:text-spore-ivory space-y-4">
+        <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
           <h3 className="font-display font-bold text-lg">Record Operational Expense</h3>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="text-spore-ivory/60 hover:text-spore-ivory"
+            className="text-stone-600 dark:text-spore-ivory/60 hover:text-stone-900 dark:hover:text-spore-ivory"
           >
             ✕
           </button>
         </div>
 
         {error && (
-          <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2 text-xs text-alert-coral">
+          <div className="rounded-lg bg-alert-coral/15 border border-alert-coral/30 p-2 text-xs text-red-600 dark:text-alert-coral">
             {error}
           </div>
         )}
@@ -64,7 +64,7 @@ export function RecordExpenseModal() {
             <select
               name="category"
               required
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             >
               <option value={ExpenseCategory.ELECTRICITY}>Electricity &amp; Air Conditioning</option>
               <option value={ExpenseCategory.FARM_LABOR}>Farm Labor &amp; Wages</option>
@@ -89,7 +89,7 @@ export function RecordExpenseModal() {
                 name="amount"
                 required
                 placeholder="e.g. 1500"
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
             <div>
@@ -99,7 +99,7 @@ export function RecordExpenseModal() {
                 name="expenseDate"
                 required
                 defaultValue={new Date().toISOString().slice(0, 10)}
-                className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+                className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
               />
             </div>
           </div>
@@ -111,7 +111,7 @@ export function RecordExpenseModal() {
               name="description"
               required
               placeholder="e.g. Electricity bill for fruiting chamber AC..."
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             />
           </div>
 
@@ -119,7 +119,7 @@ export function RecordExpenseModal() {
             <label className="block font-semibold mb-1">Payment Method</label>
             <select
               name="paymentMethod"
-              className="w-full rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-2 text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+              className="w-full rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-2 text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
             >
               <option value="UPI">UPI / Google Pay</option>
               <option value="Bank Transfer">Bank Transfer (NEFT/IMPS)</option>
@@ -128,11 +128,11 @@ export function RecordExpenseModal() {
             </select>
           </div>
 
-          <div className="flex justify-end gap-2 pt-3 border-t border-spore-ivory/10">
+          <div className="flex justify-end gap-2 pt-3 border-t border-stone-200 dark:border-spore-ivory/10">
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-full border border-spore-ivory/20 px-4 py-2 font-semibold hover:bg-spore-ivory/5"
+              className="rounded-full border border-stone-200 dark:border-spore-ivory/20 px-4 py-2 font-semibold hover:bg-stone-100 dark:hover:bg-spore-ivory/5"
             >
               Cancel
             </button>

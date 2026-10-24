@@ -87,7 +87,7 @@ export default async function ProductPage({ params }: Props) {
   ];
 
   return (
-    <article className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-12 text-forest-primary">
+    <article className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-12 text-forest-primary dark:text-spore-ivory">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -95,7 +95,7 @@ export default async function ProductPage({ params }: Props) {
         }}
       />
 
-      <nav aria-label="Breadcrumb" className="font-body text-sm text-forest-primary/60">
+      <nav aria-label="Breadcrumb" className="font-body text-sm text-forest-primary/60 dark:text-spore-ivory/60">
         <Link href="/products" className="hover:underline">
           Products
         </Link>
@@ -115,28 +115,28 @@ export default async function ProductPage({ params }: Props) {
                 {product.category.name}
               </span>
               {product.variety ? (
-                <span className="rounded-full bg-shiitake-ochre/15 px-2.5 py-0.5 font-body text-xs font-semibold text-shiitake-ochre">
+                <span className="rounded-full bg-shiitake-ochre/15 px-2.5 py-0.5 font-body text-xs font-semibold text-amber-800 dark:text-shiitake-ochre">
                   {product.variety}
                 </span>
               ) : null}
               <AvailabilityBadge product={product} />
             </div>
             <h1 className="font-display text-3xl font-extrabold sm:text-4xl">{product.name}</h1>
-            <p className="font-data text-xs text-forest-primary/60">SKU {product.sku}</p>
+            <p className="font-data text-xs text-forest-primary/60 dark:text-spore-ivory/60">SKU {product.sku}</p>
           </div>
 
           <p className="font-data">
             <span className="text-3xl font-bold">{formatCurrency(product.retailPrice)}</span>
-            <span className="text-forest-primary/60"> / {unit}</span>
+            <span className="text-forest-primary/60 dark:text-spore-ivory/60"> / {unit}</span>
             {product.minOrderQty > 1 ? (
-              <span className="block font-body text-sm text-forest-primary/60">
+              <span className="block font-body text-sm text-forest-primary/60 dark:text-spore-ivory/60">
                 Minimum order {product.minOrderQty} {unit}
               </span>
             ) : null}
           </p>
 
           {product.shortDescription ? (
-            <p className="font-body text-forest-primary/80">{product.shortDescription}</p>
+            <p className="font-body text-forest-primary/80 dark:text-spore-ivory/80">{product.shortDescription}</p>
           ) : null}
 
           <div className="flex gap-3 rounded-2xl bg-success-mint/10 p-4 font-body text-sm">
@@ -170,7 +170,7 @@ export default async function ProductPage({ params }: Props) {
           )}
 
           {product.pricingTiers.length ? (
-            <div className="rounded-2xl border border-forest-primary/10 p-4 font-body text-sm">
+            <div className="rounded-2xl border border-forest-primary/10 dark:border-white/15 p-4 font-body text-sm">
               <p className="mb-2 font-display font-semibold">👨‍🍳 Business pricing</p>
               <ul className="flex flex-col gap-1">
                 {product.pricingTiers.map((tier) => (
@@ -182,7 +182,7 @@ export default async function ProductPage({ params }: Props) {
                   </li>
                 ))}
               </ul>
-              <p className="mt-2 text-xs text-forest-primary/60">
+              <p className="mt-2 text-xs text-forest-primary/60 dark:text-spore-ivory/60">
                 Applies to approved business accounts.
               </p>
             </div>

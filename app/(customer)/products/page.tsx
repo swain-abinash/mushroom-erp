@@ -170,7 +170,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         </header>
 
         {products.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-forest-primary/20 p-10 text-center font-body text-forest-primary/60">
+          <p className="rounded-2xl border border-dashed border-forest-primary/20 dark:border-white/15 p-10 text-center font-body text-forest-primary/60 dark:text-spore-ivory/60">
             No products match these filters.
           </p>
         ) : (
@@ -184,7 +184,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         {pageCount > 1 ? (
           <nav
             aria-label="Pagination"
-            className="flex items-center justify-center gap-4 font-body text-sm text-forest-primary"
+            className="flex items-center justify-center gap-4 font-body text-sm text-forest-primary dark:text-spore-ivory"
           >
             {currentPage > 1 ? (
               <Link

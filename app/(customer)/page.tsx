@@ -282,7 +282,7 @@ function HowItWorks() {
             key={step.title}
             className="relative flex flex-col gap-3 rounded-3xl bg-surface-white dark:bg-surface-charcoal border border-forest-primary/5 dark:border-white/10 p-6 shadow-xs"
           >
-            <span className="absolute right-5 top-4 font-data text-sm text-forest-primary/30 dark:text-spore-ivory/30">
+            <span className="absolute right-5 top-4 font-data text-sm text-forest-primary/30 dark:text-spore-ivory/55">
               0{index + 1}
             </span>
             <span className="text-3xl" aria-hidden>

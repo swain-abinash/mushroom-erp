@@ -8,6 +8,7 @@ export const ROLES = {
   PRODUCTION_STAFF: "PRODUCTION_STAFF",
   INVENTORY_STAFF: "INVENTORY_STAFF",
   OPERATIONS_STAFF: "OPERATIONS_STAFF",
+  DELIVERY_STAFF: "DELIVERY_STAFF",
   CUSTOMER: "CUSTOMER",
 } as const;
 
@@ -19,10 +20,19 @@ export const STAFF_ROLES: readonly RoleName[] = [
   ROLES.PRODUCTION_STAFF,
   ROLES.INVENTORY_STAFF,
   ROLES.OPERATIONS_STAFF,
+  ROLES.DELIVERY_STAFF,
 ];
 
 export function isStaff(roles: readonly string[]): boolean {
   return roles.some((role) => STAFF_ROLES.includes(role as RoleName));
+}
+
+/** Delivery agents only see their own delivery list; every other admin page is off limits. */
+export function isDeliveryOnly(roles: readonly string[]): boolean {
+  return (
+    roles.includes(ROLES.DELIVERY_STAFF) &&
+    roles.every((role) => role === ROLES.DELIVERY_STAFF || role === ROLES.CUSTOMER)
+  );
 }
 
 export const ROLE_DEFINITIONS: Record<RoleName, { displayName: string; description: string }> = {
@@ -48,7 +58,13 @@ export const ROLE_DEFINITIONS: Record<RoleName, { displayName: string; descripti
   },
   OPERATIONS_STAFF: {
     displayName: "Fulfillment & Dispatch Agent",
-    description: "Order queue, packing, packing slips, delivery assignment, dispatch timestamps.",
+    description:
+      "Order queue, packing, packing slips, assigning packed orders to delivery agents, handing over stock.",
+  },
+  DELIVERY_STAFF: {
+    displayName: "Delivery Agent",
+    description:
+      "Last mile only: sees own assigned orders, collects stock, delivers to the customer and marks delivered.",
   },
   CUSTOMER: {
     displayName: "Retail / B2B Customer",
@@ -82,6 +98,10 @@ export const PERMISSIONS = {
   FINANCE_PNL_VIEW: "finance:pnl:view",
   FINANCE_TAX_EXPORT: "finance:tax_export",
   AUDIT_LOGS_INSPECT: "audit:logs:inspect",
+  DELIVERIES_VIEW_ALL: "deliveries:view_all",
+  DELIVERIES_ASSIGN: "deliveries:assign",
+  DELIVERIES_VIEW_OWN: "deliveries:view_own",
+  DELIVERIES_UPDATE_OWN: "deliveries:update_own",
 } as const;
 
 export type PermissionCode = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -111,6 +131,10 @@ export const PERMISSION_DESCRIPTIONS: Record<PermissionCode, string> = {
   "finance:pnl:view": "View profit & loss",
   "finance:tax_export": "Export tax reports",
   "audit:logs:inspect": "Inspect the audit log",
+  "deliveries:view_all": "View every delivery, each agent's stock in hand and delivery totals",
+  "deliveries:assign": "Assign packed orders to delivery agents",
+  "deliveries:view_own": "View deliveries assigned to oneself",
+  "deliveries:update_own": "Collect stock and mark one's own deliveries as delivered",
 };
 
 const P = PERMISSIONS;
@@ -139,6 +163,8 @@ export const ROLE_PERMISSIONS: Record<RoleName, readonly PermissionCode[]> = {
     P.PURCHASES_CREATE,
     P.EXPENSES_RECORD,
     P.EXPENSES_VIEW_ALL,
+    P.DELIVERIES_VIEW_ALL,
+    P.DELIVERIES_ASSIGN,
   ],
   PRODUCTION_STAFF: [
     P.CATALOG_PRODUCT_VIEW,
@@ -162,7 +188,10 @@ export const ROLE_PERMISSIONS: Record<RoleName, readonly PermissionCode[]> = {
     P.ORDERS_VIEW_ALL,
     P.ORDERS_UPDATE_STATUS,
     P.INVENTORY_VIEW_STOCK,
+    P.DELIVERIES_VIEW_ALL,
+    P.DELIVERIES_ASSIGN,
   ],
+  DELIVERY_STAFF: [P.DELIVERIES_VIEW_OWN, P.DELIVERIES_UPDATE_OWN],
   CUSTOMER: [P.CATALOG_PRODUCT_VIEW, P.ORDERS_CREATE_OWN],
 };
 

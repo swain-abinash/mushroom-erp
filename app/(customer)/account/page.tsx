@@ -16,16 +16,16 @@ export default async function AccountPage() {
   if (!profile) return null;
 
   return (
-    <section className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-12 text-forest-primary">
+    <section className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-12 text-forest-primary dark:text-spore-ivory">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
             <h1 className="font-display text-3xl font-bold">My account</h1>
-            <span className="rounded-full bg-forest-primary/10 border border-forest-primary/20 px-3 py-0.5 text-xs font-bold text-forest-primary">
+            <span className="rounded-full bg-forest-primary/10 border border-forest-primary/20 dark:border-white/15 px-3 py-0.5 text-xs font-bold text-forest-primary dark:text-spore-ivory">
               {user.roles[0]?.replace(/_/g, " ") ?? "CUSTOMER"}
             </span>
           </div>
-          <p className="mt-1 font-body text-sm text-forest-primary/70">
+          <p className="mt-1 font-body text-sm text-forest-primary/70 dark:text-spore-ivory/70">
             Member since {formatDate(profile.createdAt)}
           </p>
         </div>
@@ -39,7 +39,7 @@ export default async function AccountPage() {
           {user.isStaff ? (
             <Link
               href="/admin/dashboard"
-              className="rounded-full border border-forest-primary px-6 py-3 font-display font-semibold"
+              className="rounded-full border border-forest-primary dark:border-white/15 px-6 py-3 font-display font-semibold"
             >
               Admin console
             </Link>
@@ -52,12 +52,12 @@ export default async function AccountPage() {
         </div>
       </header>
 
-      <div className="rounded-2xl border border-forest-primary/10 bg-surface-white p-8">
+      <div className="rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-8">
         <h2 className="mb-6 font-display text-xl font-bold">Profile</h2>
         <ProfileForm profile={profile} />
       </div>
 
-      <div className="rounded-2xl border border-forest-primary/10 bg-surface-white p-8">
+      <div className="rounded-2xl border border-forest-primary/10 dark:border-white/15 bg-surface-white dark:bg-surface-charcoal p-8">
         <h2 className="mb-6 font-display text-xl font-bold">Password</h2>
         <ChangePasswordForm />
       </div>

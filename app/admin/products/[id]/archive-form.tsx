@@ -22,7 +22,7 @@ export function ArchiveProductForm({ productId }: { productId: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-full border border-alert-coral px-5 py-2 font-display text-sm font-semibold text-alert-coral disabled:opacity-60"
+        className="rounded-full border border-alert-coral px-5 py-2 font-display text-sm font-semibold text-red-600 dark:text-alert-coral disabled:opacity-60"
       >
         Archive product
       </button>

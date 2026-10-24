@@ -23,11 +23,11 @@ export default async function ProductionDashboardPage() {
   const totalBeds = rooms.reduce((sum, r) => sum + r._count.beds, 0);
 
   return (
-    <div className="flex flex-col gap-8 font-body text-spore-ivory">
+    <div className="flex flex-col gap-8 font-body text-stone-900 dark:text-spore-ivory">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold">Mushroom Cultivation & Agronomy</h1>
-          <p className="mt-1 text-sm text-spore-ivory/70">
+          <p className="mt-1 text-sm text-stone-700 dark:text-spore-ivory/70">
             Batch lifecycle tracking, room environmental monitoring, and rapid harvest quality logging.
           </p>
         </div>
@@ -51,66 +51,66 @@ export default async function ProductionDashboardPage() {
       <div className="grid gap-6 sm:grid-cols-3">
         <Link
           href="/admin/production/batches"
-          className="group rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6 transition-all hover:border-forest-primary/50 hover:shadow-lg"
+          className="group rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6 transition-all hover:border-forest-primary/50 dark:hover:border-white/15 hover:shadow-lg"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-3xl">🌱</span>
-            <span className="font-data text-xl font-bold text-spore-ivory">
+            <span className="font-data text-xl font-bold text-stone-900 dark:text-spore-ivory">
               {activeBatches.length} Active
             </span>
           </div>
-          <h3 className="font-display text-lg font-bold text-spore-ivory group-hover:text-success-mint">
+          <h3 className="font-display text-lg font-bold text-stone-900 dark:text-spore-ivory group-hover:text-green-700 dark:group-hover:text-success-mint">
             Production Batches →
           </h3>
-          <p className="mt-1 text-xs text-spore-ivory/60">
+          <p className="mt-1 text-xs text-stone-600 dark:text-spore-ivory/60">
             Track spawn inoculation, substrate weight, incubation timing, and biological efficiency.
           </p>
         </Link>
 
         <Link
           href="/admin/production/rooms"
-          className="group rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6 transition-all hover:border-forest-primary/50 hover:shadow-lg"
+          className="group rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6 transition-all hover:border-forest-primary/50 dark:hover:border-white/15 hover:shadow-lg"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-3xl">🪟</span>
-            <span className="font-data text-xl font-bold text-spore-ivory">
+            <span className="font-data text-xl font-bold text-stone-900 dark:text-spore-ivory">
               {totalBeds} Active Beds
             </span>
           </div>
-          <h3 className="font-display text-lg font-bold text-spore-ivory group-hover:text-success-mint">
+          <h3 className="font-display text-lg font-bold text-stone-900 dark:text-spore-ivory group-hover:text-green-700 dark:group-hover:text-success-mint">
             Growing Rooms & Beds →
           </h3>
-          <p className="mt-1 text-xs text-spore-ivory/60">
+          <p className="mt-1 text-xs text-stone-600 dark:text-spore-ivory/60">
             Interactive visual grid of fruiting racks, pinning stages, and bed contamination quarantine.
           </p>
         </Link>
 
         <Link
           href="/admin/production/harvests"
-          className="group rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6 transition-all hover:border-forest-primary/50 hover:shadow-lg"
+          className="group rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6 transition-all hover:border-forest-primary/50 dark:hover:border-white/15 hover:shadow-lg"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-3xl">🧺</span>
-            <span className="font-data text-xl font-bold text-success-mint">
+            <span className="font-data text-xl font-bold text-green-700 dark:text-success-mint">
               {totalHarvestKg.toFixed(1)} KG
             </span>
           </div>
-          <h3 className="font-display text-lg font-bold text-spore-ivory group-hover:text-success-mint">
+          <h3 className="font-display text-lg font-bold text-stone-900 dark:text-spore-ivory group-hover:text-green-700 dark:group-hover:text-success-mint">
             Harvest Logger & Quality →
           </h3>
-          <p className="mt-1 text-xs text-spore-ivory/60">
+          <p className="mt-1 text-xs text-stone-600 dark:text-spore-ivory/60">
             Fast logging of Flush #1–3, quality grading (A/B/C/Wastage), and auto-inventory sync.
           </p>
         </Link>
       </div>
 
       {/* Active Batches Snapshot */}
-      <section className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6 space-y-4">
-        <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-3">
+      <section className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6 space-y-4">
+        <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
           <h2 className="font-display text-lg font-bold">Active Cultivation Pipeline</h2>
           <Link
             href="/admin/production/batches"
-            className="text-xs text-forest-primary/90 hover:underline"
+            className="text-xs text-forest-primary/90 dark:text-spore-ivory/90 hover:underline"
           >
             View all batches →
           </Link>
@@ -118,7 +118,7 @@ export default async function ProductionDashboardPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-spore-ivory/10 text-spore-ivory/60 uppercase">
+            <thead className="border-b border-stone-200 dark:border-spore-ivory/10 text-stone-600 dark:text-spore-ivory/60 uppercase">
               <tr>
                 <th className="py-2.5">Batch #</th>
                 <th className="py-2.5">Mushroom Type</th>
@@ -130,35 +130,35 @@ export default async function ProductionDashboardPage() {
                 <th className="py-2.5">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-spore-ivory/10">
+            <tbody className="divide-y divide-stone-200 dark:divide-spore-ivory/10">
               {activeBatches.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center text-spore-ivory/50">
+                  <td colSpan={8} className="py-8 text-center text-stone-600 dark:text-spore-ivory/50">
                     No active batches. Click &quot;+ New Batch&quot; above to start a harvest cycle.
                   </td>
                 </tr>
               ) : (
                 activeBatches.map((b) => (
-                  <tr key={b.id} className="hover:bg-spore-ivory/5">
-                    <td className="py-2.5 font-data font-bold text-spore-ivory">
+                  <tr key={b.id} className="hover:bg-stone-100 dark:hover:bg-spore-ivory/5">
+                    <td className="py-2.5 font-data font-bold text-stone-900 dark:text-spore-ivory">
                       {b.batchNumber}
                     </td>
-                    <td className="py-2.5 font-semibold text-spore-ivory">{b.mushroomType}</td>
+                    <td className="py-2.5 font-semibold text-stone-900 dark:text-spore-ivory">{b.mushroomType}</td>
                     <td className="py-2.5 font-data">{b.numberOfBeds} beds</td>
-                    <td className="py-2.5 font-data text-spore-ivory/70">
+                    <td className="py-2.5 font-data text-stone-700 dark:text-spore-ivory/70">
                       {formatDate(b.inoculationDate)}
                     </td>
-                    <td className="py-2.5 font-data text-warning-amber">
+                    <td className="py-2.5 font-data text-amber-700 dark:text-warning-amber">
                       {formatDate(b.expectedHarvestDate)}
                     </td>
-                    <td className="py-2.5 font-data font-bold text-success-mint">
+                    <td className="py-2.5 font-data font-bold text-green-700 dark:text-success-mint">
                       {Number(b.totalHarvestedKg).toFixed(1)} KG
                     </td>
-                    <td className="py-2.5 font-data text-spore-ivory/80">
+                    <td className="py-2.5 font-data text-stone-700 dark:text-spore-ivory/80">
                       {b.biologicalEfficiency ? `${Number(b.biologicalEfficiency).toFixed(1)}%` : "—"}
                     </td>
                     <td className="py-2.5">
-                      <span className="rounded-full bg-forest-primary/20 px-2 py-0.5 text-[10px] font-bold text-spore-ivory">
+                      <span className="rounded-full bg-forest-primary/20 px-2 py-0.5 text-[10px] font-bold text-stone-900 dark:text-spore-ivory">
                         {b.status}
                       </span>
                     </td>
@@ -171,12 +171,12 @@ export default async function ProductionDashboardPage() {
       </section>
 
       {/* Recent Harvests */}
-      <section className="rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-6 space-y-4">
-        <div className="flex justify-between items-center border-b border-spore-ivory/10 pb-3">
+      <section className="rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-6 space-y-4">
+        <div className="flex justify-between items-center border-b border-stone-200 dark:border-spore-ivory/10 pb-3">
           <h2 className="font-display text-lg font-bold">Recent Harvest Logs</h2>
           <Link
             href="/admin/production/harvests"
-            className="text-xs text-forest-primary/90 hover:underline"
+            className="text-xs text-forest-primary/90 dark:text-spore-ivory/90 hover:underline"
           >
             Open harvest logger →
           </Link>
@@ -184,7 +184,7 @@ export default async function ProductionDashboardPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-spore-ivory/10 text-spore-ivory/60 uppercase">
+            <thead className="border-b border-stone-200 dark:border-spore-ivory/10 text-stone-600 dark:text-spore-ivory/60 uppercase">
               <tr>
                 <th className="py-2">Date</th>
                 <th className="py-2">Batch</th>
@@ -196,26 +196,26 @@ export default async function ProductionDashboardPage() {
                 <th className="py-2">Logged By</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-spore-ivory/10">
+            <tbody className="divide-y divide-stone-200 dark:divide-spore-ivory/10">
               {harvests.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-6 text-center text-spore-ivory/50">
+                  <td colSpan={8} className="py-6 text-center text-stone-600 dark:text-spore-ivory/50">
                     No harvests recorded yet.
                   </td>
                 </tr>
               ) : (
                 harvests.map((h) => (
                   <tr key={h.id}>
-                    <td className="py-2 font-data text-spore-ivory/60">{formatDate(h.harvestDate)}</td>
-                    <td className="py-2 font-bold text-spore-ivory">{h.batch.batchNumber}</td>
+                    <td className="py-2 font-data text-stone-600 dark:text-spore-ivory/60">{formatDate(h.harvestDate)}</td>
+                    <td className="py-2 font-bold text-stone-900 dark:text-spore-ivory">{h.batch.batchNumber}</td>
                     <td className="py-2 font-data">Flush #{h.flushNumber}</td>
-                    <td className="py-2 font-data font-bold text-success-mint">
+                    <td className="py-2 font-data font-bold text-green-700 dark:text-success-mint">
                       {Number(h.totalWeightKg)} KG
                     </td>
-                    <td className="py-2 font-data text-spore-ivory/80">{Number(h.gradeAKg)} KG</td>
-                    <td className="py-2 font-data text-spore-ivory/80">{Number(h.gradeBKg)} KG</td>
-                    <td className="py-2 font-data text-alert-coral">{Number(h.wastageKg)} KG</td>
-                    <td className="py-2 text-spore-ivory/60">{h.recorder.name}</td>
+                    <td className="py-2 font-data text-stone-700 dark:text-spore-ivory/80">{Number(h.gradeAKg)} KG</td>
+                    <td className="py-2 font-data text-stone-700 dark:text-spore-ivory/80">{Number(h.gradeBKg)} KG</td>
+                    <td className="py-2 font-data text-red-600 dark:text-alert-coral">{Number(h.wastageKg)} KG</td>
+                    <td className="py-2 text-stone-600 dark:text-spore-ivory/60">{h.recorder.name}</td>
                   </tr>
                 ))
               )}

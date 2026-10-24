@@ -10,14 +10,14 @@ export const instant = false;
 export const metadata: Metadata = { title: "Orders — SporeERP Admin" };
 
 const STATUS_PILLS: Record<OrderStatus, { label: string; style: string }> = {
-  PENDING: { label: "Pending", style: "bg-warning-amber/15 text-warning-amber" },
-  CONFIRMED: { label: "Confirmed", style: "bg-success-mint/15 text-success-mint" },
-  PROCESSING: { label: "Harvesting / Picking", style: "bg-shiitake-ochre/15 text-shiitake-ochre" },
-  PACKED: { label: "Packed in Chiller", style: "bg-forest-primary/20 text-spore-ivory" },
-  OUT_FOR_DELIVERY: { label: "Out on Truck", style: "bg-forest-primary/30 text-success-mint" },
-  DELIVERED: { label: "Delivered", style: "bg-success-mint/20 text-success-mint" },
-  CANCELLED: { label: "Cancelled", style: "bg-alert-coral/15 text-alert-coral" },
-  REFUNDED: { label: "Refunded", style: "bg-alert-coral/20 text-alert-coral" },
+  PENDING: { label: "Pending", style: "bg-warning-amber/15 text-amber-700 dark:text-warning-amber" },
+  CONFIRMED: { label: "Confirmed", style: "bg-success-mint/15 text-green-700 dark:text-success-mint" },
+  PROCESSING: { label: "Harvesting / Picking", style: "bg-shiitake-ochre/15 text-amber-800 dark:text-shiitake-ochre" },
+  PACKED: { label: "Packed in Chiller", style: "bg-forest-primary/20 text-stone-900 dark:text-spore-ivory" },
+  OUT_FOR_DELIVERY: { label: "Out on Truck", style: "bg-forest-primary/30 text-green-700 dark:text-success-mint" },
+  DELIVERED: { label: "Delivered", style: "bg-success-mint/20 text-green-700 dark:text-success-mint" },
+  CANCELLED: { label: "Cancelled", style: "bg-alert-coral/15 text-red-600 dark:text-alert-coral" },
+  REFUNDED: { label: "Refunded", style: "bg-alert-coral/20 text-red-600 dark:text-alert-coral" },
 };
 
 export default async function AdminOrdersPage({
@@ -51,23 +51,23 @@ export default async function AdminOrdersPage({
   ];
 
   return (
-    <div className="flex flex-col gap-8 font-body text-spore-ivory">
+    <div className="flex flex-col gap-8 font-body text-stone-900 dark:text-spore-ivory">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold">Customer Orders & Fulfillment</h1>
-          <p className="mt-1 text-sm text-spore-ivory/70">
+          <p className="mt-1 text-sm text-stone-700 dark:text-spore-ivory/70">
             Real-time harvest fulfillment queue, dispatch slots, and delivery status tracking.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-surface-charcoal border border-spore-ivory/10 px-3 py-1 text-xs font-semibold">
+          <span className="rounded-full bg-white dark:bg-surface-charcoal border border-stone-200 dark:border-spore-ivory/10 px-3 py-1 text-xs font-semibold">
             Total Orders: {pagination.total}
           </span>
         </div>
       </header>
 
       {/* Filter Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-spore-ivory/10 bg-surface-charcoal p-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal p-4">
         <div className="flex flex-wrap gap-2">
           {statuses.map((s) => {
             const active = (statusFilter ?? "") === s.value;
@@ -78,7 +78,7 @@ export default async function AdminOrdersPage({
                 className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
                   active
                     ? "bg-forest-primary text-spore-ivory"
-                    : "bg-surface-charcoal border border-spore-ivory/10 text-spore-ivory/70 hover:text-spore-ivory"
+                    : "bg-surface-charcoal border border-stone-200 dark:border-spore-ivory/10 text-spore-ivory/70 hover:text-spore-ivory"
                 }`}
               >
                 {s.label}
@@ -94,7 +94,7 @@ export default async function AdminOrdersPage({
             name="q"
             defaultValue={params.q ?? ""}
             placeholder="Search order #, customer, phone..."
-            className="rounded-lg border border-spore-ivory/20 bg-surface-charcoal px-3 py-1.5 text-xs text-spore-ivory focus:border-forest-primary focus:outline-hidden"
+            className="rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-white dark:bg-surface-charcoal px-3 py-1.5 text-xs text-stone-900 dark:text-spore-ivory focus:border-forest-primary dark:focus:border-white/15 focus:outline-hidden"
           />
           <button
             type="submit"
@@ -106,9 +106,9 @@ export default async function AdminOrdersPage({
       </div>
 
       {/* Orders Table */}
-      <div className="overflow-x-auto rounded-2xl border border-spore-ivory/10 bg-surface-charcoal">
+      <div className="overflow-x-auto rounded-2xl border border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-spore-ivory/10 bg-surface-charcoal/80 text-xs uppercase tracking-wide text-spore-ivory/60">
+          <thead className="border-b border-stone-200 dark:border-spore-ivory/10 bg-white dark:bg-surface-charcoal/80 text-xs uppercase tracking-wide text-stone-600 dark:text-spore-ivory/60">
             <tr>
               <th className="px-4 py-3">Order Number</th>
               <th className="px-4 py-3">Customer</th>
@@ -120,10 +120,10 @@ export default async function AdminOrdersPage({
               <th className="px-4 py-3">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-spore-ivory/10">
+          <tbody className="divide-y divide-stone-200 dark:divide-spore-ivory/10">
             {orders.length === 0 ? (
               <tr>
-                <td colSpan={8} className="py-12 text-center text-spore-ivory/60">
+                <td colSpan={8} className="py-12 text-center text-stone-600 dark:text-spore-ivory/60">
                   No orders found matching the filter criteria.
                 </td>
               </tr>
@@ -131,26 +131,26 @@ export default async function AdminOrdersPage({
               orders.map((order) => {
                 const pill = STATUS_PILLS[order.orderStatus] ?? {
                   label: order.orderStatus,
-                  style: "bg-spore-ivory/10 text-spore-ivory",
+                  style: "bg-stone-100 dark:bg-spore-ivory/10 text-stone-900 dark:text-spore-ivory",
                 };
                 return (
-                  <tr key={order.id} className="hover:bg-spore-ivory/5 transition-colors">
+                  <tr key={order.id} className="hover:bg-stone-100 dark:hover:bg-spore-ivory/5 transition-colors">
                     <td className="px-4 py-3 font-data font-bold">
                       <Link
                         href={`/admin/orders/${order.id}`}
-                        className="hover:underline text-forest-primary/90 hover:text-spore-ivory"
+                        className="hover:underline text-forest-primary/90 dark:text-spore-ivory/90 hover:text-stone-900 dark:hover:text-spore-ivory"
                       >
                         {order.orderNumber}
                       </Link>
-                      <div className="text-[11px] font-normal text-spore-ivory/50">
+                      <div className="text-[11px] font-normal text-stone-600 dark:text-spore-ivory/50">
                         {formatDate(order.createdAt)}
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <div className="font-semibold text-spore-ivory">
+                      <div className="font-semibold text-stone-900 dark:text-spore-ivory">
                         {order.customer.user.name}
                       </div>
-                      <div className="text-xs text-spore-ivory/60">
+                      <div className="text-xs text-stone-600 dark:text-spore-ivory/60">
                         {order.customer.user.phone ?? order.customer.user.email}
                       </div>
                     </td>
@@ -158,15 +158,15 @@ export default async function AdminOrdersPage({
                       <div className="text-xs">
                         {order.items.map((i) => i.product.name).join(", ")}
                       </div>
-                      <div className="text-[11px] text-spore-ivory/50">
+                      <div className="text-[11px] text-stone-600 dark:text-spore-ivory/50">
                         {order.items.length} {order.items.length === 1 ? "line item" : "line items"}
                       </div>
                     </td>
                     <td className="px-4 py-3 text-xs">
                       {order.deliverySlot === "MORNING_HARVEST_DISPATCH" ? (
-                        <span className="text-warning-amber">🌅 Morning</span>
+                        <span className="text-amber-700 dark:text-warning-amber">🌅 Morning</span>
                       ) : (
-                        <span className="text-shiitake-ochre">🌆 Evening</span>
+                        <span className="text-amber-800 dark:text-shiitake-ochre">🌆 Evening</span>
                       )}
                     </td>
                     <td className="px-4 py-3 font-data font-bold">
@@ -193,7 +193,7 @@ export default async function AdminOrdersPage({
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/orders/${order.id}`}
-                        className="rounded-lg bg-surface-charcoal border border-spore-ivory/20 px-3 py-1 text-xs font-semibold hover:bg-forest-primary hover:border-forest-primary transition-colors"
+                        className="rounded-lg bg-white dark:bg-surface-charcoal text-stone-900 dark:text-spore-ivory hover:text-spore-ivory border border-stone-200 dark:border-spore-ivory/20 px-3 py-1 text-xs font-semibold hover:bg-forest-primary hover:border-forest-primary dark:hover:border-white/15 transition-colors"
                       >
                         Manage →
                       </Link>

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { isStaff, ROLES, type PermissionCode } from "@/lib/auth/permissions";
+import { isDeliveryOnly, isStaff, PERMISSIONS, ROLES, type PermissionCode } from "@/lib/auth/permissions";
 
 export type CurrentUser = {
   id: string;
@@ -86,6 +86,23 @@ export async function requireUser(returnTo = "/account"): Promise<CurrentUser> {
 export async function requireStaff(returnTo = "/admin/dashboard"): Promise<CurrentUser> {
   const user = await requireUser(returnTo);
   if (!user.isStaff) redirect("/unauthorized");
+  // Delivery agents live in /admin/deliveries only.
+  if (isDeliveryOnly(user.roles)) redirect("/admin/deliveries");
+  return user;
+}
+
+/** Gate for /admin/deliveries: any staff member holding a delivery permission (agents included). */
+export async function requireDeliveryAccess(returnTo = "/admin/deliveries"): Promise<CurrentUser> {
+  const user = await requireUser(returnTo);
+  if (
+    !user.isStaff ||
+    !(
+      hasPermission(user, PERMISSIONS.DELIVERIES_VIEW_ALL) ||
+      hasPermission(user, PERMISSIONS.DELIVERIES_VIEW_OWN)
+    )
+  ) {
+    redirect("/unauthorized");
+  }
   return user;
 }
 

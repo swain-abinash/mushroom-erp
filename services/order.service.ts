@@ -1,9 +1,27 @@
 import "server-only";
-import { Prisma, OrderStatus, PaymentStatus, PaymentMethod, InventoryTxType } from "@prisma/client";
+import {
+  Prisma,
+  OrderStatus,
+  PaymentStatus,
+  PaymentMethod,
+  InventoryTxType,
+  DeliveryStatus,
+} from "@prisma/client";
 import { db } from "@/lib/db";
 import { ServiceError } from "@/lib/errors";
 import { AuditService } from "@/services/audit.service";
 import type { CheckoutInput, DeliveryAddressInput } from "@/lib/validations/order";
+
+const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+  PENDING: [OrderStatus.CONFIRMED, OrderStatus.CANCELLED],
+  CONFIRMED: [OrderStatus.PROCESSING, OrderStatus.CANCELLED],
+  PROCESSING: [OrderStatus.PACKED, OrderStatus.CANCELLED],
+  PACKED: [OrderStatus.OUT_FOR_DELIVERY, OrderStatus.CANCELLED],
+  OUT_FOR_DELIVERY: [OrderStatus.DELIVERED, OrderStatus.CANCELLED],
+  DELIVERED: [OrderStatus.REFUNDED],
+  CANCELLED: [],
+  REFUNDED: [],
+};
 
 export class OrderService {
   /**
@@ -286,6 +304,9 @@ export class OrderService {
           },
         },
         payments: true,
+        delivery: {
+          include: { driver: { include: { user: { select: { name: true, phone: true } } } } },
+        },
         statusHistory: {
           orderBy: { changedAt: "desc" },
         },
@@ -388,8 +409,10 @@ export class OrderService {
   }
 
   /**
-   * Transitions order status along the order state machine.
-   * Handles stock deduction upon delivery or stock release upon cancellation/refund.
+   * Transitions order status along the order state machine and moves stock with it:
+   *   reserved (warehouse) --OUT_FOR_DELIVERY--> in the delivery agent's custody
+   *   --DELIVERED--> sold to the customer; a cancel while out for delivery returns it to the warehouse.
+   * OUT_FOR_DELIVERY requires an assigned delivery agent.
    */
   static async updateOrderStatus(
     orderId: string,
@@ -401,6 +424,7 @@ export class OrderService {
       const order = await tx.order.findUnique({
         where: { id: orderId },
         include: {
+          delivery: true,
           items: {
             include: {
               product: { include: { inventoryItem: true } },
@@ -416,65 +440,162 @@ export class OrderService {
       const prevStatus = order.orderStatus;
       if (prevStatus === nextStatus) return order;
 
-      // Handle stock adjustments based on lifecycle
-      if (
-        (nextStatus === OrderStatus.CANCELLED || nextStatus === OrderStatus.REFUNDED) &&
-        prevStatus !== OrderStatus.CANCELLED &&
-        prevStatus !== OrderStatus.REFUNDED
-      ) {
-        // Release reserved stock back
-        for (const item of order.items) {
-          if (item.product?.inventoryItem) {
-            const qty = Number(item.quantity);
-            await tx.inventoryItem.update({
-              where: { id: item.product.inventoryItem.id },
-              data: {
-                reservedStock: { decrement: qty },
+      if (!ALLOWED_TRANSITIONS[prevStatus].includes(nextStatus)) {
+        throw new ServiceError(
+          "INVALID_TRANSITION",
+          `An order cannot move from ${prevStatus} to ${nextStatus}.`,
+          409,
+        );
+      }
+
+      const delivery = order.delivery;
+      const lines = order.items
+        .filter((item) => item.product?.inventoryItem)
+        .map((item) => ({
+          inventoryItemId: item.product!.inventoryItem!.id,
+          qty: Number(item.quantity),
+        }));
+      // True once the agent has collected the stock and it has not been delivered or returned.
+      const inCustody = Boolean(
+        delivery?.driverId && delivery.status === DeliveryStatus.PICKED_UP,
+      );
+
+      if (nextStatus === OrderStatus.OUT_FOR_DELIVERY) {
+        // Warehouse -> delivery agent custody.
+        if (!delivery?.driverId) {
+          throw new ServiceError(
+            "NO_DELIVERY_AGENT",
+            "Assign a delivery agent to this order before dispatch.",
+            409,
+          );
+        }
+        for (const { inventoryItemId, qty } of lines) {
+          const inv = await tx.inventoryItem.update({
+            where: { id: inventoryItemId },
+            data: { availableStock: { decrement: qty }, reservedStock: { decrement: qty } },
+          });
+          await tx.driverStock.upsert({
+            where: {
+              driverId_inventoryItemId: { driverId: delivery.driverId, inventoryItemId },
+            },
+            create: { driverId: delivery.driverId, inventoryItemId, quantity: qty },
+            update: { quantity: { increment: qty } },
+          });
+          await tx.inventoryTransaction.create({
+            data: {
+              inventoryItemId,
+              transactionType: InventoryTxType.DRIVER_DISPATCH,
+              quantity: new Prisma.Decimal(qty),
+              balanceAfter: inv.availableStock,
+              referenceType: "DELIVERY",
+              referenceId: delivery.id,
+              reason: `Collected by delivery agent for order ${order.orderNumber}`,
+              performedBy: actorId ?? null,
+            },
+          });
+        }
+        await tx.delivery.update({
+          where: { id: delivery.id },
+          data: { status: DeliveryStatus.PICKED_UP, dispatchedAt: new Date() },
+        });
+      } else if (nextStatus === OrderStatus.DELIVERED) {
+        for (const { inventoryItemId, qty } of lines) {
+          // Legacy orders dispatched before agent custody existed sell straight from the warehouse.
+          const inv = inCustody
+            ? await tx.inventoryItem.findUniqueOrThrow({ where: { id: inventoryItemId } })
+            : await tx.inventoryItem.update({
+                where: { id: inventoryItemId },
+                data: { availableStock: { decrement: qty }, reservedStock: { decrement: qty } },
+              });
+          if (inCustody) {
+            await tx.driverStock.update({
+              where: {
+                driverId_inventoryItemId: { driverId: delivery!.driverId!, inventoryItemId },
               },
+              data: { quantity: { decrement: qty } },
             });
           }
+          await tx.inventoryTransaction.create({
+            data: {
+              inventoryItemId,
+              transactionType: InventoryTxType.CUSTOMER_SALE,
+              quantity: new Prisma.Decimal(qty),
+              balanceAfter: inv.availableStock,
+              referenceType: "ORDER",
+              referenceId: order.id,
+              reason: `Delivered order ${order.orderNumber}`,
+              performedBy: actorId ?? null,
+            },
+          });
         }
-      } else if (
-        nextStatus === OrderStatus.DELIVERED &&
-        prevStatus !== OrderStatus.DELIVERED
-      ) {
-        // Fulfill stock: decrement both availableStock and reservedStock, log transaction
-        for (const item of order.items) {
-          if (item.product?.inventoryItem) {
-            const qty = Number(item.quantity);
-            const updatedInv = await tx.inventoryItem.update({
-              where: { id: item.product.inventoryItem.id },
-              data: {
-                availableStock: { decrement: qty },
-                reservedStock: { decrement: qty },
-              },
-            });
-
-            await tx.inventoryTransaction.create({
-              data: {
-                inventoryItemId: item.product.inventoryItem.id,
-                transactionType: InventoryTxType.CUSTOMER_SALE,
-                quantity: new Prisma.Decimal(qty),
-                balanceAfter: updatedInv.availableStock,
-                referenceType: "ORDER",
-                referenceId: order.id,
-                reason: `Delivered order ${order.orderNumber}`,
-                performedBy: actorId ?? null,
-              },
-            });
-          }
+        if (delivery) {
+          await tx.delivery.update({
+            where: { id: delivery.id },
+            data: { status: DeliveryStatus.DELIVERED, deliveredAt: new Date() },
+          });
         }
 
-        // If Cash on delivery, mark payment as PAID
+        // Cash on delivery is collected at the door.
         await tx.payment.updateMany({
           where: { orderId: order.id, status: PaymentStatus.UNPAID },
           data: { status: PaymentStatus.PAID, paidAt: new Date() },
         });
-
         await tx.order.update({
           where: { id: order.id },
           data: { paymentStatus: PaymentStatus.PAID },
         });
+      } else if (nextStatus === OrderStatus.CANCELLED || nextStatus === OrderStatus.REFUNDED) {
+        if (prevStatus === OrderStatus.OUT_FOR_DELIVERY) {
+          for (const { inventoryItemId, qty } of lines) {
+            if (inCustody) {
+              // Stock is with the agent: take it back into the warehouse.
+              const inv = await tx.inventoryItem.update({
+                where: { id: inventoryItemId },
+                data: { availableStock: { increment: qty } },
+              });
+              await tx.driverStock.update({
+                where: {
+                  driverId_inventoryItemId: { driverId: delivery!.driverId!, inventoryItemId },
+                },
+                data: { quantity: { decrement: qty } },
+              });
+              await tx.inventoryTransaction.create({
+                data: {
+                  inventoryItemId,
+                  transactionType: InventoryTxType.DRIVER_RETURN,
+                  quantity: new Prisma.Decimal(qty),
+                  balanceAfter: inv.availableStock,
+                  referenceType: "DELIVERY",
+                  referenceId: delivery!.id,
+                  reason: `Returned by delivery agent: order ${order.orderNumber} ${nextStatus.toLowerCase()}`,
+                  performedBy: actorId ?? null,
+                },
+              });
+            } else {
+              await tx.inventoryItem.update({
+                where: { id: inventoryItemId },
+                data: { reservedStock: { decrement: qty } },
+              });
+            }
+          }
+          if (delivery) {
+            await tx.delivery.update({
+              where: { id: delivery.id },
+              data: {
+                status: DeliveryStatus.FAILED_ATTEMPT,
+                deliveryNotes: notes?.slice(0, 255) ?? "Order cancelled",
+              },
+            });
+          }
+        } else if (prevStatus !== OrderStatus.DELIVERED) {
+          // Never dispatched: just release the reservation.
+          for (const { inventoryItemId, qty } of lines) {
+            await tx.inventoryItem.update({
+              where: { id: inventoryItemId },
+              data: { reservedStock: { decrement: qty } },
+            });
+          }
+        }
       }
 
       // Update Order Status

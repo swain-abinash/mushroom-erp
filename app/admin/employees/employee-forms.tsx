@@ -32,7 +32,7 @@ export function InviteEmployeeForm({ roles }: { roles: RoleOption[] }) {
     <form action={formAction} className="flex flex-col gap-4">
       <FormMessage state={state} />
       {state.data?.inviteUrl ? (
-        <p className="break-all rounded-lg bg-surface-charcoal px-3 py-2 font-data text-xs">
+        <p className="break-all rounded-lg bg-white dark:bg-surface-charcoal px-3 py-2 font-data text-xs">
           {state.data.inviteUrl}
         </p>
       ) : null}
@@ -65,7 +65,7 @@ export function InviteEmployeeForm({ roles }: { roles: RoleOption[] }) {
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-2 font-body text-sm font-medium">Roles</legend>
         <RoleCheckboxes roles={roles} />
-        {errors?.roles ? <span className="text-xs text-alert-coral">{errors.roles[0]}</span> : null}
+        {errors?.roles ? <span className="text-xs text-red-600 dark:text-alert-coral">{errors.roles[0]}</span> : null}
       </fieldset>
       <SubmitButton className="self-start">Send invite</SubmitButton>
     </form>
@@ -114,7 +114,7 @@ export function ToggleActiveForm({ userId, isActive }: { userId: string; isActiv
 }
 
 function InlineMessage({ error, success }: { error?: string; success?: string }) {
-  if (error) return <span className="text-xs text-alert-coral">{error}</span>;
-  if (success) return <span className="text-xs text-success-mint">{success}</span>;
+  if (error) return <span className="text-xs text-red-600 dark:text-alert-coral">{error}</span>;
+  if (success) return <span className="text-xs text-green-700 dark:text-success-mint">{success}</span>;
   return null;
 }

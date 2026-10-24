@@ -14,7 +14,7 @@ export const instant = false;
 export const metadata: Metadata = { title: "Products — SporeERP Admin" };
 
 const controlClass =
-  "rounded-lg border border-spore-ivory/20 bg-transparent px-3 py-2 text-sm [&>option]:text-charcoal-dark";
+  "rounded-lg border border-stone-200 dark:border-spore-ivory/20 bg-transparent px-3 py-2 text-sm [&>option]:text-charcoal-dark";
 
 export default async function ProductsPage({
   searchParams,
@@ -41,12 +41,12 @@ export default async function ProductsPage({
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold">Products</h1>
-          <p className="mt-1 text-sm text-spore-ivory/70">{products.length} products</p>
+          <p className="mt-1 text-sm text-stone-700 dark:text-spore-ivory/70">{products.length} products</p>
         </div>
         {canManage ? (
           <Link
             href="/admin/products/new"
-            className="rounded-full bg-spore-ivory px-5 py-2.5 font-display text-sm font-semibold text-forest-primary"
+            className="rounded-full bg-stone-100 dark:bg-spore-ivory px-5 py-2.5 font-display text-sm font-semibold text-forest-primary"
           >
             + New product
           </Link>
@@ -76,14 +76,14 @@ export default async function ProductsPage({
             </option>
           ))}
         </select>
-        <button type="submit" className="rounded-lg border border-spore-ivory/20 px-4 py-2 text-sm">
+        <button type="submit" className="rounded-lg border border-stone-200 dark:border-spore-ivory/20 px-4 py-2 text-sm">
           Filter
         </button>
       </form>
 
-      <section className="overflow-x-auto rounded-2xl border border-spore-ivory/10">
+      <section className="overflow-x-auto rounded-2xl border border-stone-200 dark:border-spore-ivory/10">
         <table className="w-full text-left text-sm">
-          <thead className="bg-surface-charcoal text-xs uppercase tracking-wide text-spore-ivory/60">
+          <thead className="bg-white dark:bg-surface-charcoal text-xs uppercase tracking-wide text-stone-600 dark:text-spore-ivory/60">
             <tr>
               <th className="px-4 py-3">Product</th>
               <th className="px-4 py-3">Category</th>
@@ -92,10 +92,10 @@ export default async function ProductsPage({
               <th className="px-4 py-3">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-spore-ivory/10">
+          <tbody className="divide-y divide-stone-200 dark:divide-spore-ivory/10">
             {products.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-10 text-center text-spore-ivory/60">
+                <td colSpan={5} className="px-4 py-10 text-center text-stone-600 dark:text-spore-ivory/60">
                   No products match these filters.
                 </td>
               </tr>
@@ -116,7 +116,7 @@ export default async function ProductsPage({
                         className="size-11 rounded-lg object-cover"
                       />
                     ) : (
-                      <span className="grid size-11 place-items-center rounded-lg bg-surface-charcoal">
+                      <span className="grid size-11 place-items-center rounded-lg bg-white dark:bg-surface-charcoal">
                         🍄
                       </span>
                     )}
@@ -124,32 +124,32 @@ export default async function ProductsPage({
                       <span className="block font-semibold">
                         {product.name}
                         {product.isFeatured ? (
-                          <span className="ml-2 text-xs text-shiitake-ochre">★ Featured</span>
+                          <span className="ml-2 text-xs text-amber-800 dark:text-shiitake-ochre">★ Featured</span>
                         ) : null}
                       </span>
-                      <span className="font-data text-xs text-spore-ivory/60">{product.sku}</span>
+                      <span className="font-data text-xs text-stone-600 dark:text-spore-ivory/60">{product.sku}</span>
                     </span>
                   </Link>
                 </td>
                 <td className="px-4 py-3">
                   {product.category.name}
                   {product.variety ? (
-                    <div className="text-xs text-spore-ivory/60">{product.variety}</div>
+                    <div className="text-xs text-stone-600 dark:text-spore-ivory/60">{product.variety}</div>
                   ) : null}
                 </td>
                 <td className="px-4 py-3 font-data">
                   {formatCurrency(product.retailPrice)}
-                  <span className="text-xs text-spore-ivory/60">
+                  <span className="text-xs text-stone-600 dark:text-spore-ivory/60">
                     {" "}
                     / {UNIT_LABELS[product.unitType].short}
                   </span>
                 </td>
                 <td className="px-4 py-3 font-data">
-                  <span className={product.lowStock ? "text-warning-amber" : undefined}>
+                  <span className={product.lowStock ? "text-amber-700 dark:text-warning-amber" : undefined}>
                     {product.stock ?? 0}
                   </span>
                   {product.lowStock ? (
-                    <div className="font-body text-xs text-warning-amber">Low stock</div>
+                    <div className="font-body text-xs text-amber-700 dark:text-warning-amber">Low stock</div>
                   ) : null}
                 </td>
                 <td className="px-4 py-3">

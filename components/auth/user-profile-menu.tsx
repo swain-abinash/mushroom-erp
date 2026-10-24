@@ -180,7 +180,7 @@ export function UserProfileMenu({ user }: UserProfileMenuProps) {
           <form action={signOutAction}>
             <button
               type="submit"
-              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-alert-coral hover:bg-alert-coral/10 transition-colors cursor-pointer"
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-red-600 dark:text-alert-coral hover:bg-alert-coral/10 transition-colors cursor-pointer"
             >
               <span>🚪</span>
               <span>Sign Out</span>
